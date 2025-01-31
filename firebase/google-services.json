@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "539604836728",
+    "project_id": "crypta-d5e13",
+    "storage_bucket": "crypta-d5e13.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:539604836728:android:74189e568aedaa019ee88d",
+        "android_client_info": {
+          "package_name": "group.crypta"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxSLuHz2x4XFINX2xwyarBgyuSrqRLyxI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
