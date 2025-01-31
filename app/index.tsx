@@ -1,150 +1,150 @@
-import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function LandingPage() {
   return (
-    <SafeAreaView className="flex-1 bg-background-500">
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View className="flex-row justify-between items-center px-6 pt-6 pb-4 bg-background-100">
-          <View className="flex-row items-center gap-3">
-            <MaterialCommunityIcons 
-              name="wallet" 
-              size={32} 
-              className="text-brand-primary-600" 
-            />
-            <Text className="text-3xl font-extrabold text-brand-primary-500">
-              Crypta
-            </Text>
+    <SafeAreaView className="flex-1 bg-surface-primary">
+      <ScrollView showsVerticalScrollIndicator={false} className="pb-8">
+        {/* Header with Subtle Border */}
+        <View className="px-6 pt-6 pb-4 bg-surface-primary border-b border-border-muted">
+          <View className="flex-row justify-between items-center">
+            <View className="flex-row items-center gap-3">
+              <MaterialCommunityIcons 
+                name="wallet-outline" 
+                size={28} 
+                className="text-brand-600" 
+              />
+              <Text className="text-2xl font-bold text-text-primary">Crypta</Text>
+            </View>
+            <TouchableOpacity className="px-3 py-1.5 rounded-full bg-brand-100 active:bg-brand-200">
+              <Text className="text-brand-600 text-sm font-medium">Sign In</Text>
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity className="px-4 py-2 rounded-full bg-brand-primary-100/20">
-            <Text className="text-brand-primary-600 font-semibold">Sign In</Text>
-          </TouchableOpacity>
         </View>
 
-        {/* Hero Section */}
-        <View className="px-6 pt-12 pb-8 bg-background-100">
-          <View className="mb-8">
-            <Text className="text-5xl font-black text-neutral-900 leading-tight">
-              Your Gateway to{'\n'}
-              <Text className="text-brand-primary-600">Crypto Freedom</Text>
-            </Text>
-          </View>
+        {/* Hero Section with Gradient Text */}
+        <View className="px-6 pt-10 pb-8">
+          <Text className="text-[38px] font-bold leading-tight mb-4">
+            <Text className="text-text-primary">Modern Crypto</Text>
+            <Text className="text-brand-600"> Management</Text>
+          </Text>
           
-          <Text className="text-lg text-neutral-600 mb-12">
-            Secure storage, real-time tracking, and seamless transactions for all your digital assets.
+          <Text className="text-lg text-text-secondary mb-8">
+            Secure multi-chain wallet with institutional-grade security and elegant design
           </Text>
 
           <TouchableOpacity 
-            className="bg-brand-primary-500 py-5 rounded-2xl items-center active:bg-brand-primary-600"
+            className="bg-brand-600 py-4 rounded-xl items-center active:bg-brand-700 shadow-lg"
             activeOpacity={0.95}
           >
-            <Text className="text-background-100 text-xl font-bold">
-              Get Started Free
+            <Text className="text-surface-inverse text-lg font-semibold">
+              Create Free Wallet
             </Text>
           </TouchableOpacity>
 
-          {/* Placeholder for 3D wallet illustration */}
-          <View className="h-64 mt-12 bg-brand-primary-100/20 rounded-3xl justify-center items-center">
+          {/* Abstract Graphic */}
+          <View className="mt-12 h-52 bg-surface-secondary rounded-2xl border border-border-default justify-center items-center">
             <MaterialCommunityIcons 
-              name="cellphone" 
-              size={120} 
-              className="text-brand-primary-500/30" 
+              name="shield-check" 
+              size={80} 
+              className="text-brand-400" 
             />
           </View>
         </View>
 
-        {/* Features Section */}
-        <View className="pt-12 pb-8 bg-background-300">
-          <Text className="text-3xl font-bold text-neutral-900 mb-8 px-6">
-            Why Crypta?
+        {/* Features Grid */}
+        <View className="px-6 pt-8 bg-surface-secondary">
+          <Text className="text-xl font-semibold text-text-primary mb-6">
+            Why Crypta Stands Out
           </Text>
-
+          
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ paddingHorizontal: 24 }}
-            className="mb-6"
+            contentContainerStyle={{ gap: 16 }}
           >
             {[
               {
-                icon: "shield-lock",
-                title: "Military-Grade Security",
-                description: "Bank-level encryption & biometric access",
-                color: "bg-success-light",
+                icon: "lock-outline",
+                title: "Secure Storage",
+                desc: "Biometric protected vaults",
+                color: "bg-success-surface"
+              },
+              {
+                icon: "swap-horizontal",
+                title: "Instant Swap",
+                desc: "Best rates guaranteed",
+                color: "bg-accent-100"
               },
               {
                 icon: "chart-areaspline",
-                title: "Smart Tracking",
-                description: "Real-time portfolio analytics",
-                color: "bg-info-light",
+                title: "Live Analytics",
+                desc: "Real-time tracking",
+                color: "bg-info-surface"
               },
               {
-                icon: "swap-horizontal-circle",
-                title: "Instant Swaps",
-                description: "Low-fee cross-chain exchanges",
-                color: "bg-brand-accent-200",
-              },
-              {
-                icon: "database",
-                title: "Multi-Chain",
-                description: "100+ blockchain networks supported",
-                color: "bg-warning-light",
+                icon: "web",
+                title: "Multi-chain",
+                desc: "20+ networks supported",
+                color: "bg-brand-100"
               },
             ].map((feature, index) => (
               <TouchableOpacity
                 key={index}
+                className="w-64 p-6 rounded-2xl bg-surface-primary border border-border-default"
                 activeOpacity={0.9}
-                className={`w-64 min-h-[180px] p-6 mr-4 rounded-[28px] ${feature.color} justify-between shadow-lg`}
               >
-                <MaterialCommunityIcons
-                  name={feature.icon}
-                  size={36}
-                  className="text-brand-primary-600 mb-4"
-                />
-                <View>
-                  <Text className="text-xl font-bold text-neutral-900 mb-2">
-                    {feature.title}
-                  </Text>
-                  <Text className="text-base text-neutral-600">
-                    {feature.description}
-                  </Text>
+                <View className={`w-12 h-12 rounded-lg ${feature.color} items-center justify-center mb-4`}>
+                  <MaterialCommunityIcons
+                    name={feature.icon}
+                    size={24}
+                    className="text-brand-600"
+                  />
                 </View>
+                <Text className="text-lg font-medium text-text-primary mb-2">
+                  {feature.title}
+                </Text>
+                <Text className="text-base text-text-secondary">
+                  {feature.desc}
+                </Text>
               </TouchableOpacity>
             ))}
           </ScrollView>
         </View>
 
-        {/* Stats Section */}
-        <View className="px-6 py-16 bg-brand-primary-500">
-          <View className="flex-row justify-between">
-            <View className="items-center">
-              <Text className="text-4xl font-black text-background-100 mb-2">$10B+</Text>
-              <Text className="text-background-200 font-medium">Assets Protected</Text>
-            </View>
-            <View className="items-center">
-              <Text className="text-4xl font-black text-brand-accent-500 mb-2">5M+</Text>
-              <Text className="text-background-200 font-medium">Active Users</Text>
+        {/* Stats with Gradient Background */}
+        <View className="px-6 pt-12">
+          <View className="bg-gradient-to-r from-brand-200 to-accent-100 rounded-2xl p-8">
+            <View className="flex-row justify-around">
+              <View className="items-center">
+                <Text className="text-3xl font-bold text-text-primary">$10B+</Text>
+                <Text className="text-text-secondary text-sm">Assets Secured</Text>
+              </View>
+              <View className="h-12 w-px bg-border-default my-auto" />
+              <View className="items-center">
+                <Text className="text-3xl font-bold text-text-primary">5M+</Text>
+                <Text className="text-text-secondary text-sm">Happy Users</Text>
+              </View>
             </View>
           </View>
         </View>
 
-        {/* CTA Section */}
-        <View className="px-6 py-16 bg-background-100">
-          <View className="bg-brand-primary-500 rounded-3xl p-8 items-center">
-            <Text className="text-3xl font-black text-background-100 text-center mb-4">
-              Start Your Crypto Journey Today
+        {/* Final CTA */}
+        <View className="px-6 pt-12 pb-16">
+          <View className="bg-brand-600 rounded-2xl p-8 shadow-xl">
+            <Text className="text-2xl font-bold text-surface-inverse text-center mb-3">
+              Ready to Start?
             </Text>
-            <Text className="text-background-200 text-center mb-8">
-              Join millions already managing their crypto assets securely
+            <Text className="text-surface-inverse/80 text-center text-sm mb-6">
+              Join the future of digital asset management
             </Text>
             <TouchableOpacity 
-              className="bg-background-100 px-8 py-4 rounded-2xl"
+              className="bg-surface-primary px-6 py-3 rounded-lg active:bg-surface-secondary"
               activeOpacity={0.9}
             >
-              <Text className="text-brand-primary-600 text-lg font-bold">
-                Create Free Wallet
+              <Text className="text-brand-600 text-base font-semibold text-center">
+                Get Started Free
               </Text>
             </TouchableOpacity>
           </View>
