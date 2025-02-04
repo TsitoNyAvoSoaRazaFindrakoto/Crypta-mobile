@@ -33,7 +33,7 @@ const FormField: React.FC<FormFieldProps> = ({
   return (
     <View className={`space-y-21 ${otherStyles}`}>
       <Text className="text-xl font-thin ml-2">{title}</Text>
-      <View className="border-[1px] w-full h-12 px-4 mt-2 border-accent-800 focus:border-accent-500 rounded-md items-center flex-row">
+      <View className="border-[0.5px] w-full h-12 px-4 mt-2 border-accent-800 focus:border-accent-500 rounded-md items-center flex-row">
         <TextInput
           className="flex-1 font-semibold text-base"
           value={value}
@@ -46,7 +46,7 @@ const FormField: React.FC<FormFieldProps> = ({
         {title === "Mot De Passe" && (
           <TouchableOpacity onPress={()=> setShowPassword(!showPassword)}>
 						<MaterialCommunityIcons
-              name={!showPassword ? "eye" : "eye-off"}
+              name={!showPassword ? "eye-off" : "eye"}
               size={26}
               className="text-brand-500"
             />

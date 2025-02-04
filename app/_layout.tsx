@@ -63,8 +63,8 @@ export default function RootLayout() {
       {/* 🚗 Conteneur de navigation principal (le véhicule qui transporte les écrans) */}
       <Stack screenOptions={{ headerShown: false }}>
         {/* 🏠 Écran d'accueil - Fichier : app/index.tsx */}
-        <Stack.Screen name="(auth)/sign-in.tsx" />
         <Stack.Screen name="index" />
+        <Stack.Screen name="auth" />
 
 
         {/* 🆘 Écran 404 - Fichier : app/+not-found.tsx */}

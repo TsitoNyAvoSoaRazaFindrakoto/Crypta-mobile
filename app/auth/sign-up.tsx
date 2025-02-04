@@ -76,7 +76,7 @@ const SignUp = () => {
               creer un compte
             </Text>
           </TouchableOpacity>
-					<Text className="text-sm">Vous avez deja un compte? <Link href="/(auth)/sign-in" className="text-brand-500">se connecter</Link></Text>
+					<Text className="text-sm">Vous avez deja un compte? <Link href="/sign-in" className="text-brand-500">se connecter</Link></Text>
         </View>
       </ScrollView>
     </SafeAreaView>
