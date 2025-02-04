@@ -65,6 +65,7 @@ export default function RootLayout() {
         {/* 🏠 Écran d'accueil - Fichier : app/index.tsx */}
         <Stack.Screen name="index" />
         <Stack.Screen name="auth" />
+        <Stack.Screen name="home" />
 
 
         {/* 🆘 Écran 404 - Fichier : app/+not-found.tsx */}
