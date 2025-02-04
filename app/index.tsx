@@ -1,26 +1,28 @@
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Image } from "react-native";
+import { Link, router, useRouter } from "expo-router";
+import Logo from "@/components/ui/Logo";
 
 export default function LandingPage() {
+	const router = useRouter();
+
+	const toSignin = () => {
+		router.push('/(auth)/sign-in');
+	}
+
+	const toSignup = () => {
+		router.push('/(auth)/sign-up');
+	}
+
   return (
     <SafeAreaView className="flex-1 bg-surface-primary">
       <ScrollView showsVerticalScrollIndicator={false} className="pb-8">
         {/* En-tête avec bordure subtile */}
         <View className="px-6 pt-6 pb-4 bg-surface-primary border-b border-border-muted">
           <View className="flex-row justify-between items-center">
-            <View className="flex-row items-center gap-3">
-              <MaterialCommunityIcons
-                name="wallet-plus-outline"
-                size={28}
-                className="text-brand-600"
-              />
-              <Text className="text-2xl font-bold text-text-primary">
-                Crypta
-              </Text>
-            </View>
-            <TouchableOpacity className="px-3 py-1.5 rounded-full bg-brand-100 active:bg-brand-200">
+            <Logo containerStyle="flex-row gap-2"/>
+						<TouchableOpacity className="px-3 py-1.5 rounded-full bg-brand-100 active:bg-brand-200" onPress={toSignin}>
               <Text className="text-brand-600 text-sm font-medium">
                 Connexion
               </Text>
@@ -30,15 +32,14 @@ export default function LandingPage() {
 
         {/* Section Héros avec texte en dégradé */}
         <View className="px-6 pt-10 pb-4">
-          <Text className="text-[38px] font-bold leading-tight mb-4">
-            <Text className="text-text-primary">Gerer vos Cryptos</Text>
-            {"\n"}
+          <Text className="text-4xl font-bold leading-tight mb-4">
+            <Text className="text-text-primary">Gérer vos Cryptos{"\n"}</Text>
             <Text className="text-brand-600">Tout Simplement</Text>
           </Text>
 
-          <Text className="text-lg text-text-primary font-semibold mb-8 max-w-30">
-            Portefeuille multi-chaîne sécurisé avec une sécurité
-            institutionnelle et un design élégant
+          <Text className="text-lg text-text-primary font-semibold mb-8 w-2/3">
+            Portefeuille multi-chaîne sécurisé avec{"\n"}une sécurité
+            institutionnelle et{"\n"}un design élégant
           </Text>
         </View>
 
@@ -105,33 +106,14 @@ export default function LandingPage() {
         </View>
 
         <TouchableOpacity
-          className="mx-2 my-6 bg-brand-500 py-4 rounded-2xl items-center active:bg-brand-700 border-3 shadow-lg"
+          className="mx-2 my-6 bg-brand-500 py-4 rounded-2xl items-center active:bg-brand-700 border-3 shadow-sm"
           activeOpacity={0.95}
+					onPress={toSignup}
         >
           <Text className="text-surface text-lg font-semibold">
             Rejoignez-nous
           </Text>
         </TouchableOpacity>
-
-        {/* Dernier appel à l'action */}
-        {/* <View className="px-6 pt-12 pb-16">
-          <View className="bg-brand-300 rounded-2xl p-8 shadow-xl border border-border-default">
-            <Text className="text-2xl font-bold text-surface-inverse text-center mb-3">
-              Prêt à commencer ?
-            </Text>
-            <Text className="text-surface-inverse text-center font-semibold text-sm mb-6">
-              Rejoignez l'avenir de la gestion des actifs numériques
-            </Text>
-            <TouchableOpacity
-              className="bg-surface-primary px-6 py-3 rounded-2xl active:bg-surface-tertiary border"
-              activeOpacity={0.9}
-            >
-              <Text className="text-brand-700 text-lg font-semibold text-center">
-                Commencer
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </View> */}
       </ScrollView>
     </SafeAreaView>
   );
