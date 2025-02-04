@@ -58,20 +58,15 @@ export default function RootLayout() {
    */
 
   return (
-    // 📦 Fournit le thème à toute l'app (comme un carton de décoration)
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      {/* 🚗 Conteneur de navigation principal (le véhicule qui transporte les écrans) */}
-      <Stack screenOptions={{ headerShown: false }}>
-        {/* 🏠 Écran d'accueil - Fichier : app/index.tsx */}
+      <Stack screenOptions={{ headerShown: false}}>
         <Stack.Screen name="index" />
         <Stack.Screen name="auth" />
         <Stack.Screen name="home" />
 
 
-        {/* 🆘 Écran 404 - Fichier : app/+not-found.tsx */}
         <Stack.Screen name="+not-found" />
 
-        {/* 💡 EXEMPLE AJOUT D'UN NOUVEL ÉCRAN */}
         {/* 
       <Stack.Screen
         name="profile" // ↔️ Doit correspondre à app/profile.tsx
@@ -83,7 +78,6 @@ export default function RootLayout() {
       />
       */}
       </Stack>
-      {/* 📱 Barre de statut du téléphone (heures/batterie) */}
       <StatusBar style="auto" /> {/* 🔄 S'adapte au thème */}
       {/* <Footer /> 👈 Sera présent sur tous les écrans */}
     </ThemeProvider>

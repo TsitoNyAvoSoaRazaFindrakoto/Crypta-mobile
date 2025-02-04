@@ -12,14 +12,14 @@ interface TabIconProps {
 
 const TabIcon: React.FC<TabIconProps> = ({ icon, color, name, focused }) => {
   return (
-    <View className="items-center justify-center gap-2 w-32">
+    <View className="items-center justify-center w-32">
       <MaterialCommunityIcons
         name={icon}
         color={color}
-				size={32}
+				size={24}
       />
       <Text
-        className={`${focused ? "font-psemibold" : "font-pregular"} text-xs`}
+        className={`${focused ? "font-semibold" : "font-thin"} text-xs`}
         style={{
           color: color,
         }}
@@ -36,13 +36,14 @@ const _layout = () => {
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarActiveTintColor: "##4a3a7b",
-        tabBarInactiveTintColor: "#161622",
+        tabBarActiveTintColor: "#41337a",
+        tabBarInactiveTintColor: "#04052a",
         tabBarStyle: {
-          backgroundColor: "#ffffff",
-          borderTopWidth: 1,
-          height: 60,
+          height: 56,
+					paddingTop:10,
+					borderBlockColor : '#ffffff'
         },
+				animation : "shift"				
       }}
     >
       <Tabs.Screen
@@ -50,8 +51,8 @@ const _layout = () => {
         options={{
           tabBarIcon: ({ color, focused }) => (
             <TabIcon
-              name="crypto"
-              icon="bitcoin"
+              name="Cryptos"
+              icon="bitbucket"
               focused={focused}
               color={color}
             />
@@ -63,7 +64,7 @@ const _layout = () => {
         options={{
           tabBarIcon: ({ color, focused }) => (
             <TabIcon
-              name="portefeuille"
+              name="Portefeuille"
               icon="wallet"
               focused={focused}
               color={color}
@@ -76,7 +77,7 @@ const _layout = () => {
         options={{
           tabBarIcon: ({ color, focused }) => (
             <TabIcon
-              name="depot\retrait"
+              name="Depot/Retrait"
               icon="bank"
               focused={focused}
               color={color}
@@ -89,7 +90,7 @@ const _layout = () => {
         options={{
           tabBarIcon: ({ color, focused }) => (
             <TabIcon
-              name="mon profil"
+              name="Mon Profil"
               icon="account"
               focused={focused}
               color={color}
