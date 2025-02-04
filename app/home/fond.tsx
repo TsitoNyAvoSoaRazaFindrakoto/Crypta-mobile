@@ -4,7 +4,6 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { Picker } from '@react-native-picker/picker'
 import Logo from "@/components/ui/Logo"
 import { MaterialIcons } from '@expo/vector-icons'
-import { Image } from 'expo-image'
 
 export default function Page() {
   const [form, setForm] = useState({
