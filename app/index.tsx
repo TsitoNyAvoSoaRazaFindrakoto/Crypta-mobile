@@ -114,6 +114,16 @@ export default function LandingPage() {
             Rejoignez-nous
           </Text>
         </TouchableOpacity>
+
+				<TouchableOpacity
+          className="mx-2 my-6 bg-brand-500 py-4 rounded-2xl items-center active:bg-brand-700 border-3 shadow-sm"
+          activeOpacity={0.95}
+					onPress={() => ( router.push('/home/crypto'))}
+        >
+          <Text className="text-surface text-lg font-semibold">
+            Homepage
+          </Text>
+        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
