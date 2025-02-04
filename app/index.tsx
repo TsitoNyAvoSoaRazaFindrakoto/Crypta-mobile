@@ -8,11 +8,11 @@ export default function LandingPage() {
 	const router = useRouter();
 
 	const toSignin = () => {
-		router.push('/(auth)/sign-in');
+		router.push('/auth/sign-in');
 	}
 
 	const toSignup = () => {
-		router.push('/(auth)/sign-up');
+		router.push('/auth/sign-up');
 	}
 
   return (
