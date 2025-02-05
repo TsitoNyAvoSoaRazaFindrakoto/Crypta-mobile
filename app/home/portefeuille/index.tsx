@@ -1,9 +1,8 @@
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native'
-import React from 'react'
-import { SafeAreaView } from "react-native-safe-area-context"
-import Logo from "@/components/ui/Logo"
-import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { Link } from 'expo-router'
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Link } from "expo-router";
+import Logo from "@/components/ui/Logo";
 
 // Données simulées pour la démonstration
 const favoriteCrypto = {
@@ -11,8 +10,8 @@ const favoriteCrypto = {
   symbol: "BTC",
   amount: 0.0234,
   value: 23400000,
-  id: "0"
-}
+  id: "0",
+};
 
 const recentOperations = [
   {
@@ -22,7 +21,7 @@ const recentOperations = [
     type: "achat",
     amount: 0.001,
     date: "2024-02-04",
-    value: 1200000
+    value: 1200000,
   },
   {
     id: "2",
@@ -31,7 +30,7 @@ const recentOperations = [
     type: "vente",
     amount: 0.5,
     date: "2024-02-03",
-    value: 7500000
+    value: 7500000,
   },
   {
     id: "1",
@@ -40,7 +39,7 @@ const recentOperations = [
     type: "achat",
     amount: 0.001,
     date: "2024-01-24",
-    value: 1900000
+    value: 1900000,
   },
   {
     id: "2",
@@ -49,7 +48,7 @@ const recentOperations = [
     type: "vente",
     amount: 0.5,
     date: "2024-01-13",
-    value: 7400000
+    value: 7400000,
   },
   {
     id: "2",
@@ -58,18 +57,18 @@ const recentOperations = [
     type: "vente",
     amount: 0.5,
     date: "2024-02-12",
-    value: 5400000
+    value: 5400000,
   },
   // Ajoutez plus d'opérations si nécessaire
-]
+];
 
-export default function Page() {
+const index = () => {
   return (
     <SafeAreaView className="bg-surface-primary h-full">
       {/* En-tête avec logo */}
       <View className="px-4 pb-4 bg-surface-primary border-b border-border-muted">
         <View className="flex-row justify-between items-center">
-          <Logo containerStyle="flex-row gap-2"/>
+          <Logo containerStyle="flex-row gap-2" />
         </View>
       </View>
 
@@ -86,7 +85,7 @@ export default function Page() {
                 {favoriteCrypto.value.toLocaleString()} Ar
               </Text>
             </View>
-            <TouchableOpacity 
+            <TouchableOpacity
               className="bg-surface/20 p-3 rounded-full"
               onPress={() => {}}
             >
@@ -103,7 +102,7 @@ export default function Page() {
 
           {/* Liste des opérations */}
           {recentOperations.map((operation) => (
-            <Link 
+            <Link
               href={`/home/portefeuille/crypto${operation.id}`}
               key={operation.id}
               asChild
@@ -111,16 +110,25 @@ export default function Page() {
               <TouchableOpacity className="bg-white p-4 rounded-xl mb-3 shadow-sm">
                 <View className="flex-row justify-between items-center">
                   <View className="flex-row items-center">
-                    <View className={`w-10 h-10 rounded-full ${operation.type === 'achat' ? 'bg-green-500' : 'bg-red-500'} items-center justify-center mr-3`}>
-                      <MaterialCommunityIcons 
-                        name={operation.type === 'achat' ? 'arrow-down' : 'arrow-up'} 
-                        size={20} 
-                        color="white" 
+                    <View
+                      className={`w-10 h-10 rounded-full ${
+                        operation.type === "achat"
+                          ? "bg-green-500"
+                          : "bg-red-500"
+                      } items-center justify-center mr-3`}
+                    >
+                      <MaterialCommunityIcons
+                        name={
+                          operation.type === "achat" ? "arrow-down" : "arrow-up"
+                        }
+                        size={20}
+                        color="white"
                       />
                     </View>
                     <View>
                       <Text className="font-medium">
-                        {operation.type === 'achat' ? 'Achat' : 'Vente'} {operation.cryptoSymbol}
+                        {operation.type === "achat" ? "Achat" : "Vente"}{" "}
+                        {operation.cryptoSymbol}
                       </Text>
                       <Text className="text-sm text-gray-500">
                         {operation.date}
@@ -142,7 +150,7 @@ export default function Page() {
 
           {/* Bouton voir tout l'historique */}
           <Link href="/home/portefeuille/0" asChild>
-            <TouchableOpacity 
+            <TouchableOpacity
               className="bg-brand-500 py-3 rounded-xl items-center mt-4"
               activeOpacity={0.8}
             >
@@ -154,5 +162,7 @@ export default function Page() {
         </View>
       </ScrollView>
     </SafeAreaView>
-  )
-}
+  );
+};
+
+export default index;

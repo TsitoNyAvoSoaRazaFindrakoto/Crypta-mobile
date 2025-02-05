@@ -1,8 +1,7 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import { Stack } from 'expo-router'
+import React from 'react';
+import { Stack } from 'expo-router';
 
-const _layout = () => {
+const WalletLayout = () => {
 	return (
 		<Stack>
 			<Stack.Screen name='index' options={{headerShown : false}}/>
@@ -11,4 +10,4 @@ const _layout = () => {
 	)
 }
 
-export default _layout
+export default WalletLayout;
