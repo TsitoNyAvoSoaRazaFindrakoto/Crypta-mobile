@@ -138,7 +138,7 @@ const Index = () => {
 	];
 
   return (
-    <SafeAreaView className="bg-surface-primary h-full p-4">
+    <SafeAreaView className="bg-surface-primary h-full p-2">
       {/* header section */}
       <View className="p-2 mb-2 bg-surface-primary border-b border-border-muted">
         <View className="flex-row justify-between items-center">
