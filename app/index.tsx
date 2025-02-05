@@ -22,7 +22,7 @@ export default function LandingPage() {
         <View className="px-6 pt-6 pb-4 bg-surface-primary border-b border-border-muted">
           <View className="flex-row justify-between items-center">
             <Logo containerStyle="flex-row gap-2"/>
-						<TouchableOpacity className="px-3 py-1.5 rounded-full bg-brand-100 active:bg-brand-200" onPress={toSignin}>
+						<TouchableOpacity className="px-3 py-1.5 w-1/3 rounded-full bg-brand-100 active:bg-brand-200 items-center" onPress={toSignin}>
               <Text className="text-brand-600 text-sm font-medium">
                 Connexion
               </Text>
@@ -36,10 +36,9 @@ export default function LandingPage() {
             <Text className="text-text-primary">Gérer vos Cryptos{"\n"}</Text>
             <Text className="text-brand-600">Tout Simplement</Text>
           </Text>
-
           <Text className="text-lg text-text-primary font-semibold mb-8 w-2/3">
-            Portefeuille multi-chaîne sécurisé avec{"\n"}une sécurité
-            institutionnelle et{"\n"}un design élégant
+            Portefeuille multi-chaîne sécurisé avec une sécurité
+            institutionnelle et un design élégant
           </Text>
         </View>
 

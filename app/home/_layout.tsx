@@ -37,11 +37,11 @@ const _layout = () => {
         headerShown: false,
         tabBarShowLabel: false,
         tabBarActiveTintColor: "#41337a",
-        tabBarInactiveTintColor: "#04052a",
+        tabBarInactiveTintColor: "#aba0d7",
         tabBarStyle: {
           height: 56,
 					paddingTop:10,
-					borderBlockColor : '#ffffff'
+					backgroundColor: '#f8f9fe'
         },
 				animation : "shift"				
       }}
@@ -91,7 +91,7 @@ const _layout = () => {
           tabBarIcon: ({ color, focused }) => (
             <TabIcon
               name="Mon Profil"
-              icon="account"
+              icon="account-outline"
               focused={focused}
               color={color}
             />

@@ -14,9 +14,9 @@ const Logo: React.FC<LogoProps> = ({ children,logoSize,containerStyle } : LogoPr
       <MaterialCommunityIcons
         name="wallet-plus-outline"
         size={logoSize || 28}
-        className="text-brand-600"
+				color={'#41337a'}
       />
-      <Text className="text-2xl font-bold text-brand-700 mr-2">Crypta</Text>
+      <Text className="text-2xl font-bold text-brand-600 mr-2">Crypta</Text>
       {children}
     </View>
   );
