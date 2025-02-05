@@ -37,7 +37,7 @@ const _layout = () => {
         headerShown: false,
         tabBarShowLabel: false,
         tabBarActiveTintColor: "#41337a",
-        tabBarInactiveTintColor: "#aba0d7",
+        tabBarInactiveTintColor: "#aaaada",
         tabBarStyle: {
           height: 56,
 					paddingTop:10,
@@ -59,7 +59,7 @@ const _layout = () => {
           ),
         }}
       />
-      <Tabs.Screen
+			<Tabs.Screen
         name="portefeuille"
         options={{
           tabBarIcon: ({ color, focused }) => (

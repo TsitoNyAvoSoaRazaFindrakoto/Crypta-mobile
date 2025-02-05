@@ -1,8 +1,9 @@
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Logo from "@/components/ui/Logo";
+import CustomChart from "@/components/CustomChart";
 
 type CryptoRowProps = {
   id: number;
@@ -31,13 +32,13 @@ const CryptoRow = ({
       className="p-4 bg-surface rounded-lg mb-2 border-hairline border-accent-800"
     >
       <View className="flex-row justify-between items-center">
-        <View className="flex-1">
+        <View className="flex-2">
           <Text className="text-lg font-semibold text-text-primary">
             {name}
           </Text>
         </View>
 
-        <View className="flex-row items-center gap-3">
+        <View className="flex-row items-center gap-2">
           <View className="items-end">
             <Text className="text-base font-medium text-text-primary">
               ${Number(price).toFixed(2)}
@@ -121,32 +122,52 @@ const Index = () => {
     );
   };
 
+  const graphData = [
+		{ value: 100, label: 'hey' },
+		{ value: 140, label: 'hey' },
+		{ value: 250, label: 'hey' },
+		{ value: 290, label: 'hey' },
+		{ value: 440, label: 'hey' },
+		{ value: 300, label: 'hey' },
+		{ value: 280, label: 'hey' },
+		{ value: 180, label: 'hey' },
+		{ value: 150, label: 'hey' },
+		{ value: 150, label: 'hey' },
+	];
+	
+	// Ensure graphData is not frozen
+	console.log(Object.isFrozen(graphData)); 
+
   return (
     <SafeAreaView className="bg-surface-primary h-full p-2">
       {/* header section */}
-      <View className="p-4 pb-4 mb-8 bg-surface-primary border-b border-border-muted">
+      <View className="p-2 mb-2 bg-surface-primary border-b border-border-muted">
         <View className="flex-row justify-between items-center">
           <Logo containerStyle="flex-row gap-2" />
-          <TouchableOpacity className="px-3 py-1.5 rounded-xl w-1/3 items-center bg-brand-100 active:bg-brand-200 border-hairline">
-            <Text className="text-brand-600 text-md font-medium">Graphe</Text>
+          <TouchableOpacity className="px-3 py-1.5 rounded-xl w-2/4 items-center bg-brand-100 active:bg-brand-200 border-hairline">
+            <Text className="text-brand-600 text-md font-medium">
+              Graphe General
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
 
-      <View className="w-full -px-2 h-56">
-        <Text> Graph</Text>
+      {/* Graph */}
+
+      <View className="w-full mb-2 h-2/5 bg-surface-primary overflow-hidden border-hairline rounded-lg border-elevation-5 py-4">
+        {/* <CustomChart chartData={graphData} /> */}
       </View>
 
       {/* price section */}
-      <View className="p-2 pt-4 border rounded-lg border-border-muted">
+      <View className="p-2 pt-4 border rounded-lg border-border-muted  h-1/2">
         <Text className="text-xl mx-2 font-semibold text-text-primary">
           Cours des Cryptomonnaies
         </Text>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          className="border-t-hairline py-4 mt-2 -mb-2 max-h-60"
+          className="border-t-hairline py-4 mt-2 -mb-2"
         >
-          <View className="flex-col last:mb-8">
+          <View className="flex-col last:mb-6">
             {data.map((crypto) => (
               <CryptoRow
                 key={crypto.id}
