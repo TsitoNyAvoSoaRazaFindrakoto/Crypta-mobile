@@ -4,6 +4,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Logo from "@/components/ui/Logo";
 import CustomChart from "@/components/CustomChart";
+import { useRouter } from "expo-router";
 
 type CryptoRowProps = {
   id: number;
@@ -82,6 +83,7 @@ const CryptoRow = ({
 };
 
 const Index = () => {
+	const router = useRouter();
   const [data, setData] = useState([
     {
       id: 1,
@@ -134,9 +136,6 @@ const Index = () => {
 		{ value: 150, label: 'hey' },
 		{ value: 150, label: 'hey' },
 	];
-	
-	// Ensure graphData is not frozen
-	console.log(Object.isFrozen(graphData)); 
 
   return (
     <SafeAreaView className="bg-surface-primary h-full p-2">
@@ -144,7 +143,7 @@ const Index = () => {
       <View className="p-2 mb-2 bg-surface-primary border-b border-border-muted">
         <View className="flex-row justify-between items-center">
           <Logo containerStyle="flex-row gap-2" />
-          <TouchableOpacity className="px-3 py-1.5 rounded-xl w-2/4 items-center bg-brand-100 active:bg-brand-200 border-hairline">
+          <TouchableOpacity onPress={() => router.push("/home/crypto/general")} className="px-3 py-1.5 rounded-xl w-2/4 items-center bg-brand-100 active:bg-brand-200 border-hairline">
             <Text className="text-brand-600 text-md font-medium">
               Graphe General
             </Text>
