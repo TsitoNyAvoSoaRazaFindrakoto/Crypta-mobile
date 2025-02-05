@@ -1,8 +1,3 @@
-import {
-  DarkTheme,
-  DefaultTheme,
-  ThemeProvider,
-} from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
@@ -58,15 +53,12 @@ export default function RootLayout() {
    */
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack screenOptions={{ headerShown: false}}>
+    <>
+      <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" />
         <Stack.Screen name="auth" />
         <Stack.Screen name="home" />
-
-
         <Stack.Screen name="+not-found" />
-
         {/* 
       <Stack.Screen
         name="profile" // ↔️ Doit correspondre à app/profile.tsx
@@ -74,12 +66,12 @@ export default function RootLayout() {
           title: 'Mon Profil', // 🏷 Texte dans la barre de titre
           headerStyle: { backgroundColor: 'purple' }, // 🟣 Couleur de la barre
           headerTintColor: 'white' // ⚪ Couleur du texte
-        }}
-      />
-      */}
+					}}
+					/>
+					*/}
+        {/* <Footer /> 👈 Sera présent sur tous les écrans */}
       </Stack>
-      <StatusBar style="auto" /> {/* 🔄 S'adapte au thème */}
-      {/* <Footer /> 👈 Sera présent sur tous les écrans */}
-    </ThemeProvider>
+      <StatusBar backgroundColor="#f8f9fe" style="dark" />
+    </>
   );
 }
