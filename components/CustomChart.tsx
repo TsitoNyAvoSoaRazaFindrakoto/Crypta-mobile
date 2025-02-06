@@ -11,6 +11,8 @@ interface ChartDataPoint {
 
 interface ChartConfig {
   thickness?: number;
+  height?: number;
+  width?: number;
   color?: string;
   maxValue?: number;
   noOfSections?: number;
