@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Crypta-mobile",
-    "slug": "Crypta-mobile",
+    "slug": "crypta-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -15,7 +15,11 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.tsitonyavo.cryptamobile"
     },
     "web": {
       "bundler": "metro",
@@ -43,6 +47,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "00877c72-aad3-40aa-8054-4f63af8163ab"
+      }
+    },
+    "owner": "tsitonyavo"
   }
 }

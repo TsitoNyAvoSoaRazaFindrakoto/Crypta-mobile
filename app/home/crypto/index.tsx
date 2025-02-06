@@ -5,6 +5,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Logo from "@/components/ui/Logo";
 import CustomChart from "@/components/CustomChart";
 import { useRouter } from "expo-router";
+import { chartTypes } from "react-native-gifted-charts";
 
 type CryptoRowProps = {
   id: number;
@@ -161,9 +162,9 @@ const Index = () => {
       </View>
 
       {/* Graph */}
-      <View className="w-full mb-2 h-2/5 bg-surface-primary overflow-hidden border-hairline rounded-lg border-elevation-5 py-4">
-        {/* <CustomChart chartData={graphData} /> */}
-      </View>
+      <ScrollView className="w-full mb-2 h-2/5 bg-surface-primary border-hairline rounded-lg border-elevation-5 py-4">
+        <CustomChart chartData={graphData} chartConfig={{height : 200}}/>
+      </ScrollView>
 
       {/* price section */}
       <View className="p-2 pt-4 border rounded-lg border-border-muted  h-1/2">

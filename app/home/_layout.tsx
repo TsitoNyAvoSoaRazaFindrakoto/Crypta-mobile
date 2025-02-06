@@ -88,7 +88,7 @@ const _layout = () => {
           tabBarIcon: ({ color, focused }) => (
             <TabIcon
               name="Mon Profil"
-              icon="account-outline"
+              icon="account"
               focused={focused}
               color={color}
             />
