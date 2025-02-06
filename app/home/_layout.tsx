@@ -2,6 +2,7 @@ import { View, Text } from "react-native";
 import React from "react";
 import { Tabs } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { StatusBar } from "react-native";
 
 interface TabIconProps {
   icon: any;
@@ -13,11 +14,7 @@ interface TabIconProps {
 const TabIcon: React.FC<TabIconProps> = ({ icon, color, name, focused }) => {
   return (
     <View className="items-center justify-center w-32">
-      <MaterialCommunityIcons
-        name={icon}
-        color={color}
-				size={24}
-      />
+      <MaterialCommunityIcons name={icon} color={color} size={24} />
       <Text
         className={`${focused ? "font-semibold" : "font-thin"} text-xs`}
         style={{
@@ -36,14 +33,14 @@ const _layout = () => {
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarActiveTintColor: "#41337a",
-        tabBarInactiveTintColor: "#aaaada",
+        tabBarActiveTintColor: "#6366f1",
+        tabBarInactiveTintColor: "#41337a",
         tabBarStyle: {
           height: 56,
-					paddingTop:10,
-					backgroundColor: '#f8f9fe'
+          paddingTop: 10,
+          backgroundColor: "#f8f9fe",
         },
-				animation : "shift"				
+        animation: "shift",
       }}
     >
       <Tabs.Screen
@@ -59,7 +56,7 @@ const _layout = () => {
           ),
         }}
       />
-			<Tabs.Screen
+      <Tabs.Screen
         name="portefeuille"
         options={{
           tabBarIcon: ({ color, focused }) => (
@@ -77,7 +74,7 @@ const _layout = () => {
         options={{
           tabBarIcon: ({ color, focused }) => (
             <TabIcon
-              name="Depot/Retrait"
+              name="Dépôt/Retrait"
               icon="bank"
               focused={focused}
               color={color}

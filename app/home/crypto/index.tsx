@@ -33,8 +33,13 @@ const CryptoRow = ({
       className="p-4 bg-surface rounded-lg mb-2 border-hairline border-accent-800"
     >
       <View className="flex-row justify-between items-center">
-        <View className="flex-2">
-          <Text className="text-lg font-semibold text-text-primary">
+        <View className="flex-row gap-2 items-center justify-center">
+          <MaterialCommunityIcons
+            name={`alpha-${name.charAt(0).toLocaleLowerCase()}-circle`}
+            size={32}
+            color="#636af0"
+          />
+          <Text className="text-xl font-semibold text-text-primary">
             {name}
           </Text>
         </View>
@@ -73,7 +78,7 @@ const CryptoRow = ({
             <MaterialCommunityIcons
               name={favorite ? "star" : "star-outline"}
               size={24}
-              color={"#aba0d7"}
+              color={favorite ? "#6366f1" : "#aba0d7"}
             />
           </TouchableOpacity>
         </View>
@@ -83,7 +88,7 @@ const CryptoRow = ({
 };
 
 const Index = () => {
-	const router = useRouter();
+  const router = useRouter();
   const [data, setData] = useState([
     {
       id: 1,
@@ -125,17 +130,17 @@ const Index = () => {
   };
 
   const graphData = [
-		{ value: 100, label: 'hey' },
-		{ value: 140, label: 'hey' },
-		{ value: 250, label: 'hey' },
-		{ value: 290, label: 'hey' },
-		{ value: 440, label: 'hey' },
-		{ value: 300, label: 'hey' },
-		{ value: 280, label: 'hey' },
-		{ value: 180, label: 'hey' },
-		{ value: 150, label: 'hey' },
-		{ value: 150, label: 'hey' },
-	];
+    { value: 100, label: "hey" },
+    { value: 140, label: "hey" },
+    { value: 250, label: "hey" },
+    { value: 290, label: "hey" },
+    { value: 440, label: "hey" },
+    { value: 300, label: "hey" },
+    { value: 280, label: "hey" },
+    { value: 180, label: "hey" },
+    { value: 150, label: "hey" },
+    { value: 150, label: "hey" },
+  ];
 
   return (
     <SafeAreaView className="bg-surface-primary h-full p-2">
@@ -143,8 +148,12 @@ const Index = () => {
       <View className="p-2 mb-2 bg-surface-primary border-b border-border-muted">
         <View className="flex-row justify-between items-center">
           <Logo containerStyle="flex-row gap-2" />
-          <TouchableOpacity onPress={() => router.push("/home/crypto/general")} className="px-3 py-1.5 rounded-xl w-2/4 items-center bg-brand-100 active:bg-brand-200 border-hairline">
-            <Text className="text-brand-600 text-md font-medium">
+          <TouchableOpacity
+						activeOpacity={0.9}
+            onPress={() => router.push("/home/crypto/general")}
+            className="px-3 py-1.5 rounded-xl w-2/4 items-center bg-brand-500 active:bg-brand-400 border-hairline"
+          >
+            <Text className="text-brand-100 text-md font-medium">
               Graphe General
             </Text>
           </TouchableOpacity>
@@ -152,14 +161,13 @@ const Index = () => {
       </View>
 
       {/* Graph */}
-
       <View className="w-full mb-2 h-2/5 bg-surface-primary overflow-hidden border-hairline rounded-lg border-elevation-5 py-4">
         {/* <CustomChart chartData={graphData} /> */}
       </View>
 
       {/* price section */}
       <View className="p-2 pt-4 border rounded-lg border-border-muted  h-1/2">
-        <Text className="text-xl mx-2 font-semibold text-text-primary">
+        <Text className="text-xl mx-2 font-semibold text-text-secondary">
           Cours des Cryptomonnaies
         </Text>
         <ScrollView

@@ -22,15 +22,15 @@ export default function Page() {
 
   return (
     <SafeAreaView className="bg-surface-primary h-full">
-      {/* Logo en haut à gauche */}
-      <View className="px-4 pb-4 mb-12 bg-surface-primary border-b border-border-muted">
-          <View className="flex-row justify-between items-center">
-            <Logo containerStyle="flex-row gap-2"/>
-          </View>
+      {/* header section */}
+      <View className="p-2 mb-2 bg-surface-primary border-b border-border-muted">
+        <View className="flex-row justify-between items-center">
+          <Logo />
         </View>
+      </View>
 
       {/* Container principal pour le titre et le formulaire */}
-      <View className="flex-1 bg-white rounded-t-3xl mt-6 px-6 pt-8">
+      <View className="flex-1 rounded-t-3xl mt-6 px-6 pt-8">
         {/* Titre */}
         <Text className="text-2xl font-semibold mb-8 text-center">
           Mouvement de fond

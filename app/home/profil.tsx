@@ -332,7 +332,7 @@ const Profile = () => {
         </View>
 
         {/* Options List */}
-        <View className="space-y-4">
+        <View className="gap-2">
           <TouchableOpacity
             onPress={() => setIsEditing(true)}
             className="flex-row items-center p-4 bg-surface-secondary rounded-lg"
