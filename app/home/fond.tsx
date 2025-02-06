@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Modal, TextInput, Alert } from 'react-native'
+import { View, Text, TouchableOpacity, Modal, TextInput, Alert, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Picker } from '@react-native-picker/picker'
@@ -21,27 +21,27 @@ export default function Page() {
   }
 
   return (
-    <SafeAreaView className="bg-surface-primary h-full">
-      {/* Logo en haut à gauche */}
-      <View className="px-4 pb-4 mb-12 bg-surface-primary border-b border-border-muted">
-          <View className="flex-row justify-between items-center">
-            <Logo containerStyle="flex-row gap-2"/>
-          </View>
+    <SafeAreaView className="bg-surface-primary h-full p-2">
+      {/* header section */}
+      <View className="p-2 mb-2 bg-surface-primary border-b border-border-muted">
+        <View className="flex-row justify-between items-center">
+          <Logo />
         </View>
+      </View>
 
       {/* Container principal pour le titre et le formulaire */}
-      <View className="flex-1 bg-white rounded-t-3xl mt-6 px-6 pt-8">
+      <ScrollView className="flex-1 rounded-t-3xl h-full px-6 pt-8">
         {/* Titre */}
-        <Text className="text-2xl font-semibold mb-8 text-center">
+        <Text className="text-2xl font-semibold mb-4 text-center">
           Mouvement de fond
         </Text>
 
         {/* Type d'opération */}
-        <View className="mb-6">
-          <Text className="text-lg font-medium mb-2">
+        <View className="mb-2">
+          <Text className="text-lg font-medium mb-2 ml-2">
             Type d'opération
           </Text>
-          <View className="border-[0.5px] border-accent-800 rounded-xl overflow-hidden bg-white shadow-sm">
+          <View className="border-hairline border-accent-800 rounded-lg overflow-hidden bg-white">
             <Picker
               selectedValue={form.type}
               onValueChange={(itemValue) => setForm({ ...form, type: itemValue })}
@@ -54,11 +54,11 @@ export default function Page() {
         </View>
 
         {/* Montant */}
-        <View className="mb-6">
-          <Text className="text-lg font-medium mb-2">
+        <View className="mb-4">
+          <Text className="text-lg font-medium mb-2 ml-2">
             Montant
           </Text>
-          <View className="border-[0.5px] border-accent-800 rounded-xl p-3 bg-white shadow-sm">
+          <View className="border-hairline border-accent-800 rounded-lg p-3 bg-white">
             <TextInput
               value={form.montant}
               onChangeText={(text) => {
@@ -74,7 +74,7 @@ export default function Page() {
 
         {/* Bouton Valider */}
         <TouchableOpacity
-          className="bg-brand-500 py-4 rounded-xl items-center mt-4 shadow-sm"
+          className="bg-brand-600 py-4 rounded-lg items-center mt-4"
           activeOpacity={0.8}
           onPress={handleSubmit}
         >
@@ -82,7 +82,7 @@ export default function Page() {
             Valider
           </Text>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
 
       {/* Modal de confirmation moderne */}
       <Modal

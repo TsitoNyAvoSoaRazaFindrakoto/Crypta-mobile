@@ -1,6 +1,6 @@
-import { View, Text, StyleProp, TextStyle } from "react-native";
-import React from "react";
-import { LineChart, lineDataItem } from "react-native-gifted-charts";
+import { View, Text, StyleProp, TextStyle, ScrollView } from "react-native";
+import React, { useState } from "react";
+import { LineChart, lineDataItem, lineDataItemNullSafe } from "react-native-gifted-charts";
 
 // Define types for chart data and configuration
 interface ChartDataPoint {
@@ -41,7 +41,7 @@ const DEFAULT_CONFIG: ChartConfig = {
   noOfSections: 6,
   spacing: 48,
   initialSpacing: 26,
-  yAxisOffset: 20,
+	yAxisOffset : 23,
   rulesColor: "#4a4a4a",
   rulesType: "solid",
   showReferenceLine1: true,
@@ -49,11 +49,6 @@ const DEFAULT_CONFIG: ChartConfig = {
     color: "#8171c3",
     dashWidth: 2,
     dashGap: 4,
-  },
-  xAxisLabelTextStyle: {
-    color: "gray",
-    width: 80,
-    marginLeft: 10,
   },
   yAxisTextStyle: {
     color: "gray",
@@ -63,8 +58,8 @@ const DEFAULT_CONFIG: ChartConfig = {
 const CustomDataPoint = () => (
   <View
     style={{
-      width: 12,
-      height: 12,
+      width: 16,
+      height: 16,
       backgroundColor: "#ffffff",
       borderColor: "#8171c3",
       borderWidth: 3,
@@ -82,30 +77,19 @@ const CustomLabel = ({ label }: { label: string }) => (
 const Chart = ({ chartData, chartConfig = {} }: ChartProps) => {
   const mergedConfig = { ...DEFAULT_CONFIG, ...chartConfig };
 
-  // Create NEW objects to avoid mutation issues
-  const formattedData = chartData.map((item) => ({
-    ...item, // Preserve original properties
-    customDataPoint: <CustomDataPoint />,
-    labelComponent: () => <CustomLabel label={item.label} />,
-  }));
-
   return (
-    <View className="w-full">
+    <ScrollView className="w-full h-3/4 p-6">
       <LineChart
-        {...mergedConfig}
-        data={formattedData}
-        dataPointsComponent={CustomDataPoint}
-        curved
+				{...mergedConfig}
+        data={chartData}
         isAnimated
+				showDataPointLabelOnFocus={true}
         animationDuration={400}
         hideRules={false}
         focusEnabled
-        showStripOnFocus
         showTextOnFocus
-        stripColor="#8171c3"
-        stripWidth={2}
       />
-    </View>
+    </ScrollView>
   );
 };
 

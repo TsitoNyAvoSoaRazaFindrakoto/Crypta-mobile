@@ -54,24 +54,13 @@ export default function RootLayout() {
 
   return (
     <>
+      <StatusBar backgroundColor="#f8f9fe" style="dark"/>
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" />
         <Stack.Screen name="auth" />
         <Stack.Screen name="home" />
         <Stack.Screen name="+not-found" />
-        {/* 
-      <Stack.Screen
-        name="profile" // ↔️ Doit correspondre à app/profile.tsx
-        options={{
-          title: 'Mon Profil', // 🏷 Texte dans la barre de titre
-          headerStyle: { backgroundColor: 'purple' }, // 🟣 Couleur de la barre
-          headerTintColor: 'white' // ⚪ Couleur du texte
-					}}
-					/>
-					*/}
-        {/* <Footer /> 👈 Sera présent sur tous les écrans */}
       </Stack>
-      <StatusBar backgroundColor="#f8f9fe" style="dark" />
     </>
   );
 }
