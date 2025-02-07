@@ -16,9 +16,7 @@
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": [
-        "android.permission.RECORD_AUDIO"
-      ],
+      "permissions": ["android.permission.RECORD_AUDIO"],
       "package": "com.tsitonyavo.cryptamobile"
     },
     "web": {
@@ -54,8 +52,23 @@
       },
       "eas": {
         "projectId": "00877c72-aad3-40aa-8054-4f63af8163ab"
+      },
+      "firebase": {
+        "apiKey": "AIzaSyD_dhXrU5-3m_QsUAka7FVavlGTgNTlppI",
+        "authDomain": "crypta-d5e13.firebaseapp.com",
+        "projectId": "crypta-d5e13",
+        "storageBucket": "crypta-d5e13.firebasestorage.app",
+        "messagingSenderId": "539604836728",
+        "appId": "1=539604836728=web=5876a760ea6bf2189ee88d",
+        "measurementId": "G-X7J7VJSX4N"
+      },
+      "imageKit": {
+        "publicKey": "public_UhrmHHThLKc8Yp4wVNknKOIEs24=",
+        "privateKey": "private_SpjOedTubXZQ5QiMXTvAHygzRXM=",
+        "endpointUrl": "https://ik.imagekit.io/qmegcemhav"
       }
     },
+
     "owner": "tsitonyavo"
   }
 }
