@@ -3,7 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Link, router } from 'expo-router';
+import { Link, router, useNavigation } from 'expo-router';
 
 // Mock user data - Replace with actual user data later
 const mockUser = {
@@ -17,6 +17,7 @@ const mockUser = {
 };
 
 const Profile = () => {
+  const navigation = useNavigation();
   const [user, setUser] = useState(mockUser);
   const [isEditing, setIsEditing] = useState(false);
   const [editedUser, setEditedUser] = useState(user);
@@ -240,7 +241,7 @@ const Profile = () => {
             <TouchableOpacity onPress={() => setIsEditing(false)} className="mr-4">
               <MaterialCommunityIcons name="arrow-left" size={24} color="#6366f1"  />
             </TouchableOpacity>
-            <Text className="text-xl font-bold text-text-primary">Edit Profile</Text>
+            <Text className="text-xl font-bold text-text-primary">Éditer le profil</Text>
             <TouchableOpacity onPress={handleSave} className="ml-auto">
               <MaterialCommunityIcons name="check" size={24} color="#6366f1" />
             </TouchableOpacity>
@@ -304,69 +305,104 @@ const Profile = () => {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-surface-primary">
+<SafeAreaView style={{ flex: 1, backgroundColor: "#f8f9fe" }}>
       <PhotoOptionsModal />
       <PermissionModal />
       <ErrorModal />
-      <View className="px-4 py-6">
+      
+      <View style={{ flex: 1, paddingHorizontal: 16, paddingVertical: 24, marginTop: 10 }}>
         {/* Profile Header */}
-        <View className="items-center mb-8">
-          <View className="flex-row items-end mb-4">
-            <View className="w-24 h-24 rounded-full overflow-hidden bg-surface-secondary border-2 border-brand-500">
+        <View style={{ alignItems: "center", marginBottom: 24 }}>
+          <View style={{ flexDirection: "row", alignItems: "flex-end", marginBottom: 16 }}>
+            <View style={{ width: 96, height: 96, borderRadius: 48, overflow: "hidden", backgroundColor: "#e5e7eb", borderWidth: 2, borderColor: "#6366f1" }}>
               {user.profilePicture ? (
-                <Image source={{ uri: user.profilePicture }} className="w-full h-full" />
+                <Image source={{ uri: user.profilePicture }} style={{ width: "100%", height: "100%" }} />
               ) : (
-                <View className="w-full h-full items-center justify-center bg-surface-secondary">
+                <View style={{ width: "100%", height: "100%", alignItems: "center", justifyContent: "center", backgroundColor: "#e5e7eb" }}>
                   <MaterialCommunityIcons name="account" size={48} color="#9ca3af" />
                 </View>
               )}
             </View>
+
             <TouchableOpacity 
               onPress={() => setShowPhotoModal(true)}
-              className="bg-brand-600 p-2 rounded-full -ml-8 top-2 mb-2"
+              style={{
+                backgroundColor: "#6366f1",
+                padding: 8,
+                borderRadius: 20,
+                marginLeft: -30,
+                marginBottom: 8
+              }}
             >
               <MaterialCommunityIcons name="camera" size={20} color="white" />
             </TouchableOpacity>
           </View>
-          <Text className="text-xl font-bold text-text-primary text-center">{user.name}</Text>
+
+          <Text style={{ fontSize: 20, fontWeight: "bold", color: "#1f2937", textAlign: "center" }}>
+            {user.name}
+          </Text>
         </View>
 
         {/* Options List */}
-        <View className="gap-2">
+        <View style={{ gap: 10 }}>
           <TouchableOpacity
             onPress={() => setIsEditing(true)}
-            className="flex-row items-center p-4 bg-surface-secondary rounded-lg"
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              padding: 16,
+              backgroundColor: "#f3f4f6",
+              borderRadius: 10
+            }}
           >
-            <MaterialCommunityIcons name="account-edit" size={24} color="#6366f1" className="mr-3" />
-            <Text className="text-text-primary font-medium">Edit Profile</Text>
-            <MaterialCommunityIcons name="chevron-right" size={24} color="#9ca3af" className="ml-auto" />
+            <MaterialCommunityIcons name="account-edit" size={24} color="#6366f1" style={{ marginRight: 12 }} />
+            <Text style={{ color: "#1f2937", fontWeight: "500" }}>Éditer le profil</Text>
+            <MaterialCommunityIcons name="chevron-right" size={24} color="#9ca3af" style={{ marginLeft: "auto" }} />
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => router.push('/home/photos')}
-            className="flex-row items-center p-4 bg-surface-secondary rounded-lg"
+            onPress={() => router.push("/home/ChangePassword")}
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              padding: 16,
+              backgroundColor: "#f3f4f6",
+              borderRadius: 10
+            }}
           >
-            <MaterialCommunityIcons name="image-multiple" size={24} color="#6366f1" className="mr-3" />
-            <Text className="text-text-primary font-medium">Photos de profil</Text>
-            <MaterialCommunityIcons name="chevron-right" size={24} color="#9ca3af" className="ml-auto" />
+            <MaterialCommunityIcons name="lock" size={24} color="#6366f1" style={{ marginRight: 12 }} />
+            <Text style={{ color: "#1f2937", fontWeight: "500" }}>Changer le mot de passe</Text>
+            <MaterialCommunityIcons name="chevron-right" size={24} color="#9ca3af" style={{ marginLeft: "auto" }} />
           </TouchableOpacity>
 
-          <TouchableOpacity className="flex-row items-center p-4 bg-surface-secondary rounded-lg">
-            <MaterialCommunityIcons name="lock" size={24} color="#6366f1" className="mr-3" />
-            <Text className="text-text-primary font-medium">Change Password</Text>
-            <MaterialCommunityIcons name="chevron-right" size={24} color="#9ca3af" className="ml-auto" />
+          <TouchableOpacity
+            onPress={() => router.push("/home/Information")}
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              padding: 16,
+              backgroundColor: "#f3f4f6",
+              borderRadius: 10
+            }}
+          >
+            <MaterialCommunityIcons name="information" size={24} color="#6366f1" style={{ marginRight: 12 }} />
+            <Text style={{ color: "#1f2937", fontWeight: "500" }}>Informations</Text>
+            <MaterialCommunityIcons name="chevron-right" size={24} color="#9ca3af" style={{ marginLeft: "auto" }} />
           </TouchableOpacity>
 
-          <TouchableOpacity className="flex-row items-center p-4 bg-surface-secondary rounded-lg">
-            <MaterialCommunityIcons name="information" size={24} color="#6366f1" className="mr-3" />
-            <Text className="text-text-primary font-medium">Information</Text>
-            <MaterialCommunityIcons name="chevron-right" size={24} color="#9ca3af" className="ml-auto" />
-          </TouchableOpacity>
-
-          <TouchableOpacity className="flex-row items-center p-4 bg-surface-secondary rounded-lg">
-            <MaterialCommunityIcons name="logout" size={24} color="#6366f1" className="mr-3" />
-            <Text className="text-text-primary font-medium">Log out</Text>
-            <MaterialCommunityIcons name="chevron-right" size={24} color="#9ca3af" className="ml-auto" />
+          <TouchableOpacity
+            onPress={() => router.push("/auth/sign-in")}
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              padding: 16,
+              backgroundColor: "#f3f4f6",
+              borderRadius: 10
+            }}
+          >
+            <MaterialCommunityIcons name="logout" size={24} color="#6366f1" style={{ marginRight: 12 }} />
+            <Text style={{ color: "#1f2937", fontWeight: "500" }}>Se déconnecter</Text>
+            <MaterialCommunityIcons name="chevron-right" size={24} color="#9ca3af" style={{ marginLeft: "auto" }} />
           </TouchableOpacity>
         </View>
       </View>

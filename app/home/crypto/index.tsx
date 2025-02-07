@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, Dimensions, useWindowDimensions } from "react-native";
 import React, { useState, useEffect, useMemo } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -96,6 +96,7 @@ const CryptoRow = ({
 
 const Index = () => {
   const router = useRouter();
+  const { width: screenWidth, height: screenHeight } = useWindowDimensions();
   const [selectedCrypto, setSelectedCrypto] = useState<number>(1);
   const [data, setData] = useState([
     {
@@ -161,12 +162,28 @@ const Index = () => {
   ]);
 
   const handleFavoriteButton = (id: number) => {
-    setData((prevData) =>
-      prevData.map((crypto) => ({
-        ...crypto,
-        favorite: crypto.id === id,
-      }))
-    );
+    setData((prevData) => {
+      const favoriteCount = prevData.filter(crypto => crypto.favorite).length;
+      const crypto = prevData.find(c => c.id === id);
+      
+      // Si on veut retirer des favoris
+      if (crypto?.favorite) {
+        return prevData.map(c => ({
+          ...c,
+          favorite: c.id === id ? false : c.favorite
+        }));
+      }
+      
+      // Si on veut ajouter aux favoris et qu'on n'a pas atteint la limite
+      if (favoriteCount < 3) {
+        return prevData.map(c => ({
+          ...c,
+          favorite: c.id === id ? true : c.favorite
+        }));
+      }
+      
+      return prevData;
+    });
   };
 
   const selectedCryptoData = useMemo(() => 
@@ -184,60 +201,121 @@ const Index = () => {
   );
 
   return (
-    <SafeAreaView className="bg-surface-primary h-full p-2">
+    <SafeAreaView className="bg-surface-primary h-full">
       {/* header section */}
-      <View className="p-2 mb-2 bg-surface-primary border-b border-border-muted">
+      <View className="px-4 py-3 mb-1 bg-surface-primary border-b border-border-muted">
         <View className="flex-row justify-between items-center">
           <Logo containerStyle="flex-row gap-2" />
         </View>
       </View>
 
-      {/* Graph section */}
-      <View className="bg-surface p-4 rounded-lg mb-4 h-2/4">
-        <Text className="text-xl font-bold text-text-primary mb-6">
-          Évolution du prix {selectedCryptoData?.name}
-        </Text>
-        <ScrollView className="w-full pb-4 -ml-2">
-          <CustomChart 
-            chartData={chartData}
-            chartConfig={{
-              thickness: 3,
-              color: "#636af0",
-              maxValue: 12000,
-              noOfSections: 6,
-              spacing: 45,
-              initialSpacing: 20,
-              yAxisOffset: 23,
-              rulesColor: "#94a3b8",
-              rulesType: "solid",
-              showReferenceLine1: true,
-              referenceLine1Config: {
-                color: "#8171c3",
-                dashWidth: 2,
-                dashGap: 4,
-              },
-              yAxisTextStyle: {
-                color: "#94a3b8",
-              }
-            }}
-          />
-        </ScrollView>
-      </View>
+      {/* Main Content */}
+      <ScrollView 
+        showsVerticalScrollIndicator={false} 
+        className="flex-1 px-3"
+      >
+        {/* Graph section */}
+        <View 
+          className="bg-surface rounded-xl mb-3 overflow-hidden" 
+          style={{ 
+            height: Math.min(screenHeight * 0.45, 400),
+            elevation: 3,
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 1 },
+            shadowOpacity: 0.22,
+            shadowRadius: 2.22,
+          }}
+        >
+          {/* Graph Header */}
+          <View className="px-4 py-3 border-b border-border-muted bg-white/50">
+            <Text className="text-lg font-bold text-text-primary">
+              Évolution du prix
+            </Text>
+            <View className="flex-row items-center mt-1">
+              <Text className="text-base text-indigo-600 font-semibold">
+                {selectedCryptoData?.name}
+              </Text>
+              <Text className="text-sm text-text-secondary ml-2">
+                ${Number(selectedCryptoData?.price).toLocaleString()}
+              </Text>
+            </View>
+          </View>
 
-      {/* Crypto list */}
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {data.map((crypto) => (
-          <CryptoRow
-            key={crypto.id}
-            id={crypto.id}
-            name={crypto.name}
-            price={crypto.price}
-            previousPrice={crypto.previousPrice}
-            handleFavoriteButton={handleFavoriteButton}
-            favorite={crypto.favorite}
-            onPress={() => setSelectedCrypto(crypto.id)}
-          />
-        ))}
+          {/* Graph Content */}
+          <ScrollView 
+            horizontal 
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ 
+              flexGrow: 1,
+              paddingVertical: 10,
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+            style={{ flex: 1 }}
+            contentOffset={{ x: 20, y: 0 }}
+          >
+            <CustomChart 
+              chartData={chartData}
+              chartConfig={{
+                thickness: 2.5,
+                color: "#636af0",
+                maxValue: 12000,
+                noOfSections: 6,
+                spacing: 42,
+                initialSpacing: 25,
+                yAxisOffset: 0,
+                rulesColor: "#e2e8f0",
+                rulesType: "solid",
+                showReferenceLine1: true,
+                referenceLine1Config: {
+                  color: "#818cf8",
+                  dashWidth: 2,
+                  dashGap: 3,
+                },
+                yAxisTextStyle: {
+                  color: "#64748b",
+                  fontSize: 11,
+                  fontWeight: "600",
+                },
+                xAxisLabelTextStyle: {
+                  color: "#64748b",
+                  fontSize: 10,
+                  fontWeight: "500",
+                },
+                height: Math.max(150, screenHeight * 0.22),
+                width: Math.max(screenWidth * 0.9, chartData.length * 42),
+                yAxisLabelWidth: 35
+              }}
+            />
+          </ScrollView>
+        </View>
+
+        {/* Crypto list */}
+        <View 
+          className="bg-surface rounded-xl overflow-hidden mb-3" 
+          style={{ 
+            elevation: 3,
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 1 },
+            shadowOpacity: 0.22,
+            shadowRadius: 2.22,
+          }}
+        >
+          <View className="p-2">
+            {data.map((crypto) => (
+              <CryptoRow
+                key={crypto.id}
+                id={crypto.id}
+                name={crypto.name}
+                price={crypto.price}
+                previousPrice={crypto.previousPrice}
+                handleFavoriteButton={handleFavoriteButton}
+                favorite={crypto.favorite}
+                onPress={() => setSelectedCrypto(crypto.id)}
+              />
+            ))}
+          </View>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );

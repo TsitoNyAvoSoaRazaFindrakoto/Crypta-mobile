@@ -25,6 +25,29 @@ In the output, you'll find options to open the app in a
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
+## Dépendances
+
+Ce projet utilise les dépendances suivantes :
+
+- `@react-navigation/native`
+- `@react-navigation/stack`
+- `expo-image-picker`
+- `@expo/vector-icons`
+
+### Installation des Dépendances
+Pour installer les dépendances, exécutez la commande suivante :
+
+```bash
+npm install
+```
+
+### Configuration de React Navigation
+Assurez-vous d'installer également les dépendances nécessaires pour React Navigation avec Expo :
+
+```bash
+expo install react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context @react-native-community/masked-view
+```
+
 ## Get a fresh project
 
 When you're ready, run:

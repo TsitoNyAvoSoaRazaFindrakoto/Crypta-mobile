@@ -2,7 +2,6 @@ import { View, Text } from "react-native";
 import React from "react";
 import { Tabs } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { StatusBar } from "react-native";
 
 interface TabIconProps {
   icon: any;
@@ -13,12 +12,13 @@ interface TabIconProps {
 
 const TabIcon: React.FC<TabIconProps> = ({ icon, color, name, focused }) => {
   return (
-    <View className="items-center justify-center w-32">
+    <View style={{ alignItems: "center", justifyContent: "center", width: 80 }}>
       <MaterialCommunityIcons name={icon} color={color} size={24} />
       <Text
-        className={`${focused ? "font-semibold" : "font-thin"} text-xs`}
         style={{
           color: color,
+          fontWeight: focused ? "600" : "300",
+          fontSize: 12,
         }}
       >
         {name}
@@ -47,12 +47,7 @@ const _layout = () => {
         name="crypto"
         options={{
           tabBarIcon: ({ color, focused }) => (
-            <TabIcon
-              name="Cryptos"
-              icon="bitbucket"
-              focused={focused}
-              color={color}
-            />
+            <TabIcon name="Cryptos" icon="bitcoin" focused={focused} color={color} />
           ),
         }}
       />
@@ -60,12 +55,7 @@ const _layout = () => {
         name="portefeuille"
         options={{
           tabBarIcon: ({ color, focused }) => (
-            <TabIcon
-              name="Portefeuille"
-              icon="wallet"
-              focused={focused}
-              color={color}
-            />
+            <TabIcon name="Portefeuille" icon="wallet" focused={focused} color={color} />
           ),
         }}
       />
@@ -73,12 +63,7 @@ const _layout = () => {
         name="fond"
         options={{
           tabBarIcon: ({ color, focused }) => (
-            <TabIcon
-              name="Dépôt/Retrait"
-              icon="bank"
-              focused={focused}
-              color={color}
-            />
+            <TabIcon name="Dépôt/Retrait" icon="bank" focused={focused} color={color} />
           ),
         }}
       />
@@ -86,12 +71,7 @@ const _layout = () => {
         name="profil"
         options={{
           tabBarIcon: ({ color, focused }) => (
-            <TabIcon
-              name="Mon Profil"
-              icon="account"
-              focused={focused}
-              color={color}
-            />
+            <TabIcon name="Mon Profil" icon="account" focused={focused} color={color} />
           ),
         }}
       />

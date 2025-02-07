@@ -63,178 +63,149 @@ const recentOperations = [
 
 const index = () => {
   return (
-    <SafeAreaView className="bg-surface-primary h-full p-2 flex-col">
-      <View className="p-2 mb-2 bg-surface-primary border-b border-border-muted">
+    <SafeAreaView className="bg-surface-primary flex-1">
+      {/* Header avec solde */}
+      <View className="px-4 py-3 mb-2 bg-surface-primary border-b border-border-muted">
         <View className="flex-row justify-between items-center">
           <Logo containerStyle="flex-row gap-2" />
           <TouchableOpacity
-            activeOpacity={0.9}
-            className="px-3 py-1.5 rounded-xl min-w-[] max-w-3/4 items-center bg-brand-500 active:bg-brand-200"
+            activeOpacity={0.8}
+            className="px-4 py-2 rounded-2xl items-center bg-brand-500"
           >
-            <Text className="text-elevation-4 text-lg font-medium">
-              Fonds :{" "}
-              <Text className="text-text-inverted font-semibold">$2000</Text>
+            <Text className="text-text-inverted text-base font-medium">
+              Solde disponible
+            </Text>
+            <Text className="text-text-inverted text-xl font-bold mt-0.5">
+              {Number(2000).toLocaleString()} $
             </Text>
           </TouchableOpacity>
         </View>
       </View>
 
-      <View>
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        className="flex-1 px-4"
+      >
+        {/* Section favoris */}
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          className="w-full mt-4 p-2"
+          className="mt-4"
+          contentContainerStyle={{ paddingRight: 20 }}
         >
-          <View className="flex-row first:ml-2 last:mr-6 gap-2">
-            <View className="bg-brand-200 p-4 rounded-2xl shadow-sm">
-              <Text className="text-text-tertiary text-lg mb-2">
-                Votre crypto favori
-              </Text>
-              <View className="flex-row justify-between items-center">
+          {[favoriteCrypto, favoriteCrypto, favoriteCrypto].map((crypto, index) => (
+            <TouchableOpacity
+              key={index}
+              activeOpacity={0.7}
+              onPress={() => {}}
+              className={`bg-brand-100 p-5 rounded-3xl ${index > 0 ? 'ml-4' : ''}`}
+              style={{ 
+                minWidth: 280,
+                maxWidth: 320
+              }}
+            >
+              <View className="flex-row justify-between items-start mb-4">
+                <Text className="text-brand-700 text-lg font-semibold">
+                  Crypto Favori {index + 1}
+                </Text>
+                <MaterialCommunityIcons 
+                  name="star" 
+                  size={24} 
+                  color={theme.extend.colors.brand[500]} 
+                />
+              </View>
+              <View className="flex-row justify-between items-end">
                 <View>
-                  <Text className="text-text-tertiary text-2xl font-bold">
-                    {favoriteCrypto.amount} {favoriteCrypto.symbol}
+                  <Text className="text-brand-900 text-3xl font-bold">
+                    {crypto.amount} {crypto.symbol}
                   </Text>
-                  <Text className="text-text-tertiary/80 mt-1">
-                    {favoriteCrypto.value.toLocaleString()} Ar
+                  <Text className="text-brand-700 text-lg mt-1">
+                    {crypto.value.toLocaleString()} Ar
                   </Text>
                 </View>
-                <TouchableOpacity
-                  className="bg-surface/20 p-3 rounded-full"
-                  onPress={() => {}}
-                >
-                  <MaterialCommunityIcons
-                    name="star"
-                    size={24}
-                    color={theme.extend.colors.brand[300]}
-                  />
-                </TouchableOpacity>
+                {index < 2 && (
+                  <TouchableOpacity 
+                    className="bg-brand-500/20 p-2 rounded-xl"
+                    activeOpacity={0.8}
+                    onPress={() => {}}
+                  >
+                    <MaterialCommunityIcons 
+                      name="arrow-right" 
+                      size={24} 
+                      color={theme.extend.colors.brand[700]} 
+                    />
+                  </TouchableOpacity>
+                )}
               </View>
-            </View>
-            <View className="bg-brand-200 p-4 rounded-2xl shadow-sm">
-              <Text className="text-text-tertiary text-lg mb-2">
-                Votre crypto favori
-              </Text>
-              <View className="flex-row justify-between items-center">
-                <View>
-                  <Text className="text-text-tertiary text-2xl font-bold">
-                    {favoriteCrypto.amount} {favoriteCrypto.symbol}
-                  </Text>
-                  <Text className="text-text-tertiary/80 mt-1">
-                    {favoriteCrypto.value.toLocaleString()} Ar
-                  </Text>
-                </View>
-                <TouchableOpacity
-                  className="bg-surface/20 p-3 rounded-full"
-                  onPress={() => {}}
-                >
-                  <MaterialCommunityIcons
-                    name="star"
-                    size={24}
-                    color={theme.extend.colors.brand[300]}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-            <View className="bg-brand-200 p-4 rounded-2xl shadow-sm">
-              <Text className="text-text-tertiary text-lg mb-2">
-                Votre crypto favori
-              </Text>
-              <View className="flex-row justify-between items-center">
-                <View>
-                  <Text className="text-text-tertiary text-2xl font-bold">
-                    {favoriteCrypto.amount} {favoriteCrypto.symbol}
-                  </Text>
-                  <Text className="text-text-tertiary/80 mt-1">
-                    {favoriteCrypto.value.toLocaleString()} Ar
-                  </Text>
-                </View>
-                <TouchableOpacity
-                  className="bg-surface/20 p-3 rounded-full"
-                  onPress={() => {}}
-                >
-                  <MaterialCommunityIcons
-                    name="star"
-                    size={24}
-                    color={theme.extend.colors.brand[300]}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
+            </TouchableOpacity>
+          ))}
         </ScrollView>
 
-        <View className="my-4">
-          <View className="flex-row justify-between items-center mb-2 px-2">
-            <Text className="text-xl font-semibold">Opérations récentes</Text>
-            <TouchableOpacity
-              activeOpacity={0.9}
+        {/* Section opérations récentes */}
+        <View className="mt-6 mb-4">
+          <View className="flex-row justify-between items-center mb-4">
+            <Text className="text-text-primary text-lg font-semibold">
+              Opérations Récentes
+            </Text>
+            <TouchableOpacity 
               onPress={() => router.push("/home/portefeuille/0")}
-              className="px-3 py-1 rounded-xl w-1/4 items-center bg-brand-400 active:bg-brand-300"
+              activeOpacity={0.7}
             >
-              <Text className="text-elevation-2 text-md font-medium">
-                voir tout
-              </Text>
+              <Text className="text-brand-500 text-base">Voir tout</Text>
             </TouchableOpacity>
           </View>
-          <View className="max-h-[48vh]">
-            <ScrollView
-              className="h-fit border-t-hairline pt-4"
-              showsVerticalScrollIndicator={false}
-              nestedScrollEnabled={true}
-            >
-              <View className="flex-col last:mb-6">
-                {recentOperations.map((operation) => (
-                  <TouchableOpacity
-                    key={operation.id}
-                    activeOpacity={0.7}
-                    className="bg-white p-4 rounded-xl mb-2 border-hairline border-accent-800"
+
+          {/* Liste des opérations */}
+          <View className="space-y-3">
+            {recentOperations.map((operation) => (
+              <TouchableOpacity
+                key={operation.id}
+                activeOpacity={0.7}
+                onPress={() => {}}
+                className="bg-surface flex-row justify-between items-center p-4 rounded-2xl border border-border-muted"
+              >
+                <View className="flex-row items-center gap-3">
+                  <View 
+                    className={`p-2 rounded-xl ${
+                      operation.type === "achat" 
+                        ? "bg-green-100" 
+                        : "bg-red-100"
+                    }`}
                   >
-                    <View className="flex-row justify-between items-center">
-                      <View className="flex-row items-center">
-                        <View
-                          className={`w-10 h-10 rounded-full ${
-                            operation.type === "achat"
-                              ? "bg-success"
-                              : "bg-error"
-                          } items-center justify-center mr-3`}
-                        >
-                          <MaterialCommunityIcons
-                            name={
-                              operation.type === "achat"
-                                ? "arrow-down"
-                                : "arrow-up"
-                            }
-                            size={20}
-                            color="white"
-                          />
-                        </View>
-                        <View>
-                          <Text className="font-medium">
-                            {operation.type === "achat" ? "Achat" : "Vente"}{" "}
-                            {operation.cryptoSymbol}
-                          </Text>
-                          <Text className="text-sm text-gray-500">
-                            {operation.date}
-                          </Text>
-                        </View>
-                      </View>
-                      <View className="items-end">
-                        <Text className="font-medium">
-                          {operation.amount} {operation.cryptoSymbol}
-                        </Text>
-                        <Text className="text-sm text-gray-500">
-                          {operation.value.toLocaleString()} Ar
-                        </Text>
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </ScrollView>
+                    <MaterialCommunityIcons
+                      name={operation.type === "achat" ? "arrow-bottom-left" : "arrow-top-right"}
+                      size={24}
+                      color={operation.type === "achat" ? "#16a34a" : "#dc2626"}
+                    />
+                  </View>
+                  <View>
+                    <Text className="text-text-primary text-base font-semibold">
+                      {operation.type === "achat" ? "Achat" : "Vente"} {operation.cryptoSymbol}
+                    </Text>
+                    <Text className="text-text-secondary text-sm mt-0.5">
+                      {new Date(operation.date).toLocaleDateString()}
+                    </Text>
+                  </View>
+                </View>
+                <View className="items-end">
+                  <Text className="text-text-primary text-base font-semibold">
+                    {operation.amount} {operation.cryptoSymbol}
+                  </Text>
+                  <Text 
+                    className={`text-sm mt-0.5 ${
+                      operation.type === "achat" 
+                        ? "text-green-600" 
+                        : "text-red-600"
+                    }`}
+                  >
+                    {operation.type === "achat" ? "-" : "+"}{operation.value.toLocaleString()} Ar
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            ))}
           </View>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
