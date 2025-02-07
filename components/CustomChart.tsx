@@ -1,12 +1,11 @@
-import { View, Text, StyleProp, TextStyle, ScrollView } from "react-native";
-import React, { useState } from "react";
-import { LineChart, lineDataItem, lineDataItemNullSafe } from "react-native-gifted-charts";
+import { View, Text, StyleProp, TextStyle, Dimensions } from "react-native";
+import React, { useMemo } from "react";
+import { LineChart } from "react-native-gifted-charts";
 
-// Define types for chart data and configuration
 interface ChartDataPoint {
   value: number;
   label: string;
-  timestamp?: number;
+  dataPointText?: string;
 }
 
 interface ChartConfig {
@@ -36,62 +35,85 @@ interface ChartProps {
   chartConfig?: ChartConfig;
 }
 
-const DEFAULT_CONFIG: ChartConfig = {
-  thickness: 3,
-  color: "#41337a",
-  maxValue: 600,
-  noOfSections: 6,
-  spacing: 48,
-  initialSpacing: 26,
-	yAxisOffset : 23,
-  rulesColor: "#4a4a4a",
-  rulesType: "solid",
-  showReferenceLine1: true,
-  referenceLine1Config: {
-    color: "#8171c3",
-    dashWidth: 2,
-    dashGap: 4,
-  },
-  yAxisTextStyle: {
-    color: "gray",
-  },
-};
-
-const CustomDataPoint = () => (
-  <View
-    style={{
-      width: 16,
-      height: 16,
-      backgroundColor: "#ffffff",
-      borderColor: "#8171c3",
-      borderWidth: 3,
-      borderRadius: 10,
-    }}
-  />
-);
-
-const CustomLabel = ({ label }: { label: string }) => (
-  <View style={{ width: 70, marginLeft: 7 }}>
-    <Text style={{ color: "white", fontWeight: "bold" }}>{label}</Text>
-  </View>
-);
-
 const Chart = ({ chartData, chartConfig = {} }: ChartProps) => {
+  // Calculer dynamiquement maxValue et yAxisOffset
+  const computedValues = useMemo(() => {
+    if (!chartData.length) return { maxValue: 1000, yAxisOffset: 0, noOfSections: 5 };
+    
+    const values = chartData.map(point => point.value);
+    const maxValue = Math.max(...values);
+    const minValue = Math.min(...values);
+    
+    // Ajouter et soustraire 200 pour les marges
+    const adjustedMaxValue = maxValue + 200;
+    const adjustedMinValue = Math.max(0, minValue - 200); // Éviter les valeurs négatives
+    
+    // yAxisOffset basé sur la valeur minimale ajustée
+    const yAxisOffset = adjustedMinValue;
+    
+    return {
+      maxValue: adjustedMaxValue,
+      yAxisOffset,
+      noOfSections: 5
+    };
+  }, [chartData]);
+
+  const DEFAULT_CONFIG: ChartConfig = {
+    thickness: 3,
+    color: "#4f46e5",
+    spacing: 50,
+    initialSpacing: 20,
+    rulesColor: "#94a3b8",
+    rulesType: "dashed",
+    showReferenceLine1: true,
+    referenceLine1Config: {
+      color: "#818cf8",
+      dashWidth: 2,
+      dashGap: 4,
+    },
+    yAxisTextStyle: {
+      color: "#94a3b8",
+      fontSize: 12,
+    },
+    height: 220,
+    width: Dimensions.get('window').width - 80,
+    ...computedValues
+  };
+
   const mergedConfig = { ...DEFAULT_CONFIG, ...chartConfig };
 
   return (
-    <ScrollView className="w-full h-3/4 p-6">
+    <View className="w-full items-center justify-center bg-white/5 rounded-xl p-4">
       <LineChart
-				{...mergedConfig}
+        {...mergedConfig}
         data={chartData}
         isAnimated
-				showDataPointLabelOnFocus={true}
-        animationDuration={400}
-        hideRules={false}
-        focusEnabled
-        showTextOnFocus
+        curved
+        animationDuration={800}
+        showDataPointOnTop
+        hideDataPoints={false}
+        showTextOnTop
+        textShiftY={-20}
+        textShiftX={0}
+        textFontSize={12}
+        dataPointsHeight={10}
+        dataPointsWidth={10}
+        dataPointsColor="#4f46e5"
+        dataPointsRadius={5}
+        startFillColor="rgba(79, 70, 229, 0.2)"
+        endFillColor="rgba(79, 70, 229, 0.01)"
+        xAxisColor="#94a3b8"
+        yAxisColor="#94a3b8"
+        xAxisLabelTextStyle={{ color: "#94a3b8", fontSize: 12 }}
+        yAxisTextStyle={{ color: "#94a3b8", fontSize: 12 }}
+        backgroundColor="transparent"
+        rulesThickness={0.5}
+        verticalLinesThickness={0.5}
+        horizontalLinesThickness={0.5}
+        adjustToWidth
+        pressEnabled={false}
       />
-    </ScrollView>
+    </View>
   );
 };
 

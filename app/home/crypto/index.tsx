@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Logo from "@/components/ui/Logo";
@@ -14,6 +14,7 @@ type CryptoRowProps = {
   previousPrice?: string | number;
   handleFavoriteButton: (id: number) => void;
   favorite: boolean;
+  onPress: () => void;
 };
 
 const CryptoRow = ({
@@ -23,6 +24,7 @@ const CryptoRow = ({
   previousPrice,
   handleFavoriteButton,
   favorite,
+  onPress
 }: CryptoRowProps) => {
   const priceChange = previousPrice
     ? ((Number(price) - Number(previousPrice)) / Number(previousPrice)) * 100
@@ -32,6 +34,7 @@ const CryptoRow = ({
     <TouchableOpacity
       activeOpacity={0.5}
       className="p-4 bg-surface rounded-lg mb-2 border-hairline border-accent-800"
+      onPress={onPress}
     >
       <View className="flex-row justify-between items-center">
         <View className="flex-row gap-2 items-center justify-center">
@@ -74,7 +77,10 @@ const CryptoRow = ({
           </View>
           <TouchableOpacity
             activeOpacity={0.5}
-            onPress={() => handleFavoriteButton(id)}
+            onPress={(e) => {
+              e.stopPropagation();
+              handleFavoriteButton(id);
+            }}
           >
             <MaterialCommunityIcons
               name={favorite ? "star" : "star-outline"}
@@ -90,6 +96,7 @@ const CryptoRow = ({
 
 const Index = () => {
   const router = useRouter();
+  const [selectedCrypto, setSelectedCrypto] = useState<number>(1);
   const [data, setData] = useState([
     {
       id: 1,
@@ -97,6 +104,14 @@ const Index = () => {
       price: 10000,
       previousPrice: 9000,
       favorite: true,
+      graphData: [
+        { value: 9000, label: "Jan" },
+        { value: 9500, label: "Fév" },
+        { value: 10200, label: "Mar" },
+        { value: 9800, label: "Avr" },
+        { value: 10500, label: "Mai" },
+        { value: 10000, label: "Juin" },
+      ]
     },
     {
       id: 2,
@@ -104,6 +119,14 @@ const Index = () => {
       price: 8000,
       previousPrice: 9000,
       favorite: false,
+      graphData: [
+        { value: 9000, label: "Jan" },
+        { value: 8500, label: "Fév" },
+        { value: 8200, label: "Mar" },
+        { value: 7800, label: "Avr" },
+        { value: 8500, label: "Mai" },
+        { value: 8000, label: "Juin" },
+      ]
     },
     {
       id: 3,
@@ -111,6 +134,14 @@ const Index = () => {
       price: 5000,
       previousPrice: 9000,
       favorite: false,
+      graphData: [
+        { value: 9000, label: "Jan" },
+        { value: 7500, label: "Fév" },
+        { value: 6200, label: "Mar" },
+        { value: 5800, label: "Avr" },
+        { value: 5500, label: "Mai" },
+        { value: 5000, label: "Juin" },
+      ]
     },
     {
       id: 4,
@@ -118,6 +149,14 @@ const Index = () => {
       price: 5000,
       previousPrice: 9000,
       favorite: false,
+      graphData: [
+        { value: 9000, label: "Jan" },
+        { value: 7000, label: "Fév" },
+        { value: 6000, label: "Mar" },
+        { value: 5500, label: "Avr" },
+        { value: 5200, label: "Mai" },
+        { value: 5000, label: "Juin" },
+      ]
     },
   ]);
 
@@ -125,23 +164,24 @@ const Index = () => {
     setData((prevData) =>
       prevData.map((crypto) => ({
         ...crypto,
-        favorite: crypto.id === id, // Only one can be favorite
+        favorite: crypto.id === id,
       }))
     );
   };
 
-  const graphData = [
-    { value: 100, label: "hey" },
-    { value: 140, label: "hey" },
-    { value: 250, label: "hey" },
-    { value: 290, label: "hey" },
-    { value: 440, label: "hey" },
-    { value: 300, label: "hey" },
-    { value: 280, label: "hey" },
-    { value: 180, label: "hey" },
-    { value: 150, label: "hey" },
-    { value: 150, label: "hey" },
-  ];
+  const selectedCryptoData = useMemo(() => 
+    data.find(crypto => crypto.id === selectedCrypto),
+    [data, selectedCrypto]
+  );
+
+  const chartData = useMemo(() => 
+    selectedCryptoData?.graphData.map(point => ({
+      value: point.value,
+      label: point.label,
+      dataPointText: `${point.value}$`
+    })) || [],
+    [selectedCryptoData]
+  );
 
   return (
     <SafeAreaView className="bg-surface-primary h-full p-2">
@@ -149,47 +189,56 @@ const Index = () => {
       <View className="p-2 mb-2 bg-surface-primary border-b border-border-muted">
         <View className="flex-row justify-between items-center">
           <Logo containerStyle="flex-row gap-2" />
-          <TouchableOpacity
-						activeOpacity={0.9}
-            onPress={() => router.push("/home/crypto/general")}
-            className="px-3 py-1.5 rounded-xl w-2/4 items-center bg-brand-500 active:bg-brand-400 border-hairline"
-          >
-            <Text className="text-brand-100 text-md font-medium">
-              Graphe General
-            </Text>
-          </TouchableOpacity>
         </View>
       </View>
 
-      {/* Graph */}
-      <ScrollView className="w-full mb-2 h-2/5 bg-surface-primary border-hairline rounded-lg border-elevation-5 py-4">
-        <CustomChart chartData={graphData} chartConfig={{height : 200}}/>
-      </ScrollView>
-
-      {/* price section */}
-      <View className="p-2 pt-4 border rounded-lg border-border-muted  h-1/2">
-        <Text className="text-xl mx-2 font-semibold text-text-secondary">
-          Cours des Cryptomonnaies
+      {/* Graph section */}
+      <View className="bg-surface p-4 rounded-lg mb-4 h-2/4">
+        <Text className="text-xl font-bold text-text-primary mb-6">
+          Évolution du prix {selectedCryptoData?.name}
         </Text>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          className="border-t-hairline py-4 mt-2 -mb-2"
-        >
-          <View className="flex-col last:mb-6">
-            {data.map((crypto) => (
-              <CryptoRow
-                key={crypto.id}
-                id={crypto.id}
-                name={crypto.name}
-                price={crypto.price}
-                previousPrice={crypto.previousPrice}
-                favorite={crypto.favorite}
-                handleFavoriteButton={handleFavoriteButton}
-              />
-            ))}
-          </View>
+        <ScrollView className="w-full pb-4 -ml-2">
+          <CustomChart 
+            chartData={chartData}
+            chartConfig={{
+              thickness: 3,
+              color: "#636af0",
+              maxValue: 12000,
+              noOfSections: 6,
+              spacing: 45,
+              initialSpacing: 20,
+              yAxisOffset: 23,
+              rulesColor: "#94a3b8",
+              rulesType: "solid",
+              showReferenceLine1: true,
+              referenceLine1Config: {
+                color: "#8171c3",
+                dashWidth: 2,
+                dashGap: 4,
+              },
+              yAxisTextStyle: {
+                color: "#94a3b8",
+              }
+            }}
+          />
         </ScrollView>
       </View>
+
+      {/* Crypto list */}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {data.map((crypto) => (
+          <CryptoRow
+            key={crypto.id}
+            id={crypto.id}
+            name={crypto.name}
+            price={crypto.price}
+            previousPrice={crypto.previousPrice}
+            handleFavoriteButton={handleFavoriteButton}
+            favorite={crypto.favorite}
+            onPress={() => setSelectedCrypto(crypto.id)}
+          />
+        ))}
+      </ScrollView>
     </SafeAreaView>
   );
 };
