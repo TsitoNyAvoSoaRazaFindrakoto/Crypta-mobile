@@ -39,13 +39,14 @@ export default class Utilisateur {
     role: string = "Membre simple"
   ): Promise<Utilisateur> {
     const user = new Utilisateur(pseudo, mail, password, idUtilisateur, mobile, role);
-    user._password = await user.hashPassword(password);
     return user;
   }
 
   // Static method for signing in
   public static signIn(mail: string, password: string): Utilisateur {
-    return new Utilisateur("", mail, password, "", false, "Membre simple");
+    const user =  new Utilisateur("", mail, password, "", false, "Membre simple");
+		user.hashPassword();
+		return user;
   }
 
   // Static method to create an instance from Firestore document
@@ -62,9 +63,9 @@ export default class Utilisateur {
   }
 
   // Hash password asynchronously
-  private async hashPassword(password: string): Promise<string> {
+  private async hashPassword(){
     const salt = await bcrypt.genSalt(saltRounds);
-    return bcrypt.hash(password, salt);
+    this._password = await bcrypt.hash(this._password, salt);
   }
 
   // Getters
