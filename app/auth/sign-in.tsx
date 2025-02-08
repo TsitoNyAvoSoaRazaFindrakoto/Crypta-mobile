@@ -13,6 +13,7 @@ import FormField from "@/components/ui/FormField";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Logo from "@/components/ui/Logo";
 import { Link } from "expo-router";
+import useSignIn from "@/hooks/auth/signin";
 
 const SignIn = () => {
   const [form, setForm] = useState({
@@ -21,6 +22,7 @@ const SignIn = () => {
   });
 
   const [isSumbitting, setIsSumbitting] = useState(false);
+  const { signIn, loading, error } = useSignIn();
 
   const submit = async () => {
     if (!form.email || !form.password) {
@@ -28,6 +30,15 @@ const SignIn = () => {
     }
 
     setIsSumbitting(true);
+
+    const user = await signIn(form.email, form.password);
+    if (user) {
+      Alert.alert("Success", "You are now signed in");
+    } else {
+      Alert.alert("Error", error || "Sign-in failed");
+    }
+
+    setIsSumbitting(false);
   };
 
   return (
@@ -60,9 +71,11 @@ const SignIn = () => {
           <TouchableOpacity
             className="my-6 w-full bg-brand-500 py-4 rounded-xl items-center active:bg-brand-700 border-3 shadow-sm"
             activeOpacity={0.95}
+            onPress={submit}
+            disabled={loading}
           >
             <Text className="text-surface text-lg font-semibold">
-              Se connecter
+              {loading ? "Signing in..." : "Se connecter"}
             </Text>
           </TouchableOpacity>
 					<Text className="text-sm">Pas de compte? <Link href="/auth/sign-up" className="text-brand-500">creer un compte</Link></Text>

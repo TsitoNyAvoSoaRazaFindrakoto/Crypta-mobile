@@ -18,7 +18,7 @@ export default {
         backgroundColor: "#ffffff",
       },
       googleServicesFile: "./config/firebase/google-services.json",
-      permissions: ["android.permission.RECORD_AUDIO"],
+			permissions: ["android.permission.CAMERA", "android.permission.WRITE_EXTERNAL_STORAGE"]
     },
     web: {
       bundler: "metro",
@@ -26,6 +26,7 @@ export default {
       favicon: "./assets/images/favicon.png",
     },
     plugins: [
+			"expo-secure-store",
       [
         "expo-notifications",
         {
@@ -63,15 +64,12 @@ export default {
         projectId: "00877c72-aad3-40aa-8054-4f63af8163ab",
       },
       firebase: {
-        apiKey:
-          process.env.API_KEY || "AIzaSyD_dhXrU5-3m_QsUAka7FVavlGTgNTlppI",
+        apiKey: process.env.API_KEY || "AIzaSyD_dhXrU5-3m_QsUAka7FVavlGTgNTlppI",
         authDomain: process.env.AUTH_DOMAIN || "crypta-d5e13.firebaseapp.com",
         projectId: process.env.PROJECT_ID || "crypta-d5e13",
-        storageBucket:
-          process.env.STORAGE_BUCKET || "crypta-d5e13.firebasestorage.app",
+        storageBucket: process.env.STORAGE_BUCKET || "crypta-d5e13.firebasestorage.app",
         messagingSenderId: process.env.MESSAGING_SENDER_ID || "539604836728",
-        appId:
-          process.env.APP_ID || "1=539604836728=web=5876a760ea6bf2189ee88d",
+        appId: process.env.APP_ID || "1=539604836728=web=5876a760ea6bf2189ee88d",
         measurementId: process.env.MEASUREMENT_ID || "G-X7J7VJSX4N",
       },
       imageKit: {

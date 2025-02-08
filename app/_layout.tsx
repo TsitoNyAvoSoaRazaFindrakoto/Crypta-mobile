@@ -50,33 +50,6 @@ export default function RootLayout() {
     };
   }, []);
 
-  
-
-  /**
-   * FICHIER _layout.tsx - MODE D'EMPLOI
-   *
-   * C'est le "fondateur" de votre app qui régit tous les écrans.
-   * Imaginez-le comme une maison : ce fichier est les fondations et les murs communs à toutes les pièces.
-   *
-   * Ce qu'il fait concrètement :
-   *
-   * 1. 🎨 GÈRE LE THÈME VISUEL
-   *    - Change automatiquement les couleurs si le téléphone passe en mode sombre
-   *    - Exemple : Fond noir/textes blancs si mode nuit activé
-   *
-   * 2. 🗺 ORGANISE LA NAVIGATION
-   *    - Définit comment on passe d'un écran à l'autre
-   *    - Exemple : Animation de transition quand on ouvre un profil
-   *
-   * 3. 🏗 APPLIQUE UNE STRUCTURE COMMUNE
-   *    - Ce qui est défini ici s'applique à TOUS les écrans
-   *    - Exemple : Une barre de navigation en bas présente partout
-   *
-   * 4. 🚦 CONFIGURE LES ÉCRANS
-   *    - Options par défaut pour chaque page
-   *    - Exemple : Cache la barre de titre sur l'écran d'accueil
-   */
-
   return (
     <>
       <StatusBar backgroundColor="#f8f9fe" style="dark" />
