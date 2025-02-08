@@ -123,7 +123,6 @@ const Chart = ({ chartData, chartConfig = {} }: ChartProps) => {
           curved
           animationDuration={1000}
           showDataPointOnTop
-          hideDataPoints={false}
           showTextOnTop
           textShiftY={-10}
           textShiftX={0}
@@ -131,13 +130,7 @@ const Chart = ({ chartData, chartConfig = {} }: ChartProps) => {
           dataPointsHeight={10}
           dataPointsWidth={10}
           dataPointsColor="#4f46e5"
-          focusEnabled
-          showFocusPoint
-          focusPointColor="#4f46e5"
-          focusPointRadius={5}
-          focusPointStrokeWidth={2}
-          focusPointStrokeColor="#fff"
-					maxValue={computedValues.maxValue}
+          maxValue={computedValues.maxValue}
 					yAxisOffset={computedValues.yAxisOffset}
 					noOfSections={computedValues.noOfSections}
         />

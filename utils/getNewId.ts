@@ -1,9 +1,9 @@
-import { getFirestore, collection, getCountFromServer } from "firebase/firestore";
+import { collection, getCountFromServer } from "firebase/firestore";
 import Utilisateur from "../types/Utilisateur";
+import { firestore } from "@/config/firebase/firebase-config";
 
 const getNewId = async (): Promise<string> => {
-  const db = getFirestore();
-  const collRef = collection(db, Utilisateur.table);
+  const collRef = collection(firestore, Utilisateur.table);
   const snapshot = await getCountFromServer(collRef);
   const newId = (snapshot.data().count + 1).toString();
   return newId;

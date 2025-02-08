@@ -20,7 +20,7 @@ const useSignUp = () => {
     setError(null);
     try {
       // Calling the static signUp method of Utilisateur.
-      const user = Utilisateur.signUp(pseudo, mail, password, idUtilisateur, mobile, role);
+      const user = await Utilisateur.signUp(pseudo, mail, password, idUtilisateur, mobile, role);
       // Allow time for the async password hashing to complete.
       await new Promise((resolve) => setTimeout(resolve, 0));
 

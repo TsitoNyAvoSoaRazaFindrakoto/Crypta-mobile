@@ -5,9 +5,20 @@ import { Link, router, useRouter } from "expo-router";
 import Logo from "@/components/ui/Logo";
 import { registerForPushNotifications } from "@/hooks/notifications";
 import { useEffect } from "react";
+import * as SecureStorage from "expo-secure-store";
 
 export default function LandingPage() {
   const router = useRouter();
+
+	useEffect(() => {
+		const checkRegister = async () => {
+			if (await SecureStorage.getItemAsync('user')) {
+				router.push('/home/crypto');
+			}
+		}
+		checkRegister();
+	}, [])
+	
 
   const toSignin = () => {
     router.push("/auth/sign-in");

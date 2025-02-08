@@ -64,17 +64,6 @@ const Profile = () => {
           <TouchableOpacity
             onPress={() => {
               setShowPhotoModal(false);
-              router.push('/home/photos');
-            }}
-            className="flex-row items-center p-4 border-b border-border-muted active:bg-surface-secondary"
-          >
-            <MaterialCommunityIcons name="image-size-select-actual" size={24} color="#6366f1" className="mr-3" />
-            <Text className="text-text-primary">Agrandir la photo de profil</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => {
-              setShowPhotoModal(false);
               takePhoto();
             }}
             className="flex-row items-center p-4 border-b border-border-muted active:bg-surface-secondary"

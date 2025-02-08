@@ -1,14 +1,9 @@
-import {
-  View,
-  Text,
-  ScrollView,
-  Alert,
-} from "react-native";
+import { View, Text, ScrollView, Alert } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "@/components/ui/FormField";
 import Logo from "@/components/ui/Logo";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { TouchableOpacity } from "react-native";
 import useSignUp from "@/hooks/auth/signup"; // new import
 import getNewId from "@/utils/getNewId"; // new import
@@ -17,7 +12,7 @@ const SignUp = () => {
   const [form, setForm] = useState({
     email: "",
     password: "",
-    username: ""
+    username: "",
   });
   const { signUp, loading } = useSignUp(); // using signUp and loading
 
@@ -27,9 +22,16 @@ const SignUp = () => {
     }
 
     const newId = await getNewId(); // get new id from file line count
-    const user = await signUp(form.username, form.email, form.password, newId, true, "Membre simple");
+    const user = await signUp(
+      form.username,
+      form.email,
+      form.password,
+      newId,
+      true,
+      "Membre simple"
+    );
     if (!user) return Alert.alert("Error", "Sign up failed");
-    // ... handle successful signup (e.g., navigate away)...
+    else router.push("/home/crypto");
   };
 
   return (

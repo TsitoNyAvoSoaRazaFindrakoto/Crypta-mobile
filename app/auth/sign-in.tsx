@@ -7,26 +7,22 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "@/components/ui/FormField";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Logo from "@/components/ui/Logo";
 import { Link } from "expo-router";
 import useSignIn from "@/hooks/auth/signin";
-import { deleteItemAsync}
+import { deleteItemAsync } from "expo-secure-store";
+import { router } from "expo-router";
+
 const SignIn = () => {
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
 
-	useEffect(() => {
-		const logOutUser = async () => {
-			await deleteItemAsync('user');
-		}
-	}, [third])
-	
 
   const [isSumbitting, setIsSumbitting] = useState(false);
   const { signIn, loading, error } = useSignIn();
@@ -37,9 +33,10 @@ const SignIn = () => {
     }
 
     setIsSumbitting(true);
-
+		await deleteItemAsync('user');
     const user = await signIn(form.email, form.password);
     if (user) {
+			router.push("/home/crypto");
       Alert.alert("Success", "You are now signed in");
     } else {
       Alert.alert("Error", error || "Sign-in failed");
