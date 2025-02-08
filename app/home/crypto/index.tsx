@@ -1,4 +1,11 @@
-import { View, Text, ScrollView, TouchableOpacity, Dimensions, useWindowDimensions } from "react-native";
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Dimensions,
+  useWindowDimensions,
+} from "react-native";
 import React, { useState, useEffect, useMemo } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -24,7 +31,7 @@ const CryptoRow = ({
   previousPrice,
   handleFavoriteButton,
   favorite,
-  onPress
+  onPress,
 }: CryptoRowProps) => {
   const priceChange = previousPrice
     ? ((Number(price) - Number(previousPrice)) / Number(previousPrice)) * 100
@@ -112,7 +119,7 @@ const Index = () => {
         { value: 9800, label: "Avr" },
         { value: 10500, label: "Mai" },
         { value: 10000, label: "Juin" },
-      ]
+      ],
     },
     {
       id: 2,
@@ -127,7 +134,7 @@ const Index = () => {
         { value: 7800, label: "Avr" },
         { value: 8500, label: "Mai" },
         { value: 8000, label: "Juin" },
-      ]
+      ],
     },
     {
       id: 3,
@@ -142,7 +149,7 @@ const Index = () => {
         { value: 5800, label: "Avr" },
         { value: 5500, label: "Mai" },
         { value: 5000, label: "Juin" },
-      ]
+      ],
     },
     {
       id: 4,
@@ -157,81 +164,80 @@ const Index = () => {
         { value: 5500, label: "Avr" },
         { value: 5200, label: "Mai" },
         { value: 5000, label: "Juin" },
-      ]
+        { value: 3000, label: "Juillet" },
+        { value: 4000, label: "Aout" },
+        { value: 4500, label: "Septembre" },
+        { value: 6000, label: "Octobre" },
+      ],
     },
+		
   ]);
 
   const handleFavoriteButton = (id: number) => {
     setData((prevData) => {
-      const favoriteCount = prevData.filter(crypto => crypto.favorite).length;
-      const crypto = prevData.find(c => c.id === id);
-      
+      const favoriteCount = prevData.filter((crypto) => crypto.favorite).length;
+      const crypto = prevData.find((c) => c.id === id);
+
       // Si on veut retirer des favoris
       if (crypto?.favorite) {
-        return prevData.map(c => ({
+        return prevData.map((c) => ({
           ...c,
-          favorite: c.id === id ? false : c.favorite
+          favorite: c.id === id ? false : c.favorite,
         }));
       }
-      
+
       // Si on veut ajouter aux favoris et qu'on n'a pas atteint la limite
       if (favoriteCount < 3) {
-        return prevData.map(c => ({
+        return prevData.map((c) => ({
           ...c,
-          favorite: c.id === id ? true : c.favorite
+          favorite: c.id === id ? true : c.favorite,
         }));
       }
-      
+
       return prevData;
     });
   };
 
-  const selectedCryptoData = useMemo(() => 
-    data.find(crypto => crypto.id === selectedCrypto),
+  const selectedCryptoData = useMemo(
+    () => data.find((crypto) => crypto.id === selectedCrypto),
     [data, selectedCrypto]
   );
 
-  const chartData = useMemo(() => 
-    selectedCryptoData?.graphData.map(point => ({
-      value: point.value,
-      label: point.label,
-      dataPointText: `${point.value}$`
-    })) || [],
+  const chartData = useMemo(
+    () =>
+      selectedCryptoData?.graphData.map((point) => ({
+        value: point.value,
+        label: point.label,
+        dataPointText: `${point.value}$`,
+      })) || [],
     [selectedCryptoData]
   );
 
   return (
-    <SafeAreaView className="bg-surface-primary h-full">
+    <SafeAreaView className="bg-surface-primary h-full px-2">
       {/* header section */}
-      <View className="px-4 py-3 mb-1 bg-surface-primary border-b border-border-muted">
+      <View className="px-4 py-3 mb-2 border-b-hairline border-border-muted">
         <View className="flex-row justify-between items-center">
           <Logo containerStyle="flex-row gap-2" />
         </View>
       </View>
 
       {/* Main Content */}
-      <ScrollView 
-        showsVerticalScrollIndicator={false} 
-        className="flex-1 px-3"
-      >
+      <View>
         {/* Graph section */}
-        <View 
-          className="bg-surface rounded-xl mb-3 overflow-hidden" 
-          style={{ 
-            height: Math.min(screenHeight * 0.45, 400),
+        <View
+          className="bg-surface border-hairline border-border-muted rounded-lg mb-2"
+          style={{
+            height: Math.min(screenHeight * 0.42, 400),
             elevation: 3,
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 1 },
-            shadowOpacity: 0.22,
-            shadowRadius: 2.22,
           }}
         >
           {/* Graph Header */}
-          <View className="px-4 py-3 border-b border-border-muted bg-white/50">
+          <View className="px-4 py-3 border-b flex-row border-border-muted bg-surface">
             <Text className="text-lg font-bold text-text-primary">
               Évolution du prix
             </Text>
-            <View className="flex-row items-center mt-1">
+            <View className="flex-row items-center ml-2">
               <Text className="text-base text-indigo-600 font-semibold">
                 {selectedCryptoData?.name}
               </Text>
@@ -242,28 +248,14 @@ const Index = () => {
           </View>
 
           {/* Graph Content */}
-          <ScrollView 
-            horizontal 
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ 
-              flexGrow: 1,
-              paddingVertical: 10,
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-            style={{ flex: 1 }}
-            contentOffset={{ x: 20, y: 0 }}
-          >
-            <CustomChart 
+          <View>
+            <CustomChart
               chartData={chartData}
               chartConfig={{
-                thickness: 2.5,
+                thickness: 2,
                 color: "#636af0",
-                maxValue: 12000,
-                noOfSections: 6,
                 spacing: 42,
                 initialSpacing: 25,
-                yAxisOffset: 0,
                 rulesColor: "#e2e8f0",
                 rulesType: "solid",
                 showReferenceLine1: true,
@@ -283,24 +275,14 @@ const Index = () => {
                   fontWeight: "500",
                 },
                 height: Math.max(150, screenHeight * 0.22),
-                width: Math.max(screenWidth * 0.9, chartData.length * 42),
-                yAxisLabelWidth: 35
+                yAxisLabelWidth: 35,
               }}
             />
-          </ScrollView>
+          </View>
         </View>
 
         {/* Crypto list */}
-        <View 
-          className="bg-surface rounded-xl overflow-hidden mb-3" 
-          style={{ 
-            elevation: 3,
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 1 },
-            shadowOpacity: 0.22,
-            shadowRadius: 2.22,
-          }}
-        >
+        <ScrollView className="rounded-lg h-2/5  overflow-hidden mb-3 border-hairline border-border-intense">
           <View className="p-2">
             {data.map((crypto) => (
               <CryptoRow
@@ -315,8 +297,8 @@ const Index = () => {
               />
             ))}
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };

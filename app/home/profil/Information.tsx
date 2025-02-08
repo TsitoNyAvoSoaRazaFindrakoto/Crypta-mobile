@@ -8,11 +8,12 @@ const Information = () => {
       <View style={styles.header}>
         <Text style={styles.title}>📢 Informations sur l'application</Text>
       </View>
-      
+
       <Text style={styles.description}>
-        Bienvenue dans notre application de gestion de cryptomonnaies. 
-        Cette application vous permet de suivre vos transactions, de gérer vos dépôts et retraits, 
-        et d'accéder à des informations en temps réel sur le marché des cryptomonnaies.
+        Bienvenue dans notre application de gestion de cryptomonnaies. Cette
+        application vous permet de suivre vos transactions, de gérer vos dépôts
+        et retraits, et d'accéder à des informations en temps réel sur le marché
+        des cryptomonnaies.
       </Text>
 
       <Text style={styles.subtitle}>🚀 Fonctionnalités principales :</Text>
@@ -21,7 +22,11 @@ const Information = () => {
         <Text style={styles.listText}>Suivi des transactions</Text>
       </View>
       <View style={styles.listItem}>
-        <MaterialCommunityIcons name="bank-transfer" size={20} color="#6366f1" />
+        <MaterialCommunityIcons
+          name="bank-transfer"
+          size={20}
+          color="#6366f1"
+        />
         <Text style={styles.listText}>Gestion des dépôts et retraits</Text>
       </View>
       <View style={styles.listItem}>
@@ -35,14 +40,14 @@ const Information = () => {
 
       <Text style={styles.subtitle}>📩 Contact :</Text>
       <Text style={styles.description}>
-        Pour toute question ou assistance, veuillez nous contacter à {" "}
+        Pour toute question ou assistance, veuillez nous contacter à{" "}
         <Text style={styles.email}>support@crypta.com</Text>.
       </Text>
 
       <Text style={styles.subtitle}>📜 Mentions légales :</Text>
       <Text style={styles.description}>
-        L'utilisation de cette application est soumise à nos conditions d'utilisation. 
-        Veuillez les lire attentivement.
+        L'utilisation de cette application est soumise à nos conditions
+        d'utilisation. Veuillez les lire attentivement.
       </Text>
     </ScrollView>
   );

@@ -10,7 +10,6 @@ import type { NotificationResponse, Notification } from "expo-notifications"; //
 import { StatusBar } from "expo-status-bar";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -37,8 +36,6 @@ export default function RootLayout() {
     notificationListener.current =
       Notifications.addNotificationReceivedListener(
         (notification: Notification) => {
-          // Type the notification parameter
-          // Handle foreground notifications
           setInAppNotification({
             title:
               notification.request.content.title || "Notification Received",

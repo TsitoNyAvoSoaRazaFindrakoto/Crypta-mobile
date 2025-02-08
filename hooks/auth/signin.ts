@@ -17,7 +17,7 @@ const useSignIn = () => {
 
 		try {
 			const db = getFirestore();
-			const utilisateurCollection = collection(db, 'Utilisateur');
+			const utilisateurCollection = collection(db, Utilisateur.table);
 			const q = query(utilisateurCollection, where('email', '==', user.mail));
 			const querySnapshot = await getDocs(q);
 

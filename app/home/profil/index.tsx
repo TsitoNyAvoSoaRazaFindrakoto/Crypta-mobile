@@ -3,7 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Link, router, useNavigation } from 'expo-router';
+import { router, useNavigation } from 'expo-router';
 
 // Mock user data - Replace with actual user data later
 const mockUser = {
@@ -232,6 +232,10 @@ const Profile = () => {
     setIsEditing(false);
   };
 
+	const handleLogOut = () => {
+		router.push('/auth/sign-in');
+	}
+
   if (isEditing) {
     return (
       <SafeAreaView className="flex-1 bg-surface-primary">
@@ -391,7 +395,7 @@ const Profile = () => {
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => router.push("/auth/sign-in")}
+            onPress={() => handleLogOut()}
             style={{
               flexDirection: "row",
               alignItems: "center",

@@ -2,33 +2,34 @@ import {
   View,
   Text,
   ScrollView,
-  Image,
   Alert,
-  TextInput,
-  TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "@/components/ui/FormField";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Logo from "@/components/ui/Logo";
 import { Link } from "expo-router";
+import { TouchableOpacity } from "react-native";
+import useSignUp from "@/hooks/auth/signup"; // new import
+import getNewId from "@/utils/getNewId"; // new import
 
 const SignUp = () => {
   const [form, setForm] = useState({
     email: "",
     password: "",
-		username: ""
+    username: ""
   });
-
-  const [isSumbitting, setIsSumbitting] = useState(false);
+  const { signUp, loading } = useSignUp(); // using signUp and loading
 
   const submit = async () => {
-    if (!form.email || !form.password) {
-      Alert.alert("Error", "Please fill in all fields");
+    if (!form.username || !form.email || !form.password) {
+      return Alert.alert("Error", "Please fill in all fields");
     }
 
-    setIsSumbitting(true);
+    const newId = await getNewId(); // get new id from file line count
+    const user = await signUp(form.username, form.email, form.password, newId, true, "Membre simple");
+    if (!user) return Alert.alert("Error", "Sign up failed");
+    // ... handle successful signup (e.g., navigate away)...
   };
 
   return (
@@ -40,10 +41,10 @@ const SignUp = () => {
             <Text className="text-3xl font-semibold">Bienvenue</Text>
           </Logo>
 
-					<FormField
+          <FormField
             title="Pseudo"
             otherStyles="my-2"
-            value={form.email}
+            value={form.username} // changed from form.email
             placeholder="monPseudo"
             handleChangeText={(text: string) =>
               setForm({ ...form, username: text })
@@ -69,14 +70,21 @@ const SignUp = () => {
             }
           />
           <TouchableOpacity
+            onPress={submit} // added submit handler
             className="my-6 w-full bg-brand-500 py-4 rounded-xl items-center active:bg-brand-700 border-3 shadow-sm"
             activeOpacity={0.95}
+            disabled={loading} // disable button while loading
           >
             <Text className="text-surface text-lg font-semibold">
-              creer un compte
+              {loading ? "Loading..." : "creer un compte"}
             </Text>
           </TouchableOpacity>
-					<Text className="text-sm">Vous avez deja un compte? <Link href="/auth/sign-in" className="text-brand-500">se connecter</Link></Text>
+          <Text className="text-sm">
+            Vous avez deja un compte?{" "}
+            <Link href="/auth/sign-in" className="text-brand-500">
+              se connecter
+            </Link>
+          </Text>
         </View>
       </ScrollView>
     </SafeAreaView>

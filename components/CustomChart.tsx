@@ -1,4 +1,11 @@
-import { View, Text, StyleProp, TextStyle, Dimensions, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleProp,
+  TextStyle,
+  Dimensions,
+  ScrollView,
+} from "react-native";
 import React, { useMemo } from "react";
 import { LineChart } from "react-native-gifted-charts";
 
@@ -42,25 +49,26 @@ interface ChartProps {
 const Chart = ({ chartData, chartConfig = {} }: ChartProps) => {
   // Calculer dynamiquement maxValue et yAxisOffset
   const computedValues = useMemo(() => {
-    if (!chartData.length) return { maxValue: 12000, yAxisOffset: 0, noOfSections: 6 };
-    
-    const values = chartData.map(point => point.value);
+    if (!chartData.length)
+      return { maxValue: 12000, yAxisOffset: 0, noOfSections: 6 };
+
+    const values = chartData.map((point) => point.value);
     const maxValue = Math.max(...values);
-    
+
     // Calculer les valeurs ajustées selon les nouvelles règles
     // Si data max = 9000 -> y max = 12000 (arrondi pour une meilleure lisibilité)
     const adjustedMaxValue = Math.ceil((maxValue + 3000) / 2000) * 2000;
-    
+
     // Toujours commencer à 0 pour plus de cohérence
-    const adjustedMinValue = 0;
-    
+    const adjustedMinValue = Math.min(0, Math.min(...values)-2000);
+
     // Calculer le nombre de sections pour un écart de 2000
     const noOfSections = adjustedMaxValue / 2000;
-    
+
     return {
       maxValue: adjustedMaxValue,
       yAxisOffset: adjustedMinValue,
-      noOfSections
+      noOfSections,
     };
   }, [chartData]);
 
@@ -70,7 +78,7 @@ const Chart = ({ chartData, chartConfig = {} }: ChartProps) => {
 
   // Calculer la largeur du graphique en fonction du nombre de points
   const chartWidth = Math.max(
-    Dimensions.get('window').width - 60,
+    Dimensions.get("window").width - 60,
     chartData.length * 60 // 60 pixels par point de données
   );
 
@@ -99,21 +107,15 @@ const Chart = ({ chartData, chartConfig = {} }: ChartProps) => {
     },
     height: 250,
     width: chartWidth,
-    hideRules: false,
     yAxisLabelWidth: 50,
     formatYLabel,
-    ...computedValues
   };
 
   const mergedConfig = { ...DEFAULT_CONFIG, ...chartConfig };
 
   return (
-    <View className="w-full items-center justify-center bg-white/5 rounded-xl p-4">
-      <ScrollView 
-        horizontal 
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 10 }}
-      >
+    <View className="items-center justify-center p-4 overflow-hidden">
+      <ScrollView horizontal contentContainerStyle={{ paddingHorizontal: 1 }}>
         <LineChart
           {...mergedConfig}
           data={chartData}
@@ -123,22 +125,21 @@ const Chart = ({ chartData, chartConfig = {} }: ChartProps) => {
           showDataPointOnTop
           hideDataPoints={false}
           showTextOnTop
-          textShiftY={-20}
+          textShiftY={-10}
           textShiftX={0}
-          textFontSize={11}
-          dataPointsHeight={8}
-          dataPointsWidth={8}
+          textFontSize={10}
+          dataPointsHeight={10}
+          dataPointsWidth={10}
           dataPointsColor="#4f46e5"
-          pressEnabled
-          onPress={(item: any) => {
-            console.log('Point pressed:', item);
-          }}
           focusEnabled
           showFocusPoint
           focusPointColor="#4f46e5"
           focusPointRadius={5}
           focusPointStrokeWidth={2}
           focusPointStrokeColor="#fff"
+					maxValue={computedValues.maxValue}
+					yAxisOffset={computedValues.yAxisOffset}
+					noOfSections={computedValues.noOfSections}
         />
       </ScrollView>
     </View>

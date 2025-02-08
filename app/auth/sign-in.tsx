@@ -14,12 +14,19 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Logo from "@/components/ui/Logo";
 import { Link } from "expo-router";
 import useSignIn from "@/hooks/auth/signin";
-
+import { deleteItemAsync}
 const SignIn = () => {
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
+
+	useEffect(() => {
+		const logOutUser = async () => {
+			await deleteItemAsync('user');
+		}
+	}, [third])
+	
 
   const [isSumbitting, setIsSumbitting] = useState(false);
   const { signIn, loading, error } = useSignIn();
