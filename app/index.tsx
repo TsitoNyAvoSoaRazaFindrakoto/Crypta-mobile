@@ -17,29 +17,6 @@ export default function LandingPage() {
     router.push("/auth/sign-up");
   };
 
-  useEffect(() => {
-    const getPush =async () => {
-      const token = await registerForPushNotifications();
-
-      // Send notification via Expo
-      await fetch("https://exp.host/--/api/v2/push/send", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          to: token,
-          title: "Test Notification",
-          body: "This is a test notification",
-          data: { url: "/notification-details" },
-        }),
-      });
-    };
-
-		getPush();
-  }, []);
-
   return (
     <SafeAreaView className="flex-1 bg-surface-primary">
       <ScrollView showsVerticalScrollIndicator={false} className="pb-8">

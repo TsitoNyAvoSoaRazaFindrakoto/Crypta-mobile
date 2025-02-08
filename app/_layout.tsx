@@ -20,22 +20,9 @@ Notifications.setNotificationHandler({
 });
 
 export default function RootLayout() {
-  const [loaded] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
-  });
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
-  const notificationListener = useRef<Notifications.Subscription>();
-  const responseListener = useRef<Notifications.Subscription>();
+	const notificationListener = useRef<Notifications.EventSubscription>();
+  const responseListener = useRef<Notifications.EventSubscription>();
 
   useEffect(() => {
     notificationListener.current =
@@ -62,6 +49,8 @@ export default function RootLayout() {
       }
     };
   }, []);
+
+  
 
   /**
    * FICHIER _layout.tsx - MODE D'EMPLOI
