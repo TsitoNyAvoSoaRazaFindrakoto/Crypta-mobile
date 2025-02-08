@@ -19,22 +19,28 @@ const useSignUp = () => {
     setLoading(true);
     setError(null);
     try {
+			console.log("hook sign up");
       // Calling the static signUp method of Utilisateur.
       const user = await Utilisateur.signUp(pseudo, mail, password, idUtilisateur, mobile, role);
-      // Allow time for the async password hashing to complete.
+			console.log("creation mdp");
+			
+
+			// Allow time for the async password hashing to complete.
       await new Promise((resolve) => setTimeout(resolve, 0));
+			console.log(`utilisateur mdp : ${user.password}`);
 
       await setDoc(doc(db, Utilisateur.table, user.id), {
         pseudo: user.pseudo,
         mail: user.mail,
         idUtilisateur: user.idUtilisateur,
         mobile: user.mobile,
-        role: user.role
+        role: user.role,
+				password : user.password
       });
 
       // Store the user info securely in secure-store.
-      await SecureStore.setItemAsync('user', JSON.stringify(user));
 
+			console.log(await SecureStore.getItemAsync('user'));
       setLoading(false);
       return user;
     } catch (err: any) {

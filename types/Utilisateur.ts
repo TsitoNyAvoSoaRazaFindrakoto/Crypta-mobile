@@ -1,8 +1,9 @@
-import bcrypt from "bcryptjs";
+import { hashPassword, comparePassword } from "@/utils/crypto";
 
 const saltRounds = 10;
 
 export default class Utilisateur {
+
   private _id: string = "";
   private _password: string = "";
   private _pseudo: string;
@@ -10,7 +11,7 @@ export default class Utilisateur {
   private _idUtilisateur: string = "";
   private _mobile: boolean = false;
   role: string = "Membre simple";
-  public static readonly table: string = "utilisateurs";
+  public static readonly table: string = "utilisateur";
 
   private constructor(
     pseudo: string,
@@ -30,14 +31,14 @@ export default class Utilisateur {
   }
 
   // Static method for signing up
-  public static signUp(
+  public static async signUp(
     pseudo: string,
     mail: string,
     password: string,
     idUtilisateur: string,
     mobile: boolean,
     role: string = "Membre simple"
-  ): Utilisateur {
+  ): Promise<Utilisateur> {
     const user = new Utilisateur(
       pseudo,
       mail,
@@ -46,12 +47,12 @@ export default class Utilisateur {
       mobile,
       role
     );
-    user.hashPassword();
+    await user.hashMyPassword();
     return user;
   }
 
   // Static method for signing in
-  public static signIn(mail: string, password: string): Utilisateur {
+  public static async signIn(mail: string, password: string): Utilisateur {
     const user = new Utilisateur(
       "",
       mail,
@@ -60,8 +61,6 @@ export default class Utilisateur {
       false,
       "Membre simple"
     );
-    user.hashPassword();
-    return user;
   }
 
   // Static method to create an instance from Firestore document
@@ -77,10 +76,25 @@ export default class Utilisateur {
     );
   }
 
-  // Hash password asynchronously
-  private async hashPassword() {
-    const salt = await bcrypt.genSalt(saltRounds);
-    this._password = await bcrypt.hash(this._password, salt);
+  // Hash password asynchronously using new method
+  private async hashMyPassword() {
+    try {
+      this._password = await hashPassword(this._password);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  private async verifyPassword(password: string): Promise<Utilisateur> {
+    try {
+      const valid = await comparePassword(password, this._password);
+      if (!valid) {
+        throw new Error("Invalid password");
+      }
+      return this;
+    } catch (error) {
+      throw error;
+    }
   }
 
   // Getters

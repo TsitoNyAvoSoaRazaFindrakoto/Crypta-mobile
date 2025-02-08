@@ -7,6 +7,7 @@ import { Link, router } from "expo-router";
 import { TouchableOpacity } from "react-native";
 import useSignUp from "@/hooks/auth/signup"; // new import
 import getNewId from "@/utils/getNewId"; // new import
+import { setItemAsync } from "expo-secure-store";
 
 const SignUp = () => {
   const [form, setForm] = useState({
@@ -21,8 +22,10 @@ const SignUp = () => {
       return Alert.alert("Error", "Please fill in all fields");
     }
 
+		console.info("submitting sign-up form");
     const newId = await getNewId(); // get new id from file line count
-    const user = await signUp(
+		console.info(`new id: ${newId}`);
+		const user = await signUp(
       form.username,
       form.email,
       form.password,
@@ -30,8 +33,13 @@ const SignUp = () => {
       true,
       "Membre simple"
     );
+		console.log(user);
+		
     if (!user) return Alert.alert("Error", "Sign up failed");
-    else router.push("/home/crypto");
+    else {
+      await setItemAsync("user", JSON.stringify(user));
+      router.push("/home/crypto");
+    }
   };
 
   return (

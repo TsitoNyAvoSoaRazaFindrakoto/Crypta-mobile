@@ -14,8 +14,9 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Logo from "@/components/ui/Logo";
 import { Link } from "expo-router";
 import useSignIn from "@/hooks/auth/signin";
-import { deleteItemAsync } from "expo-secure-store";
+import { deleteItemAsync, getItemAsync, setItemAsync } from "expo-secure-store";
 import { router } from "expo-router";
+import Utilisateur from "@/types/Utilisateur";
 
 const SignIn = () => {
   const [form, setForm] = useState({
@@ -33,9 +34,11 @@ const SignIn = () => {
     }
 
     setIsSumbitting(true);
-		await deleteItemAsync('user');
+		const oldUser : Utilisateur = JSON.parse(await getItemAsync('user') || "");
+		console.log(oldUser.mail);		
     const user = await signIn(form.email, form.password);
     if (user) {
+			await setItemAsync('user', JSON.stringify(user));
 			router.push("/home/crypto");
       Alert.alert("Success", "You are now signed in");
     } else {
