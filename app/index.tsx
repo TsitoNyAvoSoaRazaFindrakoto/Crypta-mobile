@@ -3,17 +3,42 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Link, router, useRouter } from "expo-router";
 import Logo from "@/components/ui/Logo";
+import { registerForPushNotifications } from "@/hooks/notifications";
+import { useEffect } from "react";
 
 export default function LandingPage() {
-	const router = useRouter();
+  const router = useRouter();
 
-	const toSignin = () => {
-		router.push('/auth/sign-in');
-	}
+  const toSignin = () => {
+    router.push("/auth/sign-in");
+  };
 
-	const toSignup = () => {
-		router.push('/auth/sign-up');
-	}
+  const toSignup = () => {
+    router.push("/auth/sign-up");
+  };
+
+  useEffect(() => {
+    const getPush =async () => {
+      const token = await registerForPushNotifications();
+
+      // Send notification via Expo
+      await fetch("https://exp.host/--/api/v2/push/send", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          to: token,
+          title: "Test Notification",
+          body: "This is a test notification",
+          data: { url: "/notification-details" },
+        }),
+      });
+    };
+
+		getPush();
+  }, []);
 
   return (
     <SafeAreaView className="flex-1 bg-surface-primary">
@@ -21,8 +46,11 @@ export default function LandingPage() {
         {/* En-tête avec bordure subtile */}
         <View className="px-6 pt-6 pb-4 bg-surface-primary border-b border-border-muted">
           <View className="flex-row justify-between items-center">
-            <Logo containerStyle="flex-row gap-2"/>
-						<TouchableOpacity className="px-3 py-1.5 w-1/3 rounded-full bg-brand-100 active:bg-brand-200 items-center" onPress={toSignin}>
+            <Logo containerStyle="flex-row gap-2" />
+            <TouchableOpacity
+              className="px-3 py-1.5 w-1/3 rounded-full bg-brand-100 active:bg-brand-200 items-center"
+              onPress={toSignin}
+            >
               <Text className="text-brand-600 text-sm font-medium">
                 Connexion
               </Text>
@@ -107,21 +135,19 @@ export default function LandingPage() {
         <TouchableOpacity
           className="mx-2 my-6 bg-brand-500 py-4 rounded-2xl items-center active:bg-brand-700 border-3 shadow-sm"
           activeOpacity={0.95}
-					onPress={toSignup}
+          onPress={toSignup}
         >
           <Text className="text-surface text-lg font-semibold">
             Rejoignez-nous
           </Text>
         </TouchableOpacity>
 
-				<TouchableOpacity
+        <TouchableOpacity
           className="mx-2 my-6 bg-brand-500 py-4 rounded-2xl items-center active:bg-brand-700 border-3 shadow-sm"
           activeOpacity={0.95}
-					onPress={() => ( router.push('/home/crypto'))}
+          onPress={() => router.push("/home/crypto")}
         >
-          <Text className="text-surface text-lg font-semibold">
-            Homepage
-          </Text>
+          <Text className="text-surface text-lg font-semibold">Homepage</Text>
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>

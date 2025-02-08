@@ -1,50 +1,189 @@
-# Welcome to your Expo app 👋
+# Crypta SDK
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+SDK pour le suivi et la gestion des cryptomonnaies en temps réel.
 
-## Get started
+## Prérequis
 
-1. Install dependencies
+- Node.js (version 14 ou supérieure)
+- npm ou yarn
+- React Native (version 0.71 ou supérieure)
+- Expo (version 49 ou supérieure)
 
-   ```bash
-   npm install
-   ```
+## Technologies Utilisées
 
-2. Start the app
+- **React Native**: Framework pour le développement mobile
+- **Expo**: Plateforme de développement React Native
+- **TypeScript**: Langage de programmation typé
+- **TailwindCSS**: Framework CSS pour le style
+- **React Native Charts**: Pour l'affichage des graphiques
+- **Firebase**: Pour l'authentification et le stockage de données
 
-   ```bash
-    npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Installation
 
 ```bash
-npm run reset-project
+npm install @crypta/sdk
+# ou
+yarn add @crypta/sdk
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Configuration
 
-## Learn more
+### 1. Configuration de l'Environnement
 
-To learn more about developing your project with Expo, look at the following resources:
+```bash
+# Installation des dépendances globales
+npm install -g expo-cli
+npm install -g typescript
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+# Installation des dépendances du projet
+npm install
+```
 
-## Join the community
+### 2. Variables d'Environnement
 
-Join our community of developers creating universal apps.
+Créez un fichier `.env` à la racine du projet :
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```env
+API_URL=votre_url_api
+API_KEY=votre_cle_api
+FIREBASE_CONFIG={...vos_configurations_firebase}
+```
+
+## Utilisation du SDK
+
+### 1. Initialisation
+
+```typescript
+import { CryptaSDK } from '@crypta/sdk';
+
+const sdk = new CryptaSDK({
+  apiKey: process.env.API_KEY,
+  baseUrl: process.env.API_URL
+});
+```
+
+### 2. Fonctionnalités Principales
+
+#### Gestion des Cryptomonnaies
+
+```typescript
+// Récupérer la liste des cryptomonnaies
+const cryptos = await sdk.getCryptoAssets();
+
+// Obtenir l'historique des prix
+const historique = await sdk.getHistoricalData(1, 'week');
+
+// Gérer les favoris
+await sdk.toggleFavorite(1);
+
+// Calculer les variations de prix
+const variation = sdk.calculatePriceChange(10000, 9000);
+```
+
+## Structure du Projet
+
+```
+crypta-mobile/
+├── app/                    # Code source principal
+│   ├── home/              # Pages principales
+│   │   └── crypto/        # Composants crypto
+├── assets/                # Ressources statiques
+├── components/            # Composants réutilisables
+├── constants/             # Constants et configurations
+├── firebase/             # Configuration Firebase
+├── hooks/                # Hooks personnalisés
+├── sdk/                  # SDK Crypta
+│   ├── types.ts          # Types et interfaces
+│   ├── index.ts          # Classe principale du SDK
+│   └── README.md         # Documentation
+└── package.json          # Dépendances
+```
+
+## Composants Principaux
+
+### CryptoRow
+Composant pour afficher les informations d'une cryptomonnaie :
+- Prix actuel
+- Variation de prix
+- Statut favori
+- Icône personnalisée
+
+### CustomChart
+Composant de graphique personnalisé pour afficher :
+- Historique des prix
+- Tendances
+- Périodes personnalisables
+
+## Sécurité
+
+- Authentification via Firebase
+- Stockage sécurisé des clés API
+- Chiffrement des données sensibles
+- Validation des entrées utilisateur
+
+## Bonnes Pratiques
+
+1. **Code**
+   - Utiliser TypeScript pour le typage
+   - Suivre les principes SOLID
+   - Documenter les fonctions et composants
+
+2. **Performance**
+   - Optimiser les rendus React
+   - Mettre en cache les données
+   - Utiliser la pagination pour les listes
+
+3. **UI/UX**
+   - Interface responsive
+   - Thème sombre/clair
+   - Animations fluides
+   - Retours utilisateur
+
+## Dépannage
+
+### Problèmes Courants
+
+1. **Erreur de connexion API**
+   ```
+   Solution: Vérifier les configurations dans .env
+   ```
+
+2. **Graphiques ne s'affichent pas**
+   ```
+   Solution: Vérifier l'installation de react-native-charts
+   ```
+
+3. **Problèmes de compilation**
+   ```
+   Solution: Nettoyer le cache
+   npx expo start -c
+   ```
+
+## Support
+
+Pour toute question ou problème :
+- Ouvrir une issue sur GitHub
+- Consulter la documentation API
+- Contacter l'équipe de support
+
+## Types de Données
+
+```typescript
+interface CryptoAsset {
+  id: number;
+  name: string;
+  price: number;
+  previousPrice?: number;
+  favorite: boolean;
+}
+
+interface ChartData {
+  value: number;
+  label?: string;
+  timestamp: number;
+}
+
+interface CryptoSDKConfig {
+  apiKey?: string;
+  baseUrl?: string;
+}
