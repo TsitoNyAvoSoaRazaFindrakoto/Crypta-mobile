@@ -1,7 +1,6 @@
 import { View, Text, TouchableOpacity, Modal, TextInput, Alert, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from "react-native-safe-area-context"
-import { Picker } from '@react-native-picker/picker'
 import Logo from "@/components/ui/Logo"
 import { MaterialIcons } from '@expo/vector-icons'
 
@@ -38,18 +37,23 @@ export default function Page() {
 
         {/* Type d'opération */}
         <View className="mb-2">
-          <Text className="text-lg font-medium mb-2 ml-2">
-            Type d'opération
-          </Text>
-          <View className="border-hairline border-accent-800 rounded-lg overflow-hidden bg-white">
-            <Picker
-              selectedValue={form.type}
-              onValueChange={(itemValue) => setForm({ ...form, type: itemValue })}
-              className="h-12"
+          <View style={{ flexDirection: 'row', justifyContent: 'space-around', margin: 20 }}>
+            <TouchableOpacity
+              style={{ backgroundColor: form.type === 'depot' ? '#4CAF50' : '#ccc', padding: 15, borderRadius: 10, elevation: 5, flexDirection: 'row', alignItems: 'center' }}
+              onPress={() => setForm({ ...form, type: 'depot' })}
+              activeOpacity={0.7}
             >
-              <Picker.Item label="Dépôt" value="depot" />
-              <Picker.Item label="Retrait" value="retrait" />
-            </Picker>
+              <MaterialIcons name="arrow-upward" size={24} color={form.type === 'depot' ? 'white' : 'black'} />
+              <Text style={{ color: form.type === 'depot' ? 'white' : 'black', fontSize: 18, textAlign: 'center', marginLeft: 10 }}>Dépôt</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{ backgroundColor: form.type === 'retrait' ? '#F44336' : '#ccc', padding: 15, borderRadius: 10, elevation: 5, flexDirection: 'row', alignItems: 'center' }}
+              onPress={() => setForm({ ...form, type: 'retrait' })}
+              activeOpacity={0.7}
+            >
+              <MaterialIcons name="arrow-downward" size={24} color={form.type === 'retrait' ? 'white' : 'black'} />
+              <Text style={{ color: form.type === 'retrait' ? 'white' : 'black', fontSize: 18, textAlign: 'center', marginLeft: 10 }}>Retrait</Text>
+            </TouchableOpacity>
           </View>
         </View>
 

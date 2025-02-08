@@ -3,7 +3,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useState, useMemo } from "react";
-import Logo from "@/components/ui/Logo";
 import { theme } from "@/tailwind.config";
 
 // Mock data - Replace with actual API calls later
@@ -24,7 +23,7 @@ const mockTransactions = [
     date: "2025-02-03T15:45:00Z",
     crypto: "ETH",
   },
-	{
+  {
     id: 3,
     type: "sell",
     amount: 0.02,
@@ -32,7 +31,7 @@ const mockTransactions = [
     date: "2025-02-03T15:45:00Z",
     crypto: "ETH",
   },
-	{
+  {
     id: 4,
     type: "sell",
     amount: 0.02,
@@ -40,7 +39,7 @@ const mockTransactions = [
     date: "2025-02-03T15:45:00Z",
     crypto: "ETH",
   },
-	{
+  {
     id: 5,
     type: "sell",
     amount: 0.02,
@@ -48,7 +47,7 @@ const mockTransactions = [
     date: "2025-02-03T15:45:00Z",
     crypto: "ETH",
   },
-	{
+  {
     id: 6,
     type: "sell",
     amount: 0.02,
@@ -70,28 +69,23 @@ const transactionTypes = [
 ];
 
 const getFavoriteCryptoId = () => {
-  // TODO: Implement getting favorite crypto from user preferences
-  return "BTC"; // Bitcoin as default
+  return "BTC";
 };
 
 const History = () => {
   const router = useRouter();
   const { id } = useLocalSearchParams();
   const cryptoId = id === "0" ? getFavoriteCryptoId() : String(id);
-  const favoriteCryptoId = getFavoriteCryptoId();
 
-  // Filter states
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const [selectedCryptos, setSelectedCryptos] = useState<string[]>([]);
+  const [selectedCryptos, setSelectedCryptos] = useState<string[]>([cryptoId]);
 
-  // Filter transactions based on selected filters
   const filteredTransactions = useMemo(() => {
     return mockTransactions.filter((transaction) => {
       const typeMatch =
         selectedTypes.length === 0 || selectedTypes.includes(transaction.type);
       const cryptoMatch =
-        selectedCryptos.length === 0 ||
-        selectedCryptos.includes(transaction.crypto);
+        selectedCryptos.length === 0 || selectedCryptos.includes(transaction.crypto);
       return typeMatch && cryptoMatch;
     });
   }, [selectedTypes, selectedCryptos]);
@@ -112,7 +106,6 @@ const History = () => {
     );
   };
 
-  // Improved date formatting with better French locale
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("fr-FR", {
       year: "numeric",
@@ -123,7 +116,6 @@ const History = () => {
     });
   };
 
-  // Enhanced price formatting
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat("fr-FR", {
       style: "currency",
@@ -133,202 +125,170 @@ const History = () => {
     }).format(price);
   };
 
-  // Improved crypto amount formatting
   const formatCryptoAmount = (amount: number) => {
     return amount.toFixed(amount < 0.1 ? 6 : 2);
   };
 
   return (
-    <SafeAreaView className="bg-surface-primary flex-1 px-4 pt-4">
-        {/* Enhanced Header */}
-        <View className="pb-4 mb-4 border-b border-border-muted">
-          <View className="flex-row justify-between items-center">
-            <Logo containerStyle="flex-row gap-2" />
+    <SafeAreaView className="bg-surface-primary flex-1">
+      <View className="flex-1">
+        {/* Header avec description */}
+        <View className="px-4 py-4 border-b border-border-muted">
+          <View className="flex-row justify-between items-center mb-2">
+            <Text style={{ margin: '20px 0', fontSize: 24, textAlign: 'center', color: '#333', fontWeight: 'bold' }} className="text-text-primary">
+              Transactions
+            </Text>
             <TouchableOpacity
               onPress={() => router.back()}
-              className="px-4 py-2 rounded-lg bg-brand-500 active:opacity-90"
+              className="px-4 py-2 rounded-lg bg-brand-500"
             >
-              <Text className="text-brand-contrast text-sm font-semibold">
-                Revenir aux Cours
+              <Text className="text-white font-medium">
+                Retour au portefeuille
               </Text>
             </TouchableOpacity>
           </View>
         </View>
 
-        {/* Title Section */}
-        <View className="mb-4">
-          <Text className="text-3xl font-bold text-text-primary">
-            Historique des transactions
-          </Text>
-{/*           <Text className="text-text-tertiary mt-2 text-lg">
-            {id === "0" ? "Crypto préférée" : `Crypto #${cryptoId}`}
-          </Text> */}
-        </View>
-
-        {/* Enhanced Filters Section */}
-        <View className="mb-6">
-          <View className="px-2 pb-1 ">
-            <View className="flex-row flex-wrap gap-3">
+        <ScrollView className="flex-1 px-4">
+          {/* Section des filtres avec descriptions */}
+          <View className="py-4">
+            <Text className="text-lg font-semibold text-text-primary mb-3">
+              Filtrer par type d'opération
+            </Text>
+            <View className="flex-row flex-wrap gap-2 mb-6">
               {transactionTypes.map((type) => (
                 <TouchableOpacity
                   key={type.id}
                   onPress={() => toggleType(type.id)}
-                  className={`flex-row items-center px-4 py-2 rounded-full border ${
+                  className={`px-4 py-2 rounded-full border ${
                     selectedTypes.includes(type.id)
-                      ? "bg-brand-pale border-brand-500"
+                      ? "bg-brand-500 border-brand-500"
                       : "border-border-muted"
                   }`}
                 >
-                  <MaterialCommunityIcons
-                    name={
-                      selectedTypes.includes(type.id)
-                        ? "checkbox-marked"
-                        : "checkbox-blank-outline"
-                    }
-                    size={20}
-                    color={
-                      selectedTypes.includes(type.id)
-                        ? theme.extend.colors.brand[500]
-                        : theme.extend.colors.text.muted
-                    }
-                    className="mr-2"
-                  />
                   <Text
-                    className={`text-sm ${
+                    className={
                       selectedTypes.includes(type.id)
-                        ? "text-brand-600 font-medium"
+                        ? "text-white font-medium"
                         : "text-text-secondary"
-                    }`}
+                    }
                   >
                     {type.name}
                   </Text>
                 </TouchableOpacity>
               ))}
             </View>
-          </View>
 
-          {/* Improved Crypto Filters */}
-          <View className="p-2">
-{/*             <Text className="text-lg font-semibold text-text-primary mb-2">
-              Cryptomonnaies
-            </Text> */}
-            <View className="flex-row flex-wrap gap-2">
-              {cryptoList.map((crypto) => {
-                const isFavorite = crypto.id === favoriteCryptoId;
-                const isSelected = selectedCryptos.includes(crypto.id);
-
-                return (
-                  <TouchableOpacity
-                    key={crypto.id}
-                    onPress={() => toggleCrypto(crypto.id)}
-                    className={`flex-row items-center px-4 py-2 rounded-full border ${
-                      isSelected
-                        ? "bg-brand-pale border-brand-500"
-                        : isFavorite
-                        ? "border-accent-500 bg-accent-50"
-                        : "border-border-muted"
-                    }`}
+            <Text className="text-lg font-semibold text-text-primary mb-3">
+              Sélectionner les cryptomonnaies
+            </Text>
+            <View className="flex-row flex-wrap gap-2 mb-6">
+              {cryptoList.map((crypto) => (
+                <TouchableOpacity
+                  key={crypto.id}
+                  onPress={() => toggleCrypto(crypto.id)}
+                  className={`px-4 py-2 rounded-full border ${
+                    selectedCryptos.includes(crypto.id)
+                      ? "bg-brand-500 border-brand-500"
+                      : "border-border-muted"
+                  }`}
+                >
+                  <Text
+                    className={
+                      selectedCryptos.includes(crypto.id)
+                        ? "text-white font-medium"
+                        : "text-text-secondary"
+                    }
                   >
-                    <MaterialCommunityIcons
-                      name={
-                        isSelected
-                          ? "checkbox-marked"
-                          : "checkbox-blank-outline"
-                      }
-                      size={20}
-                      color={
-                        isSelected
-                          ? theme.extend.colors.brand[500]
-                          : isFavorite
-                          ? theme.extend.colors.accent[500]
-                          : theme.extend.colors.text.muted
-                      }
-                      className="mr-2"
-                    />
-                    <Text
-                      className={`text-sm ${
-                        isSelected
-                          ? "text-brand-600 font-medium"
-                          : isFavorite
-                          ? "text-accent-700"
-                          : "text-text-secondary"
-                      }`}
-                    >
-                      {crypto.name}
-                    </Text>
-                  </TouchableOpacity>
-                );
-              })}
+                    {crypto.name}
+                  </Text>
+                </TouchableOpacity>
+              ))}
             </View>
           </View>
-        </View>
 
-        {/* Enhanced Transactions List */}
-        <ScrollView className="rounded-xl max-h-[48vh] flex-grow-0 ">
-          {filteredTransactions.length === 0 ? (
-            <View className="py-12 items-center">
-              <MaterialCommunityIcons
-                name="chart-line-variant"
-                size={40}
-                color={theme.extend.colors.text.muted}
-              />
-              <Text className="text-text-tertiary mt-4 text-lg">
-                Aucune transaction trouvée
-              </Text>
-            </View>
-          ) : (
-            filteredTransactions.map((transaction) => (
-              <View
-                key={transaction.id}
-                className="bg-elevation-1 p-4"
-              >
-                <View className="flex-row justify-between items-center">
-                  {/* Transaction Details */}
-                  <View className="flex-row items-center gap-4">
-                    <View
-                      className={`w-12 h-12 rounded-full items-center justify-center ${
-                        transaction.type === "buy"
-                          ? "bg-success-surface"
-                          : "bg-error-surface"
-                      }`}
-                    >
-                      <MaterialCommunityIcons
-                        name={
-                          transaction.type === "buy" ? "arrow-down" : "arrow-up"
-                        }
-                        size={24}
-                        color={
+          {/* Liste des transactions avec titre */}
+          <View className="pb-4">
+            <Text className="text-lg font-semibold text-text-primary mb-4">
+              Vos transactions {selectedTypes.length > 0 ? "filtrées" : "récentes"}
+            </Text>
+            
+            {filteredTransactions.length === 0 ? (
+              <View className="py-12 items-center bg-surface-secondary rounded-xl">
+                <MaterialCommunityIcons
+                  name="history"
+                  size={40}
+                  color={theme.extend.colors.text.muted}
+                />
+                <Text className="text-text-primary font-medium text-lg mt-4">
+                  Aucune transaction trouvée
+                </Text>
+                <Text className="text-text-secondary text-center mt-2 px-4">
+                  Modifiez vos filtres ou revenez plus tard pour voir vos nouvelles transactions
+                </Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    setSelectedTypes([]);
+                    setSelectedCryptos([cryptoId]);
+                  }}
+                  className="mt-4 px-6 py-2 bg-brand-500 rounded-full"
+                >
+                  <Text className="text-white font-medium">
+                    Réinitialiser les filtres
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              filteredTransactions.map((transaction) => (
+                <View
+                  key={transaction.id}
+                  className="bg-surface p-4 rounded-xl border border-border-muted mb-3"
+                >
+                  <View className="flex-row justify-between items-center">
+                    <View className="flex-row items-center gap-3">
+                      <View
+                        className={`w-10 h-10 rounded-full items-center justify-center ${
                           transaction.type === "buy"
-                            ? theme.extend.colors.success.DEFAULT
-                            : theme.extend.colors.error.DEFAULT
-                        }
-                      />
+                            ? "bg-green-100"
+                            : "bg-red-100"
+                        }`}
+                      >
+                        <MaterialCommunityIcons
+                          name={transaction.type === "buy" ? "arrow-down" : "arrow-up"}
+                          size={24}
+                          color={transaction.type === "buy" ? "#16a34a" : "#dc2626"}
+                        />
+                      </View>
+                      <View>
+                        <Text className="text-text-primary font-medium text-base">
+                          {transaction.type === "buy" ? "Achat de" : "Vente de"} {transaction.crypto}
+                        </Text>
+                        <Text className="text-text-secondary text-sm">
+                          Effectué le {formatDate(transaction.date)}
+                        </Text>
+                      </View>
                     </View>
-                    <View>
-                      <Text className="text-lg font-semibold text-text-primary capitalize">
-                        {transaction.type}
+                    <View className="items-end">
+                      <Text className="text-text-primary font-medium text-base">
+                        {formatCryptoAmount(transaction.amount)} {transaction.crypto}
                       </Text>
-                      <Text className="text-sm text-text-muted">
-                        {formatDate(transaction.date)}
+                      <Text
+                        className={`text-sm ${
+                          transaction.type === "buy"
+                            ? "text-green-600"
+                            : "text-red-600"
+                        }`}
+                      >
+                        {transaction.type === "buy" ? "-" : "+"}{formatPrice(transaction.price)}
                       </Text>
                     </View>
-                  </View>
-
-                  {/* Amount Details */}
-                  <View className="items-end">
-                    <Text className="text-lg font-semibold text-text-primary">
-                      {formatCryptoAmount(transaction.amount)}{" "}
-                      {transaction.crypto}
-                    </Text>
-                    <Text className="text-sm text-text-secondary">
-                      {formatPrice(transaction.price)}
-                    </Text>
                   </View>
                 </View>
-              </View>
-            ))
-          )}
+              ))
+            )}
+          </View>
         </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };
