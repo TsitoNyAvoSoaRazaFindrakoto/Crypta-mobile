@@ -3,7 +3,7 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "start": "npx expo start",
+    "start": "expo start --dev-client",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "npx expo run:android",
     "ios": "npx expo run:ios",
@@ -22,8 +22,7 @@
           "tailwindcss",
           "bcryptjs",
           "imagekit-javascript"
-        ],
-        "listUnknownPackages": false
+        ]
       }
     }
   },
