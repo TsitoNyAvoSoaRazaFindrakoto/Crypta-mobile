@@ -31,6 +31,6 @@ export default class CryptoVal {
 		return new CryptoVal(doc._dateHeure, doc._valeur);
 	}
 
-
+	
 
 }

@@ -6,6 +6,7 @@ import Logo from "@/components/ui/Logo";
 import { registerForPushNotifications } from "@/hooks/notifications";
 import { useEffect } from "react";
 import * as SecureStorage from "expo-secure-store";
+import Utilisateur from "@/types/Utilisateur";
 
 export default function LandingPage() {
   const router = useRouter();
@@ -13,6 +14,7 @@ export default function LandingPage() {
 	useEffect(() => {
 		const checkRegister = async () => {
 			if (await SecureStorage.getItemAsync('user')) {
+				await Utilisateur.updateLocalConfig();
 				router.push('/home/crypto');
 			}
 		}

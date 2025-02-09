@@ -25,15 +25,10 @@ export default class Crypto {
   private _crypto: string;
   private _id: string;
   private _idCrypto: number;
-  private _favoris?: boolean;
   private _current?: number;
   private _vals?: CryptoVal[];
 
-  constructor(
-    crypto: string,
-    id: string,
-    idCrypto: number
-  ) {
+  constructor(crypto: string, id: string, idCrypto: number) {
     this._crypto = crypto;
     this._id = id;
     this._idCrypto = idCrypto;
@@ -52,10 +47,7 @@ export default class Crypto {
   async fetchAllValues(): Promise<CryptoVal[]> {
     try {
       const dbRef = ref(database, `${this.idCrypto}`);
-      const queryRef = query(
-        dbRef,
-        orderByChild("dateHeure")
-      );
+      const queryRef = query(dbRef, orderByChild("dateHeure"));
 
       const snapshot = await get(queryRef);
 
@@ -63,7 +55,7 @@ export default class Crypto {
         console.log("tsisy valeur");
         return [];
       }
-			console.log();
+      console.log();
       return this.parseSnapshot(snapshot);
     } catch (error) {
       console.error("Error fetching all values:", error);
@@ -115,22 +107,13 @@ export default class Crypto {
       }
       return false; // Continue enumeration
     });
-		console.log(values);
-		
+    console.log(values);
+
     return values;
   }
 
-  static fromDoc(
-    doc: any,
-    fetchData: boolean = false,
-    fetchAll: boolean = false,
-    limit: number
-  ): Crypto {
-    return new Crypto(
-      doc.crypto,
-      doc.idCrypto,
-      doc.idCrypto,
-    );
+  static fromDoc(doc: any): Crypto {
+    return new Crypto(doc.crypto, doc.idCrypto, doc.idCrypto);
   }
 
   public get crypto(): string {
@@ -150,12 +133,13 @@ export default class Crypto {
   }
   public set idCrypto(value: number) {
     this._idCrypto = value;
+    this._id = String(this._idCrypto);
   }
   get current(): number {
     return this._current ?? 0;
   }
 
-	public get vals(): CryptoVal[] {
+  public get vals(): CryptoVal[] {
     return this._vals ?? [];
   }
   public set vals(value: CryptoVal[]) {
@@ -170,6 +154,31 @@ export default class Crypto {
     }
   }
 
+  public static async getById(idCrypto: number): Promise<Crypto | null> {
+    try {
+      const historiqueCollection = collection(firestore, Crypto.table);
+      const q = firestoreQuery(
+        historiqueCollection,
+        where("idCrypto", "==", idCrypto)
+      );
+
+      const snapshot = await getDocs(q);
+
+      if (snapshot.empty) {
+        console.log(`Crypto with id ${idCrypto} not found`);
+        return null;
+      }
+
+      const doc = snapshot.docs[0]; // Assuming idCrypto is unique
+      const data = { ...doc.data() };
+
+      return Crypto.fromDoc(data);
+    } catch (error) {
+      console.error(`Error fetching crypto with id ${idCrypto}:`, error);
+      throw new Error(`Failed to fetch crypto with id ${idCrypto}`);
+    }
+  }
+
   public static async getAll(): Promise<Crypto[]> {
     try {
       const historiqueCollection = collection(firestore, Crypto.table);
@@ -178,14 +187,13 @@ export default class Crypto {
       const snapshot = await getDocs(q);
 
       if (snapshot.empty) {
-				console.log("there are cryptos")
+        console.log("there are cryptos");
         return [];
       }
 
       return snapshot.docs.map((doc) => {
         const data = { ...doc.data() };
-
-        return Crypto.fromDoc(data, true, false, 1);
+        return Crypto.fromDoc(data);
       });
     } catch (error) {
       console.error("Error fetching all historique entries:", error);

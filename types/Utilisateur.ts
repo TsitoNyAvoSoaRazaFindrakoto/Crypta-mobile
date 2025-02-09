@@ -1,4 +1,7 @@
+import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
 import { hashPassword, comparePassword } from "@/utils/crypto";
+import { firestore } from "@/config/firebase/firebase-config";
+import { getItemAsync, setItemAsync } from "expo-secure-store";
 
 export default class Utilisateur {
 
@@ -55,8 +58,8 @@ export default class Utilisateur {
   }
 
   // Static method to create an instance from Firestore document
-  public static fromFirestoreDoc(doc: any): Utilisateur {
-    const data = doc.data();
+  public static fromFirestoreDoc(docSnap: any): Utilisateur {
+    const data = docSnap.data();
     return new Utilisateur(
       data.pseudo,
       data.mail,
@@ -64,8 +67,24 @@ export default class Utilisateur {
       data.idUtilisateur,
       data.mobile,
       data.role,
-      data.favoris // this field may be undefined if not present in the document
+      data.favoris 
     );
+  }
+
+  // New: Get utilisateur by idUtilisateur from Firestore
+  public static async getById(idUtilisateur: number): Promise<Utilisateur | null> {
+    const docRef = doc(firestore, Utilisateur.table, String(idUtilisateur));
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return Utilisateur.fromFirestoreDoc(docSnap);
+    }
+    return null;
+  }
+
+  // New: Update favoris field in Firestore for a user
+  public static async updateFavoris(idUtilisateur: number, favoris: string[]): Promise<void> {
+    const docRef = doc(firestore, Utilisateur.table, String(idUtilisateur));
+    await updateDoc(docRef, { favoris });
   }
 
   // Hash password asynchronously using new method
@@ -156,4 +175,11 @@ export default class Utilisateur {
   set mobile(value: boolean) {
     this._mobile = value;
   }
+
+	public static async updateLocalConfig(){
+		const user : Utilisateur = JSON.parse(await getItemAsync('user') || "");
+		await setItemAsync('user', JSON.stringify(await Utilisateur.getById(user.id)));
+	}
+
+
 }

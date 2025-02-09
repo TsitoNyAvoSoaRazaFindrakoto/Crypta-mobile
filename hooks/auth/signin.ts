@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
 import Utilisateur from "@/types/Utilisateur";
 import { comparePassword } from "@/utils/crypto"; // new import
+import { firestore } from '@/config/firebase/firebase-config';
 
 const useSignIn = () => {
 	const [loading, setLoading] = useState(false);
@@ -12,8 +13,7 @@ const useSignIn = () => {
 		setError(null);
 		
 		try {
-			const db = getFirestore();
-			const utilisateurCollection = collection(db, Utilisateur.table);
+			const utilisateurCollection = collection(firestore, Utilisateur.table);
 			const q = query(utilisateurCollection, where('email', '==', email));
 			const querySnapshot = await getDocs(q);
 

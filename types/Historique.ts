@@ -96,7 +96,7 @@ class Historique {
   }
 
   // Fetch the latest historique entries with a limit
-  static async fetchLatestWithLimit(
+  public static async fetchLatestWithLimit(
     idUtilisateur: number,
     limitCount: number = 5
   ): Promise<Historique[]> {
@@ -122,6 +122,50 @@ class Historique {
     } catch (error) {
       console.error("Error fetching latest historique entries:", error);
       throw new Error("Failed to fetch latest historique entries");
+    }
+  }
+
+	public static async fetchGroupedByCrypto(idUtilisateur: number): Promise<{ idCrypto: number; idUtilisateur: number; totalEntree: number; totalSortie: number }[]> {
+		try {
+			const historiqueCollection = collection(firestore, Historique.table);
+			const q = query(
+				historiqueCollection,
+				where("idUtilisateur", "==", idUtilisateur)
+			);
+
+      const snapshot = await getDocs(q);
+
+      if (snapshot.empty) {
+        return [];
+      }
+
+      const groupedData: Map<string, { idCrypto: number; idUtilisateur: number; totalEntree: number; totalSortie: number }> = new Map();
+
+      snapshot.docs.forEach((doc) => {
+        const data = doc.data() as HistoriqueData;
+        const key = `${data.idCrypto}`;
+
+        if (!groupedData.has(key)) {
+          groupedData.set(key, {
+            idCrypto: data.idCrypto,
+            idUtilisateur: data.idUtilisateur,
+            totalEntree: 0,
+            totalSortie: 0,
+          });
+        }
+
+        const currentData = groupedData.get(key);
+        if (currentData) {
+          currentData.totalEntree += data.entree;
+          currentData.totalSortie += data.sortie;
+          groupedData.set(key, currentData);
+        }
+      });
+
+      return Array.from(groupedData.values());
+    } catch (error) {
+      console.error("Error fetching grouped historique entries:", error);
+      throw new Error("Failed to fetch grouped historique entries");
     }
   }
 }

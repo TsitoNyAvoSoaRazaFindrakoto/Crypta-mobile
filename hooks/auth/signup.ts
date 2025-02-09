@@ -2,11 +2,11 @@ import { useState } from "react";
 import Utilisateur from "../../types/Utilisateur";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 import * as SecureStore from 'expo-secure-store';
+import { firestore } from "@/config/firebase/firebase-config";
 
 const useSignUp = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const db = getFirestore();
 
   const signUp = async (
     pseudo: string,
@@ -29,7 +29,7 @@ const useSignUp = () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
       console.log(`utilisateur mdp : ${user.password}`);
 
-      await setDoc(doc(db, Utilisateur.table, String(user.id)), {
+      await setDoc(doc(firestore, Utilisateur.table, String(user.id)), {
         pseudo: user.pseudo,
         mail: user.mail,
         idUtilisateur: user.idUtilisateur,
