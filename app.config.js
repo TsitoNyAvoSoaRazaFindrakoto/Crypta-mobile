@@ -12,7 +12,7 @@ export default {
       supportsTablet: true,
     },
     android: {
-      package: "com.mobile.crypta",
+      package: "group.crypta",
       adaptiveIcon: {
         foregroundImage: "./assets/images/adaptive-icon.png",
         backgroundColor: "#ffffff",
