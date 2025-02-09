@@ -74,11 +74,9 @@ const getFavoriteCryptoId = () => {
 
 const History = () => {
   const router = useRouter();
-  const { id } = useLocalSearchParams();
-  const cryptoId = id === "0" ? getFavoriteCryptoId() : String(id);
 
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const [selectedCryptos, setSelectedCryptos] = useState<string[]>([cryptoId]);
+  const [selectedCryptos, setSelectedCryptos] = useState<string[]>([]);
 
   const filteredTransactions = useMemo(() => {
     return mockTransactions.filter((transaction) => {
@@ -135,13 +133,13 @@ const History = () => {
         {/* Header avec description */}
         <View className="px-4 py-4 border-b border-border-muted">
           <View className="flex-row justify-between items-center mb-2">
-            <Text style={{ margin: '20px 0', fontSize: 24, textAlign: 'center', color: '#333', fontWeight: 'bold' }} className="text-text-primary">
+            <Text style={{ marginTop: 20, marginBottom: 20, fontSize: 24, textAlign: 'center', color: '#333', fontWeight: 'bold' }} className="text-text-primary">
               Transactions
             </Text>
-            <TouchableOpacity
-              onPress={() => router.back()}
-              className="px-4 py-2 rounded-lg bg-brand-500"
-            >
+						<TouchableOpacity
+							onPress={() => router.back()}
+							className="px-4 py-2 rounded-lg bg-brand-500 mt-2"
+						>
               <Text className="text-white font-medium">
                 Retour au portefeuille
               </Text>
@@ -229,7 +227,7 @@ const History = () => {
                 <TouchableOpacity
                   onPress={() => {
                     setSelectedTypes([]);
-                    setSelectedCryptos([cryptoId]);
+                    setSelectedCryptos([]);
                   }}
                   className="mt-4 px-6 py-2 bg-brand-500 rounded-full"
                 >

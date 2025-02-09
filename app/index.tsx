@@ -14,6 +14,7 @@ export default function LandingPage() {
 	useEffect(() => {
 		const checkRegister = async () => {
 			if (await SecureStorage.getItemAsync('user')) {
+				console.info("user has already logged in");
 				await Utilisateur.updateLocalConfig();
 				router.push('/home/crypto');
 			}
@@ -132,13 +133,13 @@ export default function LandingPage() {
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           className="mx-2 my-6 bg-brand-500 py-4 rounded-2xl items-center active:bg-brand-700 border-3 shadow-sm"
           activeOpacity={0.95}
           onPress={() => router.push("/home/crypto")}
         >
           <Text className="text-surface text-lg font-semibold">Homepage</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </ScrollView>
     </SafeAreaView>
   );

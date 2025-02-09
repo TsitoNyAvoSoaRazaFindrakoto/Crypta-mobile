@@ -121,7 +121,7 @@ const index = () => {
               Opérations Récentes
             </Text>
             <TouchableOpacity
-              onPress={() => router.push("/home/portefeuille/0")}
+              onPress={() => router.push("/home/portefeuille/general")}
               activeOpacity={0.7}
             >
               <Text className="text-brand-500 text-base">Voir tout</Text>

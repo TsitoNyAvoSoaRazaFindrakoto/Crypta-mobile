@@ -139,24 +139,24 @@ const Index = () => {
 
 	const handleFavoriteButton = (id: number) => {
 		setCryptos((prevData) => {
-			const favoriteCount = prevData.filter((crypto) => crypto.).length;
-			const crypto = prevData.find((c) => c.idCrypto === id);
+			// const favoriteCount = prevData.filter((crypto) => crypto.).length;
+			// const crypto = prevData.find((c) => c.idCrypto === id);
 
-			// Si on veut retirer des favoris
-			if (crypto?.) {
-				return prevData.map((c) => ({
-					...c,
-					favorite: c.idCrypto === id ? false : c.,
-				}));
-			}
+			// // Si on veut retirer des favoris
+			// if (crypto.favorite) {
+			// 	return prevData.map((c) => ({
+			// 		...c,
+			// 		favorite: c.idCrypto === id ? false : c.,
+			// 	}));
+			// }
 
-			// Si on veut ajouter aux favoris et qu'on n'a pas atteint la limite
-			if (favoriteCount < 3) {
-				return prevData.map((c) => ({
-					...c,
-					favorite: c.idCrypto === id ? true : c.,
-				}));
-			}
+			// // Si on veut ajouter aux favoris et qu'on n'a pas atteint la limite
+			// if (favoriteCount < 3) {
+			// 	return prevData.map((c) => ({
+			// 		...c,
+			// 		favorite: c.idCrypto === id ? true : c.,
+			// 	}));
+			// }
 
 			return prevData;
     });
@@ -243,12 +243,12 @@ const Index = () => {
             {cryptos.map((crypto) => (
               <CryptoRow
                 key={crypto.id}
-                id={crypto.id}
+                id={crypto.idCrypto}
                 name={crypto.crypto}
                 price={crypto.current}
                 handleFavoriteButton={handleFavoriteButton}
-                favorite={crypto.favorite}
-                onPress={() => setSelectedCrypto(crypto.id)}
+                favorite={true}
+                onPress={() => setSelectedCrypto(crypto.idCrypto)}
               />
             ))}
           </View>
