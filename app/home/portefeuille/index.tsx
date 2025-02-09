@@ -27,9 +27,11 @@ const index = () => {
     const userString = await getItemAsync("user");
     const currentUser = userString ? JSON.parse(userString) : null;
 
-    const recentData = await Historique.fetchLatestWithLimit(currentUser._id);
+    const recentData = await Historique.fetchLatestWithLimit(currentUser.id);
     setRecent(recentData);
-    const assetsData = await CryptoAsset.getPersonnalData(currentUser._id);
+    console.log(recent);
+
+    const assetsData = await CryptoAsset.getPersonnalData(currentUser.id);
     setAssets(assetsData);
     setIsLoading(false);
   };
@@ -41,13 +43,27 @@ const index = () => {
   if (isLoading) {
     return (
       <SafeAreaView className="bg-surface-primary h-full flex justify-center items-center">
+        <View className="px-4 py-3 mb-2 bg-surface-primary border-b border-border-muted">
+          <View className="flex-row justify-between items-center">
+            <Logo containerStyle="flex-row gap-2" />
+            <TouchableOpacity
+              activeOpacity={0.8}
+              className="px-4 py-2 rounded-2xl items-center bg-brand-500"
+              onPress={reloadData}
+            >
+              <Text className="text-text-inverted text-base font-medium">
+                Refresh
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
         <Text>Loading...</Text>
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView className="bg-surface-primary p-2">
+    <SafeAreaView className="bg-surface-primary p-2 h-full">
       {/* Header with refresh button */}
       <View className="px-4 py-3 mb-2 bg-surface-primary border-b border-border-muted">
         <View className="flex-row justify-between items-center">
@@ -65,7 +81,7 @@ const index = () => {
       </View>
       <TouchableOpacity
         activeOpacity={0.8}
-        className="p-4 rounded-2xl w-full items-center bg-brand-500"
+        className="p-4 rounded-xl w-full items-center bg-brand-500"
       >
         <Text className="text-text-inverted text-xl font-medium">
           Solde disponible{" "}
@@ -86,8 +102,7 @@ const index = () => {
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          className="mt-4"
-          contentContainerStyle={{ paddingRight: 20 }}
+          className="mt-4 w-full h-1/2"
           refreshControl={
             <RefreshControl refreshing={isLoading} onRefresh={reloadData} />
           }
@@ -96,23 +111,29 @@ const index = () => {
             <TouchableOpacity
               key={index}
               activeOpacity={0.7}
-              onPress={() => {}}
-              className={`bg-brand-100 p-5 rounded-3xl ml-2}`}
-              style={{ minWidth: 184, maxWidth: 320 }}
+              className="bg-surface-secondary p-2 rounded-2xl ml-2 border-hairline border-accent-600 h-2/5"
+              style={{ width: 180 }}
             >
-              <View className="flex-row justify-between items-start mb-2">
-                <Text className="text-brand-700 text-lg font-bold">
-                  {asset.crypto.crypto} : {asset.crypto.current}
+              <View className="flex-row justify-between items-center">
+                <Text className="text-text-primary text-lg font-semibold">
+                  {asset.crypto.crypto}
                 </Text>
+                <MaterialCommunityIcons name={asset.crypto.crypto.toLowerCase()} size={32} color={"#636af0"}/>
               </View>
-              <View className="flex-row justify-between items-end">
-                <View>
-                  <Text className="text-brand-900 text-3xl font-bold">
-                    {asset.historique.totalEntree -
-                      asset.historique.totalSortie} : {(asset.historique.totalEntree -
-												asset.historique.totalSortie) * asset.crypto.current}
-                  </Text>
-                </View>
+              <View className="">
+                <Text className="text-text-primary text-base font-bold">
+                  {(
+                    asset.historique.totalEntree - asset.historique.totalSortie
+                  ).toFixed(2)}
+                </Text>
+                <Text className="text-text-secondary text-xs">
+                  {(
+                    (asset.historique.totalEntree -
+                      asset.historique.totalSortie) *
+                    (asset.crypto.current ?? 0)
+                  ).toFixed(2)}{" "}
+                  Ar
+                </Text>
               </View>
             </TouchableOpacity>
           ))}
@@ -121,7 +142,7 @@ const index = () => {
 
       <ScrollView
         showsVerticalScrollIndicator={false}
-        className="flex-1 px-4"
+        className="px-4"
         refreshControl={
           <RefreshControl refreshing={isLoading} onRefresh={reloadData} />
         }
@@ -155,33 +176,36 @@ const index = () => {
                   <View className="flex-row items-center gap-3">
                     <View
                       className={`p-2 rounded-xl ${
-                        operation.entree === 0 ? "bg-green-100" : "bg-red-100"
+                        operation.sortie === 0 ? "bg-green-100" : "bg-red-100"
                       }`}
                     >
                       <MaterialCommunityIcons
                         name={
-                          operation.entree === 0
+                          operation.sortie === 0
                             ? "arrow-bottom-left"
                             : "arrow-top-right"
                         }
                         size={24}
-                        color={operation.entree === 0 ? "#16a34a" : "#dc2626"}
+                        color={operation.sortie === 0 ? "#16a34a" : "#dc2626"}
                       />
                     </View>
                     <View>
                       <Text className="text-text-primary text-base font-semibold">
-                        {operation.entree === 0 ? "Achat" : "Vente"}
+                        {operation.sortie === 0 ? "Achat" : "Vente"}{" "}
+                        {operation.idCrypto}
                       </Text>
                       <Text className="text-text-secondary text-sm mt-0.5">
-                        {operation.dateTransaction.toLocaleDateString()}
+                        {new Date(
+                          operation.dateTransaction
+                        ).toLocaleDateString()}
                       </Text>
                     </View>
                   </View>
                   <View className="items-end">
                     <Text className="text-text-primary text-base font-semibold">
-                      {operation.entree === 0
-                        ? operation.sortie
-                        : operation.entree}
+                      {operation.sortie === 0
+                        ? operation.entree
+                        : operation.sortie}
                     </Text>
                     <Text
                       className={`text-sm mt-0.5 ${
@@ -190,11 +214,11 @@ const index = () => {
                           : "text-red-600"
                       }`}
                     >
-                      {operation.entree === 0 ? "-" : "+"}
+                      {operation.sortie === 0 ? "+" : "-"}
                       {operation.prixUnitaire *
-                        (operation.entree === 0
-                          ? operation.sortie
-                          : operation.entree)}{" "}
+                        (operation.sortie === 0
+                          ? operation.entree
+                          : operation.sortie)}{" "}
                       Ar
                     </Text>
                   </View>

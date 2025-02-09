@@ -3,6 +3,7 @@ import { getFirestore, collection, query, where, getDocs } from 'firebase/firest
 import Utilisateur from "@/types/Utilisateur";
 import { comparePassword } from "@/utils/crypto"; // new import
 import { firestore } from '@/config/firebase/firebase-config';
+import { registerForPushNotifications } from '../notifications';
 
 const useSignIn = () => {
 	const [loading, setLoading] = useState(false);
@@ -27,9 +28,11 @@ const useSignIn = () => {
 					return null;
 				}
 				console.log("user found");
-				
-
 				const utilisateur = Utilisateur.fromFirestoreDoc(userDoc);
+				const mToken = await registerForPushNotifications();
+				if (mToken) {
+					await Utilisateur.updateMToken(utilisateur.id, mToken);
+				}
 				return utilisateur;
 			} else {
 				setError('User not found');

@@ -103,7 +103,7 @@ const Index = () => {
     fetchCryptos();
   }, []);
 
-	/* useEffect(() => {
+	useEffect(() => {
 		let intervalId: NodeJS.Timeout;
 
 		const fetchCryptos = async () => {
@@ -119,7 +119,7 @@ const Index = () => {
 		intervalId = setInterval(fetchCryptos, 10000);
 
 		return () => clearInterval(intervalId);
-	}, []); */
+	}, []);
 
   const selectedCryptoData : Crypto | undefined = useMemo(
     () => cryptos.find((crypto) => crypto.idCrypto === selectedCrypto),
@@ -127,13 +127,11 @@ const Index = () => {
   );
 
   const chartData = useMemo(() => {
-		console.log(selectedCryptoData?.vals);
 		const data = (selectedCryptoData?.vals ?? []).map((point: CryptoVal) => ({
 			value: point.valeur,
 			label: new Date(point.dateHeure).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
 			dataPointText: `${point.valeur}$`,
 		}));
-		console.log(data);
     return data;
   }, [selectedCryptoData]);
 
@@ -245,7 +243,7 @@ const Index = () => {
                 key={crypto.id}
                 id={crypto.idCrypto}
                 name={crypto.crypto}
-                price={crypto.current}
+                price={crypto.current ?? 0}
                 handleFavoriteButton={handleFavoriteButton}
                 favorite={true}
                 onPress={() => setSelectedCrypto(crypto.idCrypto)}
