@@ -1,7 +1,7 @@
 import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
 import { hashPassword, comparePassword } from "@/utils/crypto";
 import { firestore } from "@/config/firebase/firebase-config";
-import { getItemAsync, setItemAsync } from "expo-secure-store";
+import { getItem, getItemAsync, setItemAsync } from "expo-secure-store";
 
 export default class Utilisateur {
 
@@ -177,8 +177,23 @@ export default class Utilisateur {
   }
 
 	public static async updateLocalConfig(){
-		const user : Utilisateur = JSON.parse(await getItemAsync('user') || "");
-		await setItemAsync('user', JSON.stringify(await Utilisateur.getById(user.id)));
+		
+		const userString = getItem('user');
+		if (!userString) {
+			throw new Error("No user data found locally.");
+		}
+	
+		const user = JSON.parse(userString);
+		if (!user || !user._id) {
+			throw new Error("Invalid user data found locally.");
+		}
+
+		const updatedUser = await Utilisateur.getById(user._id);
+		if (!updatedUser) {
+			throw new Error("User not found in Firestore.");
+		}
+		await setItemAsync('user', JSON.stringify(updatedUser));
+
 	}
 
 

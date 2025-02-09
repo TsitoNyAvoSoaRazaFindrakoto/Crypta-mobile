@@ -2,19 +2,16 @@ import {
   View,
   Text,
   ScrollView,
-  Image,
   Alert,
-  TextInput,
   TouchableOpacity,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import FormField from "@/components/ui/FormField";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Logo from "@/components/ui/Logo";
 import { Link } from "expo-router";
 import useSignIn from "@/hooks/auth/signin";
-import { deleteItemAsync, getItemAsync, setItemAsync } from "expo-secure-store";
+import {getItemAsync, setItemAsync } from "expo-secure-store";
 import { router } from "expo-router";
 import Utilisateur from "@/types/Utilisateur";
 
@@ -29,13 +26,12 @@ const SignIn = () => {
   const { signIn, loading, error } = useSignIn();
 
   const submit = async () => {
+		console.log("trying sign-in");
     if (!form.email || !form.password) {
       Alert.alert("Error", "Please fill in all fields");
     }
-
-    setIsSumbitting(true);
-		const oldUser : Utilisateur = JSON.parse(await getItemAsync('user') || "");
-		console.log(oldUser.mail);		
+		console.log("all data is there");
+    setIsSumbitting(true);	
     const user = await signIn(form.email, form.password);
     if (user) {
 			await setItemAsync('user', JSON.stringify(user));
@@ -79,10 +75,10 @@ const SignIn = () => {
             className="my-6 w-full bg-brand-500 py-4 rounded-xl items-center active:bg-brand-700 border-3 shadow-sm"
             activeOpacity={0.95}
             onPress={submit}
-            disabled={loading}
+            disabled={isSumbitting}
           >
             <Text className="text-surface text-lg font-semibold">
-              {loading ? "Signing in..." : "Se connecter"}
+              {isSumbitting ? "Signing in..." : "Se connecter"}
             </Text>
           </TouchableOpacity>
 					<Text className="text-sm">Pas de compte? <Link href="/auth/sign-up" className="text-brand-500">creer un compte</Link></Text>

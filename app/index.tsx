@@ -1,27 +1,27 @@
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Link, router, useRouter } from "expo-router";
+import { router } from "expo-router";
 import Logo from "@/components/ui/Logo";
-import { registerForPushNotifications } from "@/hooks/notifications";
 import { useEffect } from "react";
 import * as SecureStorage from "expo-secure-store";
 import Utilisateur from "@/types/Utilisateur";
 
 export default function LandingPage() {
-  const router = useRouter();
+  useEffect(() => {
+    const checkRegister = async () => {
+      const user = await SecureStorage.getItemAsync("user");
+      if (user !== null && user !== "") {
+        console.info("user has already logged in");
+        console.info("updating information");
+        await Utilisateur.updateLocalConfig();
+        console.info("going to index");
+        router.push("/home/crypto");
+      }
+    };
 
-	useEffect(() => {
-		const checkRegister = async () => {
-			if (await SecureStorage.getItemAsync('user')) {
-				console.info("user has already logged in");
-				await Utilisateur.updateLocalConfig();
-				router.push('/home/crypto');
-			}
-		}
-		checkRegister();
-	}, [])
-	
+    checkRegister();
+  }, []);
 
   const toSignin = () => {
     router.push("/auth/sign-in");
@@ -133,13 +133,13 @@ export default function LandingPage() {
           </Text>
         </TouchableOpacity>
 
-        {/* <TouchableOpacity
+        <TouchableOpacity
           className="mx-2 my-6 bg-brand-500 py-4 rounded-2xl items-center active:bg-brand-700 border-3 shadow-sm"
           activeOpacity={0.95}
           onPress={() => router.push("/home/crypto")}
         >
           <Text className="text-surface text-lg font-semibold">Homepage</Text>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );

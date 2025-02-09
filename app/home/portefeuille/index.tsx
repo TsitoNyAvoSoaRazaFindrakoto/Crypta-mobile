@@ -1,4 +1,10 @@
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  RefreshControl,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Link, router } from "expo-router";
@@ -8,32 +14,30 @@ import { useEffect, useState } from "react";
 import Historique from "@/types/Historique";
 import CryptoAsset from "@/types/CryptoAssets";
 import Utilisateur from "@/types/Utilisateur";
-import { getItem } from "expo-secure-store";
+import { getItem, getItemAsync } from "expo-secure-store";
 
 const index = () => {
   const [recent, setRecent] = useState<Array<Historique>>([]);
   const [assets, setAssets] = useState<Array<CryptoAsset>>([]);
-  const [finds, setFunds] = useState<number>(0);
+  const [funds, setFunds] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const oldUser: Utilisateur = JSON.parse(getItem("user") || "");
-		const getFond = async () => {
-			
-		};
-    const getRecents = async () => {
-      const data = await Historique.fetchLatestWithLimit(5);
-      setRecent(data);
-    };
-    const getAssets = async () => {
-      const data = await CryptoAsset.getPersonnalData(oldUser.id);
-      setAssets(data);
-    };
-
+  const reloadData = async () => {
     setIsLoading(true);
-    getAssets();
-    getRecents();
+    const userString = await getItemAsync("user");
+    const currentUser = userString ? JSON.parse(userString) : null;
+
+    console.info(userString);
+
+    const recentData = await Historique.fetchLatestWithLimit(currentUser._id);
+    setRecent(recentData);
+    const assetsData = await CryptoAsset.getPersonnalData(currentUser._id);
+    setAssets(assetsData);
     setIsLoading(false);
+  };
+
+  useEffect(() => {
+    reloadData();
   }, []);
 
   if (isLoading) {
@@ -45,42 +49,57 @@ const index = () => {
   }
 
   return (
-    <SafeAreaView className="bg-surface-primary flex-1">
-      {/* Header avec solde */}
+    <SafeAreaView className="bg-surface-primary p-2">
+      {/* Header with refresh button */}
       <View className="px-4 py-3 mb-2 bg-surface-primary border-b border-border-muted">
         <View className="flex-row justify-between items-center">
           <Logo containerStyle="flex-row gap-2" />
           <TouchableOpacity
             activeOpacity={0.8}
             className="px-4 py-2 rounded-2xl items-center bg-brand-500"
+            onPress={reloadData}
           >
             <Text className="text-text-inverted text-base font-medium">
-              Solde disponible
-            </Text>
-            <Text className="text-text-inverted text-xl font-bold mt-0.5">
-              {Number(2000).toLocaleString()} $
+              Refresh
             </Text>
           </TouchableOpacity>
         </View>
       </View>
+      <TouchableOpacity
+        activeOpacity={0.8}
+        className="p-4 rounded-2xl w-full items-center bg-brand-500"
+      >
+        <Text className="text-text-inverted text-xl font-medium">
+          Solde disponible{" "}
+          <Text className="text-text-inverted font-bold mt-0.5">
+            {Number(2000).toLocaleString()} $
+          </Text>
+        </Text>
+      </TouchableOpacity>
 
-        {/* Section favoris */}
+      {/* cryptos section */}
+      {assets.length === 0 ? (
+        <View className="p-4">
+          <Text className="text-center text-text-secondary">
+            Vous ne possedez rien
+          </Text>
+        </View>
+      ) : (
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          className="mt-4"
+          className="mt-4 w-full"
           contentContainerStyle={{ paddingRight: 20 }}
+          refreshControl={
+            <RefreshControl refreshing={isLoading} onRefresh={reloadData} />
+          }
         >
           {assets.map((asset, index) => (
-						<TouchableOpacity
+            <TouchableOpacity
               key={index}
               activeOpacity={0.7}
               onPress={() => {}}
-              className={`bg-brand-100 p-5 rounded-3xl ${index > 0 ? "ml-4" : ""}`}
-              style={{
-                minWidth: 280,
-                maxWidth: 320,
-              }}
+              className={`bg-brand-100 p-5 rounded-3xl ml-2 w-2/3`}
             >
               <View className="flex-row justify-between items-start mb-4">
                 <Text className="text-brand-700 text-lg font-semibold">
@@ -96,7 +115,7 @@ const index = () => {
                   </Text>
                 </View>
                 {index < 2 && (
-									<TouchableOpacity
+                  <TouchableOpacity
                     className="bg-brand-500/20 p-2 rounded-xl"
                     activeOpacity={0.8}
                     onPress={() => {}}
@@ -112,8 +131,15 @@ const index = () => {
             </TouchableOpacity>
           ))}
         </ScrollView>
+      )}
 
-      <ScrollView showsVerticalScrollIndicator={false} className="flex-1 px-4">
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        className="flex-1 px-4"
+        refreshControl={
+          <RefreshControl refreshing={isLoading} onRefresh={reloadData} />
+        }
+      >
         {/* Section opérations récentes */}
         <View className="mt-6 mb-4">
           <View className="flex-row justify-between items-center mb-4">
@@ -173,7 +199,9 @@ const index = () => {
                     </Text>
                     <Text
                       className={`text-sm mt-0.5 ${
-                        operation.entree === 0 ? "text-green-600" : "text-red-600"
+                        operation.entree === 0
+                          ? "text-green-600"
+                          : "text-red-600"
                       }`}
                     >
                       {operation.entree === 0 ? "-" : "+"}

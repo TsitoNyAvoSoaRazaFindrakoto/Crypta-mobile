@@ -125,12 +125,14 @@ class Historique {
     }
   }
 
-	public static async fetchGroupedByCrypto(idUtilisateur: number): Promise<{ idCrypto: number; idUtilisateur: number; totalEntree: number; totalSortie: number }[]> {
+	public static async fetchGroupedByCrypto(idUtilisateure: number): Promise<{ idCrypto: number; idUtilisateur: number; totalEntree: number; totalSortie: number }[]> {
 		try {
+			console.log("id utilisat is "+idUtilisateure);
+			
 			const historiqueCollection = collection(firestore, Historique.table);
 			const q = query(
 				historiqueCollection,
-				where("idUtilisateur", "==", idUtilisateur)
+				where("utilisateur.idUtilisateur", "==", idUtilisateure)
 			);
 
       const snapshot = await getDocs(q);
@@ -148,7 +150,7 @@ class Historique {
         if (!groupedData.has(key)) {
           groupedData.set(key, {
             idCrypto: data.idCrypto,
-            idUtilisateur: data.idUtilisateur,
+            idUtilisateur: idUtilisateure,
             totalEntree: 0,
             totalSortie: 0,
           });
