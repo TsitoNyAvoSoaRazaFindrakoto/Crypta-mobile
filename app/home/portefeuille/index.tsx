@@ -27,8 +27,6 @@ const index = () => {
     const userString = await getItemAsync("user");
     const currentUser = userString ? JSON.parse(userString) : null;
 
-    console.info(userString);
-
     const recentData = await Historique.fetchLatestWithLimit(currentUser._id);
     setRecent(recentData);
     const assetsData = await CryptoAsset.getPersonnalData(currentUser._id);
@@ -88,7 +86,7 @@ const index = () => {
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          className="mt-4 w-full"
+          className="mt-4"
           contentContainerStyle={{ paddingRight: 20 }}
           refreshControl={
             <RefreshControl refreshing={isLoading} onRefresh={reloadData} />
@@ -99,34 +97,22 @@ const index = () => {
               key={index}
               activeOpacity={0.7}
               onPress={() => {}}
-              className={`bg-brand-100 p-5 rounded-3xl ml-2 w-2/3`}
+              className={`bg-brand-100 p-5 rounded-3xl ml-2}`}
+              style={{ minWidth: 184, maxWidth: 320 }}
             >
-              <View className="flex-row justify-between items-start mb-4">
-                <Text className="text-brand-700 text-lg font-semibold">
-                  {asset.crypto.crypto}
+              <View className="flex-row justify-between items-start mb-2">
+                <Text className="text-brand-700 text-lg font-bold">
+                  {asset.crypto.crypto} : {asset.crypto.current}
                 </Text>
               </View>
               <View className="flex-row justify-between items-end">
                 <View>
                   <Text className="text-brand-900 text-3xl font-bold">
                     {asset.historique.totalEntree -
-                      asset.historique.totalSortie}
-                    ;
+                      asset.historique.totalSortie} : {(asset.historique.totalEntree -
+												asset.historique.totalSortie) * asset.crypto.current}
                   </Text>
                 </View>
-                {index < 2 && (
-                  <TouchableOpacity
-                    className="bg-brand-500/20 p-2 rounded-xl"
-                    activeOpacity={0.8}
-                    onPress={() => {}}
-                  >
-                    <MaterialCommunityIcons
-                      name="arrow-right"
-                      size={24}
-                      color={theme.extend.colors.brand[700]}
-                    />
-                  </TouchableOpacity>
-                )}
               </View>
             </TouchableOpacity>
           ))}

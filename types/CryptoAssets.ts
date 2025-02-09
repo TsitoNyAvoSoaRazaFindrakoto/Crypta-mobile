@@ -24,12 +24,11 @@ class CryptoAsset {
   }
 
   public static async getPersonnalData(id: number): Promise<CryptoAsset[]> {
-    const historics = await Historique.fetchGroupedByCrypto(id);
-		console.log(historics);
-		
+    const historics = await Historique.fetchGroupedByCrypto(id);		
     const cryptoAssets: CryptoAsset[] = [];
     for (const historic of historics) {
       const crypto = await Crypto.getById(historic.idCrypto);
+			crypto.initializePrices(false,1);
       if (crypto) {
         cryptoAssets.push(new CryptoAsset(crypto, historic));
       }

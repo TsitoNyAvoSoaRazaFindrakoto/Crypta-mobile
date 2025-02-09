@@ -126,9 +126,7 @@ class Historique {
   }
 
 	public static async fetchGroupedByCrypto(idUtilisateure: number): Promise<{ idCrypto: number; idUtilisateur: number; totalEntree: number; totalSortie: number }[]> {
-		try {
-			console.log("id utilisat is "+idUtilisateure);
-			
+		try {			
 			const historiqueCollection = collection(firestore, Historique.table);
 			const q = query(
 				historiqueCollection,

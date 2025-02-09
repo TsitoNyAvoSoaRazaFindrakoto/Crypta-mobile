@@ -154,7 +154,7 @@ export default class Crypto {
     }
   }
 
-  public static async getById(idCrypto: number): Promise<Crypto | null> {
+  public static async getById(idCrypto: number): Promise<Crypto> {
     try {
       const historiqueCollection = collection(firestore, Crypto.table);
       const q = firestoreQuery(
@@ -163,11 +163,6 @@ export default class Crypto {
       );
 
       const snapshot = await getDocs(q);
-
-      if (snapshot.empty) {
-        console.log(`Crypto with id ${idCrypto} not found`);
-        return null;
-      }
 
       const doc = snapshot.docs[0]; // Assuming idCrypto is unique
       const data = { ...doc.data() };
