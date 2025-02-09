@@ -12,7 +12,7 @@ const useSignUp = () => {
     pseudo: string,
     mail: string,
     password: string,
-    idUtilisateur: string,
+    idUtilisateur: number,
     mobile: true,
     role: string = "Membre simple"
   ) => {
@@ -27,9 +27,9 @@ const useSignUp = () => {
 
 			// Allow time for the async password hashing to complete.
       await new Promise((resolve) => setTimeout(resolve, 0));
-			console.log(`utilisateur mdp : ${user.password}`);
+      console.log(`utilisateur mdp : ${user.password}`);
 
-      await setDoc(doc(db, Utilisateur.table, user.id), {
+      await setDoc(doc(db, Utilisateur.table, String(user.id)), {
         pseudo: user.pseudo,
         mail: user.mail,
         idUtilisateur: user.idUtilisateur,

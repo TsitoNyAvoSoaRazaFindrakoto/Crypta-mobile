@@ -50,7 +50,7 @@ const Chart = ({ chartData, chartConfig = {} }: ChartProps) => {
   // Calculer dynamiquement maxValue et yAxisOffset
   const computedValues = useMemo(() => {
     if (!chartData.length)
-      return { maxValue: 12000, yAxisOffset: 0, noOfSections: 6 };
+      return { maxValue: 1000, yAxisOffset: 0, noOfSections: 6 };
 
     const values = chartData.map((point) => point.value);
     const maxValue = Math.max(...values);
@@ -106,24 +106,22 @@ const Chart = ({ chartData, chartConfig = {} }: ChartProps) => {
       fontWeight: "600",
     },
     height: 250,
-    width: chartWidth,
     yAxisLabelWidth: 50,
-    formatYLabel,
+    formatYLabel
   };
 
   const mergedConfig = { ...DEFAULT_CONFIG, ...chartConfig };
 
   return (
-    <View className="items-center justify-center p-4 overflow-hidden">
-      <ScrollView horizontal contentContainerStyle={{ paddingHorizontal: 1 }}>
         <LineChart
           {...mergedConfig}
           data={chartData}
           isAnimated
+					animateOnDataChange
           curved
           animationDuration={1000}
-          showDataPointOnTop
-          showTextOnTop
+					endSpacing={10}
+					renderDataPointsAfterAnimationEnds
           textShiftY={-10}
           textShiftX={0}
           textFontSize={10}
@@ -134,8 +132,6 @@ const Chart = ({ chartData, chartConfig = {} }: ChartProps) => {
 					yAxisOffset={computedValues.yAxisOffset}
 					noOfSections={computedValues.noOfSections}
         />
-      </ScrollView>
-    </View>
   );
 };
 

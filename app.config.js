@@ -18,7 +18,10 @@ export default {
         backgroundColor: "#ffffff",
       },
       googleServicesFile: "./config/firebase/google-services.json",
-			permissions: ["android.permission.CAMERA", "android.permission.WRITE_EXTERNAL_STORAGE"]
+      permissions: [
+        "android.permission.CAMERA",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+      ],
     },
     web: {
       bundler: "metro",
@@ -26,7 +29,7 @@ export default {
       favicon: "./assets/images/favicon.png",
     },
     plugins: [
-			"expo-secure-store",
+      "expo-secure-store",
       [
         "expo-notifications",
         {
@@ -65,12 +68,13 @@ export default {
       },
       firebase: {
         apiKey: "AIzaSyD_dhXrU5-3m_QsUAka7FVavlGTgNTlppI",
-        authDomain:"crypta-d5e13.firebaseapp.com",
+        authDomain: "crypta-d5e13.firebaseapp.com",
+        databaseURL: "https://crypta-d5e13-default-rtdb.firebaseio.com",
         projectId: "crypta-d5e13",
         storageBucket: "crypta-d5e13.firebasestorage.app",
         messagingSenderId: "539604836728",
-        appId:"1=539604836728=web=5876a760ea6bf2189ee88d",
-        measurementId:"G-X7J7VJSX4N",
+        appId: "1:539604836728:web:5876a760ea6bf2189ee88d",
+        measurementId: "G-X7J7VJSX4N",
       },
       imageKit: {
         publicKey: "public_UhrmHHThLKc8Yp4wVNknKOIEs24=",

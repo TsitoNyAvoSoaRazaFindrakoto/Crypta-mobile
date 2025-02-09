@@ -1,15 +1,16 @@
 import { hashPassword, comparePassword } from "@/utils/crypto";
 
-const saltRounds = 10;
-
 export default class Utilisateur {
 
-  private _id: string = "";
+  private _id: number = 0;
   private _password: string = "";
   private _pseudo: string;
   private _mail: string;
-  private _idUtilisateur: string = "";
+  private _idUtilisateur: number = 0;
   private _mobile: boolean = false;
+  // Optional favoris field: may not be present initially
+  private _favoris?: string[];
+
   role: string = "Membre simple";
   public static readonly table: string = "utilisateur";
 
@@ -17,9 +18,10 @@ export default class Utilisateur {
     pseudo: string,
     mail: string,
     password: string,
-    idUtilisateur: string,
+    idUtilisateur: number,
     mobile: boolean,
-    role: string
+    role: string,
+    favoris?: string[]
   ) {
     this._pseudo = pseudo;
     this._mail = mail;
@@ -28,6 +30,7 @@ export default class Utilisateur {
     this._id = idUtilisateur;
     this._mobile = mobile;
     this.role = role;
+    this._favoris = favoris;
   }
 
   // Static method for signing up
@@ -35,7 +38,7 @@ export default class Utilisateur {
     pseudo: string,
     mail: string,
     password: string,
-    idUtilisateur: string,
+    idUtilisateur: number,
     mobile: boolean,
     role: string = "Membre simple"
   ): Promise<Utilisateur> {
@@ -51,18 +54,6 @@ export default class Utilisateur {
     return user;
   }
 
-  // Static method for signing in
-  public static async signIn(mail: string, password: string): Utilisateur {
-    const user = new Utilisateur(
-      "",
-      mail,
-      password,
-      "",
-      false,
-      "Membre simple"
-    );
-  }
-
   // Static method to create an instance from Firestore document
   public static fromFirestoreDoc(doc: any): Utilisateur {
     const data = doc.data();
@@ -72,7 +63,8 @@ export default class Utilisateur {
       data.password,
       data.idUtilisateur,
       data.mobile,
-      data.role
+      data.role,
+      data.favoris // this field may be undefined if not present in the document
     );
   }
 
@@ -97,8 +89,32 @@ export default class Utilisateur {
     }
   }
 
+  // Getter for favoris
+  public get favoris(): string[] {
+    return this._favoris ?? [];
+  }
+
+  /**
+   * Adds a new favorite crypto (as a string, for example a crypto ID or name)
+   * If there are already three favorites, removes the oldest favorite before adding the new one.
+   */
+  public addFavoris(newFavori: string): void {
+    // If favoris is not present, initialize as an empty array
+    const favoris = this._favoris ?? [];
+    // Optionally, you can prevent duplicates:
+    if (favoris.includes(newFavori)) {
+      return;
+    }
+    if (favoris.length >= 3) {
+      // Remove the first one, then push the new one
+      favoris.shift();
+    }
+    favoris.push(newFavori);
+    this._favoris = favoris;
+  }
+
   // Getters
-  get id(): string {
+  get id(): number {
     return this._id;
   }
 
@@ -110,7 +126,7 @@ export default class Utilisateur {
     return this._password;
   }
 
-  get idUtilisateur(): string {
+  get idUtilisateur(): number {
     return this._idUtilisateur;
   }
 
@@ -130,7 +146,7 @@ export default class Utilisateur {
     this._pseudo = value;
   }
 
-  set idUtilisateur(value: string) {
+  set idUtilisateur(value: number) {
     if (!value) {
       throw new Error("ID Utilisateur cannot be empty.");
     }
