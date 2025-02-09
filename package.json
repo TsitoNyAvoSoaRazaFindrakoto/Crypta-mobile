@@ -53,6 +53,7 @@
     "expo-system-ui": "~4.0.7",
     "expo-web-browser": "~14.0.2",
     "firebase": "^11.2.0",
+    "imagekit": "^6.0.0",
     "imagekit-javascript": "^3.0.2",
     "lightningcss": "^1.29.1",
     "nativewind": "^4.1.23",
