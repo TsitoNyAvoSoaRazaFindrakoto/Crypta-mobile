@@ -93,7 +93,7 @@ const Index = () => {
       const data = await Crypto.getAll();
       await Promise.all(
         data.map(async (cryptoInstance) => {
-          await cryptoInstance.initializePrices(false, 5);
+          await cryptoInstance.initializePrices(true, 20);
         })
       );
       setCryptos(data);

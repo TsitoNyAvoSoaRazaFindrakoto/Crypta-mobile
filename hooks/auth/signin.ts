@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { getFirestore, collection, query, where, getDocs } from 'firebase/firestore';
 import Utilisateur from "@/types/Utilisateur";
-import { comparePassword } from "@/utils/crypto"; // new import
+import { comparePassword } from "@/utils/cryptographie"; // new import
 import { firestore } from '@/config/firebase/firebase-config';
 import { registerForPushNotifications } from '../notifications';
 

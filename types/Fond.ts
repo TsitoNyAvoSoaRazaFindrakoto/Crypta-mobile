@@ -1,6 +1,14 @@
 import { firestore } from "@/config/firebase/firebase-config";
 import { getItemAsync } from "expo-secure-store";
-import { collection, addDoc } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  orderBy,
+  limit,
+	addDoc,
+} from "firebase/firestore";
 import Utilisateur from "./Utilisateur";
 
 class Fond {
@@ -76,6 +84,35 @@ class Fond {
       console.error("Error adding document: ", e);
     }
   }
+
+	public static async fetchTotal(
+			idUtilisateure: number
+		): Promise<number> {
+			try {
+				const historiqueCollection = collection(firestore, "fondUtilisateur");
+				const q = query(
+					historiqueCollection,
+					where("utilisateur.idUtilisateur", "==", idUtilisateure)
+				);
+	
+				const snapshot = await getDocs(q);
+	
+				let val = 0;
+				if (snapshot.empty) {
+					return val;
+				}
+	
+				snapshot.docs.forEach((doc) => {
+					const data = doc.data() as Fond;
+					val+= (data.entree-data.sortie);
+				});
+				return val;
+				
+			} catch (error) {
+				console.error("Error fetching grouped historique entries:", error);
+				throw new Error("Failed to fetch grouped historique entries");
+			}
+		}
 }
 
 export default Fond;

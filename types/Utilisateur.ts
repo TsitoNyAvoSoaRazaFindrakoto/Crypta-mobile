@@ -1,5 +1,5 @@
 import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
-import { hashPassword, comparePassword } from "@/utils/crypto";
+import { hashPassword, comparePassword } from "@/utils/cryptographie";
 import { firestore } from "@/config/firebase/firebase-config";
 import { getItem, getItemAsync, setItemAsync } from "expo-secure-store";
 
