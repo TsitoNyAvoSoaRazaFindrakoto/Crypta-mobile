@@ -35,4 +35,5 @@ yarn-error.*
 # typescript
 *.tsbuildinfo
 
-app-example
+android
+config/firebase/firebase-private-key.json
