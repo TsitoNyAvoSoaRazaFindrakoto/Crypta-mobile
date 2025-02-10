@@ -106,6 +106,7 @@ const Index = () => {
       setIsLoading(false);
       setSelectedCrypto(1);
     };
+		fetchFavs();
     fetchCryptos();
   }, []);
 
@@ -146,21 +147,30 @@ const Index = () => {
 
   const handleFavoriteButton = async (cryptoId: number) => {
     const setFavoriteCryptos = async () => {
-      if (favorites.includes(String(cryptoId))) {
-        return favorites;
-      }
+			if (favorites.includes(String(cryptoId))) {
+				const updatedFavorites = favorites.filter(
+					(id) => id !== String(cryptoId)
+				);
+				const userString = await getItemAsync("user");
+				const currentUser: Utilisateur = userString
+					? JSON.parse(userString)
+					: null;
+				await Utilisateur.updateFavoris(currentUser.id, updatedFavorites);
+				await Utilisateur.updateLocalConfig();
+				return updatedFavorites;
+			}
 
-      const updatedFavorites = [...favorites, String(cryptoId)];
-      if (updatedFavorites.length > 3) {
-        updatedFavorites.shift();
-      }
-      const userString = await getItemAsync("user");
-      const currentUser: Utilisateur = userString
-        ? JSON.parse(userString)
-        : null;
-      await Utilisateur.updateFavoris(currentUser.id, updatedFavorites);
-      await Utilisateur.updateLocalConfig();
-      return updatedFavorites;
+			const updatedFavorites = [...favorites, String(cryptoId)];
+			if (updatedFavorites.length > 3) {
+				updatedFavorites.shift();
+			}
+			const userString = await getItemAsync("user");
+			const currentUser: Utilisateur = userString
+				? JSON.parse(userString)
+				: null;
+			await Utilisateur.updateFavoris(currentUser.id, updatedFavorites);
+			await Utilisateur.updateLocalConfig();
+			return updatedFavorites;
     };
     setFavorites(await setFavoriteCryptos());
   };
