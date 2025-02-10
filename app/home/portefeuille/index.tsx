@@ -224,8 +224,8 @@ const index = () => {
                     <Text
                       className={`text-sm mt-0.5 ${
                         operation.sortie === 0
-												? "text-green-600"
-                          : "text-red-600"
+                          ? "text-red-600"
+                          : "text-green-600"
                       }`}
                     >
                       {operation.sortie === 0 ? "-" : "+"}
