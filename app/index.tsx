@@ -109,14 +109,6 @@ export default function LandingPage() {
         >
           <Text className="text-surface text-lg font-semibold">Rejoignez-nous</Text>
         </TouchableOpacity>
-  
-        <TouchableOpacity
-          className="mx-2 my-6 bg-brand-500 py-4 rounded-2xl items-center active:bg-brand-700 border-3 shadow-sm"
-          activeOpacity={0.95}
-          onPress={toHomepage}
-        >
-          <Text className="text-surface text-lg font-semibold">Homepage</Text>
-        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
