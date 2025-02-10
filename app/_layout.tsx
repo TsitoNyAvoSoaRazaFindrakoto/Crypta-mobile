@@ -1,8 +1,6 @@
 import { router, Stack } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
 import { View, Text, StyleSheet } from "react-native";
 import { useEffect, useRef, useState } from "react";
-import "react-native-reanimated";
 import "../global.css";
 
 import * as Notifications from "expo-notifications";

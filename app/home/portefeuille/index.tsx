@@ -30,7 +30,7 @@ const index = () => {
 		
 		const fonds = await Fond.fetchTotal(currentUser.id)
 		setFunds(fonds);
-    const recentData = await Historique.fetchLatestWithLimit(currentUser.id);
+    const recentData = await Historique.fetchAll(currentUser.id);
     setRecent(recentData);
 
     const assetsData = await CryptoAsset.getPersonnalData(currentUser.id);
@@ -155,12 +155,6 @@ const index = () => {
             <Text className="text-text-primary text-lg font-semibold">
               Opérations Récentes
             </Text>
-            <TouchableOpacity
-              onPress={() => router.push("/home/portefeuille/general")}
-              activeOpacity={0.7}
-            >
-              <Text className="text-brand-500 text-base">Voir tout</Text>
-            </TouchableOpacity>
           </View>
           {recent.length === 0 ? (
             <Text className="text-center text-text-secondary">

@@ -3,7 +3,6 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  Dimensions,
   useWindowDimensions,
 } from "react-native";
 import React, { useState, useEffect, useMemo } from "react";
@@ -11,10 +10,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Logo from "@/components/ui/Logo";
 import CustomChart from "@/components/CustomChart";
-import { useRouter } from "expo-router";
 import Crypto from "@/types/Crypto";
 import CryptoVal from "@/types/CryptoVal";
-import { criticallyDampedSpringCalculations } from "react-native-reanimated/lib/typescript/animation/springUtils";
+import Utilisateur from "@/types/Utilisateur";
+import { getItemAsync } from "expo-secure-store";
 
 type CryptoRowProps = {
   id: number;
@@ -79,15 +78,22 @@ const CryptoRow = ({
 };
 
 const Index = () => {
-  const router = useRouter();
-
   const { width: screenWidth, height: screenHeight } = useWindowDimensions();
   const [selectedCrypto, setSelectedCrypto] = useState<number>(1);
   const [cryptos, setCryptos] = useState<Array<Crypto>>([]);
-
+  const [favorites, setFavorites] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const fetchFavs = async () => {
+      const userString = await getItemAsync("user");
+			if (userString) { 
+				const storedUser: Utilisateur = JSON.parse(userString);
+				setFavorites(storedUser.favoris ?? []);
+			}
+
+    };
+
     const fetchCryptos = async () => {
       setIsLoading(true);
       const data = await Crypto.getAll();
@@ -103,61 +109,60 @@ const Index = () => {
     fetchCryptos();
   }, []);
 
-	useEffect(() => {
-		let intervalId: NodeJS.Timeout;
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout;
 
-		const fetchCryptos = async () => {
-			const data = await Crypto.getAll();
-			await Promise.all(
-				data.map(async (cryptoInstance) => {
-					await cryptoInstance.initializePrices(false, 5);
-				})
-			);
-			setCryptos(data);
-		};
+    const fetchCryptos = async () => {
+      const data = await Crypto.getAll();
+      await Promise.all(
+        data.map(async (cryptoInstance) => {
+          await cryptoInstance.initializePrices(true, 5);
+        })
+      );
+      setCryptos(data);
+    };
 
-		intervalId = setInterval(fetchCryptos, 10000);
+    intervalId = setInterval(fetchCryptos, 10000);
 
-		return () => clearInterval(intervalId);
-	}, []);
+    return () => clearInterval(intervalId);
+  }, []);
 
-  const selectedCryptoData : Crypto | undefined = useMemo(
+  const selectedCryptoData: Crypto | undefined = useMemo(
     () => cryptos.find((crypto) => crypto.idCrypto === selectedCrypto),
     [cryptos, selectedCrypto]
   );
 
   const chartData = useMemo(() => {
-		const data = (selectedCryptoData?.vals ?? []).map((point: CryptoVal) => ({
-			value: point.valeur,
-			label: new Date(point.dateHeure).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-			dataPointText: `${point.valeur}$`,
-		}));
+    const data = (selectedCryptoData?.vals ?? []).map((point: CryptoVal) => ({
+      value: point.valeur,
+      label: new Date(point.dateHeure).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      dataPointText: `${point.valeur}$`,
+    }));
     return data;
   }, [selectedCryptoData]);
 
-	const handleFavoriteButton = (id: number) => {
-		setCryptos((prevData) => {
-			// const favoriteCount = prevData.filter((crypto) => crypto.).length;
-			// const crypto = prevData.find((c) => c.idCrypto === id);
+  const handleFavoriteButton = async (cryptoId: number) => {
+    const setFavoriteCryptos = async () => {
+      if (favorites.includes(String(cryptoId))) {
+        return favorites;
+      }
 
-			// // Si on veut retirer des favoris
-			// if (crypto.favorite) {
-			// 	return prevData.map((c) => ({
-			// 		...c,
-			// 		favorite: c.idCrypto === id ? false : c.,
-			// 	}));
-			// }
-
-			// // Si on veut ajouter aux favoris et qu'on n'a pas atteint la limite
-			// if (favoriteCount < 3) {
-			// 	return prevData.map((c) => ({
-			// 		...c,
-			// 		favorite: c.idCrypto === id ? true : c.,
-			// 	}));
-			// }
-
-			return prevData;
-    });
+      const updatedFavorites = [...favorites, String(cryptoId)];
+      if (updatedFavorites.length > 3) {
+        updatedFavorites.shift();
+      }
+      const userString = await getItemAsync("user");
+      const currentUser: Utilisateur = userString
+        ? JSON.parse(userString)
+        : null;
+      await Utilisateur.updateFavoris(currentUser.id, updatedFavorites);
+      await Utilisateur.updateLocalConfig();
+      return updatedFavorites;
+    };
+    setFavorites(await setFavoriteCryptos());
   };
 
   if (isLoading) {
@@ -245,7 +250,7 @@ const Index = () => {
                 name={crypto.crypto}
                 price={crypto.current ?? 0}
                 handleFavoriteButton={handleFavoriteButton}
-                favorite={true}
+                favorite={favorites.includes(String(crypto.id))}
                 onPress={() => setSelectedCrypto(crypto.idCrypto)}
               />
             ))}

@@ -26,7 +26,7 @@ const Profile = () => {
         id: storedUser.id,
         pseudo: storedUser.pseudo,
         email: storedUser.email,
-        // profilePicture: storedUser.profilePicture
+        profilePicture: storedUser.img ??  ""
       };
       setUser(allowedUser);
     }

@@ -1,4 +1,4 @@
-import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { hashPassword, comparePassword } from "@/utils/cryptographie";
 import { firestore } from "@/config/firebase/firebase-config";
 import { getItem, getItemAsync, setItemAsync } from "expo-secure-store";
@@ -117,25 +117,6 @@ export default class Utilisateur {
     } catch (error) {
       throw error;
     }
-  }
-
-  /**
-   * Adds a new favorite crypto (as a string, for example a crypto ID or name)
-   * If there are already three favorites, removes the oldest favorite before adding the new one.
-   */
-  public addFavoris(newFavori: string): void {
-    // If favoris is not present, initialize as an empty array
-    const favoris = this.favoris ?? [];
-    // Optionally, you can prevent duplicates:
-    if (favoris.includes(newFavori)) {
-      return;
-    }
-    if (favoris.length >= 3) {
-      // Remove the first one, then push the new one
-      favoris.shift();
-    }
-    favoris.push(newFavori);
-    this.favoris = favoris;
   }
 
   // Getters

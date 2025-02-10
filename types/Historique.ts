@@ -70,7 +70,8 @@ class Historique {
       const historiqueCollection = collection(firestore, Historique.table);
       const q = query(
         historiqueCollection,
-        where("idUtilisateur", "==", idUtilisateur) // Filter by user ID
+        where("idUtilisateur", "==", idUtilisateur),
+				orderBy("dateTransaction", "desc"),
       );
 
       const snapshot = await getDocs(q);

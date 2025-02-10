@@ -14,10 +14,13 @@ export class ImageKitService {
     });
   }
 
-  public async uploadImage(imageUri: string, fileName: string) {
+  public async uploadImage(imageUri: string, userId : number) {
     try {
       // Lancer en parallèle l'obtention des paramètres d'authentification
       // et la lecture du fichier en base64
+
+			const fileName = `profil_${userId}_${imageUri.replace(/[^a-zA-Z0-9.]/g, "_")}`;
+
       const [authParams, base64Data] = await Promise.all([
         imagekitAuth.getAuthenticationParameters(),
         FileSystem.readAsStringAsync(imageUri, {
@@ -30,22 +33,18 @@ export class ImageKitService {
 
       const uploadOptions = {
         file: fileBase64,
-        fileName,
+        fileName : fileName,
         signature: authParams.signature,
         token: authParams.token,
         expire: authParams.expire,
         useUniqueFileName: true,
         tags: ["react-native"],
-        folder: "/uploads",
+        folder: "/profile-pictures",
       };
 
       const result = await this.imagekit.upload(uploadOptions);
 
-      return {
-        url: result.url,
-        thumbnailUrl: result.thumbnailUrl,
-        fileId: result.fileId,
-      };
+      return result.url;
     } catch (error) {
       console.error("Erreur upload:", error);
       throw error;

@@ -53,17 +53,12 @@ const Chart = ({ chartData, chartConfig = {} }: ChartProps) => {
       return { maxValue: 1000, yAxisOffset: 0, noOfSections: 6 };
 
     const values = chartData.map((point) => point.value);
-    const maxValue = Math.max(...values);
 
-    // Calculer les valeurs ajustées selon les nouvelles règles
-    // Si data max = 9000 -> y max = 12000 (arrondi pour une meilleure lisibilité)
-    const adjustedMaxValue = Math.ceil((maxValue + 3000) / 2000) * 2000;
-
-    // Toujours commencer à 0 pour plus de cohérence
-    const adjustedMinValue = Math.min(0, Math.min(...values)-2000);
+    const adjustedMaxValue = Math.max(...values)+ 100;
+    const adjustedMinValue = Math.min(...values) - 100;
 
     // Calculer le nombre de sections pour un écart de 2000
-    const noOfSections = adjustedMaxValue / 2000;
+    const noOfSections = 10;
 
     return {
       maxValue: adjustedMaxValue,
