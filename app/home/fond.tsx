@@ -19,7 +19,7 @@ export default function Page() {
     }
     const fond = await Fond.createFond(form.depot, Number(form.montant));
 		await fond.saveToFirestore();
-    setShowModal(true)
+    setShowModal(true);
   }
 
   return (

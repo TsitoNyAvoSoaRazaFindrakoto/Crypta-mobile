@@ -1,5 +1,7 @@
 import { firestore } from "@/config/firebase/firebase-config";
+import { getItemAsync } from "expo-secure-store";
 import { collection, addDoc } from "firebase/firestore";
+import Utilisateur from "./Utilisateur";
 
 class Fond {
   dateTransaction: string;
@@ -23,11 +25,12 @@ class Fond {
   }
 
   static async createFond(entree: boolean, montant: number): Promise<Fond> {
+		
     const dateTransaction = new Date().toISOString();
-    const utilisateurString = localStorage.getItem("utilisateur");
+    const utilisateurString = await getItemAsync("user");
     let utilisateur;
     if (utilisateurString) {
-      const user = JSON.parse(utilisateurString);
+      const user : Utilisateur = JSON.parse(utilisateurString);
       utilisateur = {
         idUtilisateur: user.id,
         utilisateur: user.pseudo,
@@ -35,7 +38,6 @@ class Fond {
     } else {
       throw new Error("Utilisateur non trouvé dans le stockage sécurisé");
     }
-    const idFondUtilisateur = crypto.randomUUID();
     let entreeValue = 0;
     let sortieValue = 0;
 
@@ -44,10 +46,7 @@ class Fond {
     } else {
       sortieValue = montant;
     }
-
-		console.log("created fond");
 		
-
     return new Fond(
       dateTransaction,
       entreeValue,

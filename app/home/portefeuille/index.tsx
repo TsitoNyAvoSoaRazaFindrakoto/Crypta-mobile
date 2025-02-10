@@ -65,7 +65,7 @@ const index = () => {
   return (
     <SafeAreaView className="bg-surface-primary p-2 h-full">
       {/* Header with refresh button */}
-      <View className="px-4 py-3 mb-2 bg-surface-primary border-b border-border-muted">
+      <View className="py-2 bg-surface-primary border-b border-border-muted">
         <View className="flex-row justify-between items-center">
           <Logo containerStyle="flex-row gap-2" />
           <TouchableOpacity
@@ -81,7 +81,7 @@ const index = () => {
       </View>
       <TouchableOpacity
         activeOpacity={0.8}
-        className="p-4 rounded-xl w-full items-center bg-brand-500"
+        className="p-4 rounded-xl w-full my-2 items-center bg-brand-500"
       >
         <Text className="text-text-inverted text-xl font-medium">
           Solde disponible{" "}
@@ -99,85 +99,98 @@ const index = () => {
           </Text>
         </View>
       ) : (
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          className="mt-4 w-full h-1/2"
-          refreshControl={
-            <RefreshControl refreshing={isLoading} onRefresh={reloadData} />
-          }
-        >
-          {assets.map((asset, index) => (
-            <TouchableOpacity
-              key={index}
-              activeOpacity={0.7}
-              className="bg-surface-secondary p-2 rounded-2xl ml-2 border-hairline border-accent-600 h-2/5"
-              style={{ width: 180 }}
-            >
-              <View className="flex-row justify-between items-center">
-                <Text className="text-text-primary text-lg font-semibold">
-                  {asset.crypto.crypto}
-                </Text>
-                <MaterialCommunityIcons name={asset.crypto.crypto.toLowerCase()} size={32} color={"#636af0"}/>
-              </View>
-              <View className="">
-                <Text className="text-text-primary text-base font-bold">
-                  {(
-                    asset.historique.totalEntree - asset.historique.totalSortie
-                  ).toFixed(2)}
-                </Text>
-                <Text className="text-text-secondary text-xs">
-                  {(
-                    (asset.historique.totalEntree -
-                      asset.historique.totalSortie) *
-                    (asset.crypto.current ?? 0)
-                  ).toFixed(2)}{" "}
-                  Ar
-                </Text>
-              </View>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
+        <View className="w-full h-[25%]">
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            className="py-6"
+            refreshControl={
+              <RefreshControl refreshing={isLoading} onRefresh={reloadData} />
+            }
+          >
+            <View className="flex-row gap-4 w-full first:ml-4 last:mr-4">
+              {[
+                assets[0],
+                assets[0],
+                assets[0],
+                assets[0],
+                assets[0],
+                assets[0],
+              ].map((asset, index) => (
+                <TouchableOpacity
+                  key={index}
+                  activeOpacity={0.7}
+                  className="bg-surface-secondary p-3 rounded-2xl border border-border-muted w-40 "
+                >
+                  <View className="flex-row justify-between items-center mb-2">
+                    <Text className="text-text-primary text-lg font-semibold">
+                      {asset.crypto.crypto}
+                    </Text>
+                    <MaterialCommunityIcons
+                      name={asset.crypto.crypto.toLowerCase()}
+                      size={24}
+                      color={theme.extend.colors.brand[500]}
+                    />
+                  </View>
+                  <View>
+                    <Text className="text-text-primary text-sm font-bold">
+                      {(
+                        asset.historique.totalEntree -
+                        asset.historique.totalSortie
+                      ).toFixed(2)}
+                    </Text>
+                    <Text className="text-text-secondary text-xs">
+                      {(
+                        (asset.historique.totalEntree -
+                          asset.historique.totalSortie) *
+                        (asset.crypto.current ?? 0)
+                      ).toFixed(2)}{" "}
+                      Ar
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </ScrollView>
+        </View>
       )}
 
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        className="px-4"
-        refreshControl={
-          <RefreshControl refreshing={isLoading} onRefresh={reloadData} />
-        }
-      >
-        {/* Section opérations récentes */}
-        <View className="mt-6 mb-4">
-          <View className="flex-row justify-between items-center mb-4">
-            <Text className="text-text-primary text-lg font-semibold">
-              Opérations Récentes
-            </Text>
-            <TouchableOpacity
-              onPress={() => router.push("/home/portefeuille/general")}
-              activeOpacity={0.7}
-            >
-              <Text className="text-brand-500 text-base">Voir tout</Text>
-            </TouchableOpacity>
-          </View>
-          {recent.length === 0 ? (
-            <Text className="text-center text-text-secondary">
-              Aucune opération récente
-            </Text>
-          ) : (
-            <View className="space-y-3">
-              {recent.map((operation) => (
+      {/* Section opérations récentes */}
+
+      <View className="mt-4 max-h-[50%]">
+        <View className="flex-row justify-between items-center border-b-hairline p-2">
+          <Text className="text-text-primary text-lg font-semibold">
+            Opérations Récentes
+          </Text>
+          <TouchableOpacity
+            onPress={() => router.push("/home/portefeuille/general")}
+            activeOpacity={0.7}
+          >
+            <Text className="text-brand-500 text-base">Voir tout</Text>
+          </TouchableOpacity>
+        </View>
+        {recent.length === 0 ? (
+          <Text className="text-center text-text-secondary">
+            Aucune opération récente
+          </Text>
+        ) : (
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+              <RefreshControl refreshing={isLoading} onRefresh={reloadData} />
+            }
+          >
+            <View className="flex-col gap-2 first:mt-4 last:mb-4">
+              {[recent[0], recent[0]].map((operation, index) => (
                 <TouchableOpacity
-                  key={operation.idTransCrypto}
+                  key={index}
                   activeOpacity={0.7}
                   onPress={() => {}}
                   className="bg-surface flex-row justify-between items-center p-4 rounded-2xl border border-border-muted"
                 >
                   <View className="flex-row items-center gap-3">
                     <View
-                      className={`p-2 rounded-xl ${
-                        operation.sortie === 0 ? "bg-green-100" : "bg-red-100"
-                      }`}
+                      className={`p-2 rounded-xl`}
                     >
                       <MaterialCommunityIcons
                         name={
@@ -186,12 +199,13 @@ const index = () => {
                             : "arrow-top-right"
                         }
                         size={24}
-                        color={operation.sortie === 0 ? "#16a34a" : "#dc2626"}
+                        color={"#1721e7"}
                       />
                     </View>
                     <View>
                       <Text className="text-text-primary text-base font-semibold">
-                        {operation.sortie === 0 ? "Achat" : "Vente"}{" "}
+                        {operation.sortie === 0 ? "Achat" : "Vente"}
+                        {" ID:"}
                         {operation.idCrypto}
                       </Text>
                       <Text className="text-text-secondary text-sm mt-0.5">
@@ -209,12 +223,12 @@ const index = () => {
                     </Text>
                     <Text
                       className={`text-sm mt-0.5 ${
-                        operation.entree === 0
-                          ? "text-green-600"
+                        operation.sortie === 0
+												? "text-green-600"
                           : "text-red-600"
                       }`}
                     >
-                      {operation.sortie === 0 ? "+" : "-"}
+                      {operation.sortie === 0 ? "-" : "+"}
                       {operation.prixUnitaire *
                         (operation.sortie === 0
                           ? operation.entree
@@ -225,9 +239,9 @@ const index = () => {
                 </TouchableOpacity>
               ))}
             </View>
-          )}
-        </View>
-      </ScrollView>
+          </ScrollView>
+        )}
+      </View>
     </SafeAreaView>
   );
 };
