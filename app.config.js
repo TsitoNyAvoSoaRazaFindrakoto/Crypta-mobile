@@ -12,7 +12,7 @@ export default {
       supportsTablet: true,
     },
     android: {
-      package: "com.mobile.crypta",
+      package: "group.crypta",
       adaptiveIcon: {
         foregroundImage: "./assets/images/adaptive-icon.png",
         backgroundColor: "#ffffff",
@@ -33,7 +33,7 @@ export default {
       [
         "expo-notifications",
         {
-          icon: "./assets/icon.png",
+          icon: "./assets/images/icon.png",
           color: "#ffffff",
           sounds: ["./assets/audio/notif.wav"],
         },

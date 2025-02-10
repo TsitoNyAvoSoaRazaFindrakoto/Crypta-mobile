@@ -4,15 +4,14 @@ import { firestore } from "@/config/firebase/firebase-config";
 import { getItem, getItemAsync, setItemAsync } from "expo-secure-store";
 
 export default class Utilisateur {
-
-  private _id: number = 0;
-  private _password: string = "";
-  private _pseudo: string;
-  private _mail: string;
-  private _idUtilisateur: number = 0;
-  private _mobile: boolean = false;
-  // Optional favoris field: may not be present initially
-  private _favoris?: string[];
+  id: number = 0;
+  password: string = "";
+  pseudo: string;
+  email: string;
+  idUtilisateur: number = 0;
+  mobile: boolean = false;
+  mToken: string = "";
+  favoris?: string[];
 
   role: string = "Membre simple";
   public static readonly table: string = "utilisateur";
@@ -24,16 +23,17 @@ export default class Utilisateur {
     idUtilisateur: number,
     mobile: boolean,
     role: string,
+    mToken?: string,
     favoris?: string[]
   ) {
-    this._pseudo = pseudo;
-    this._mail = mail;
-    this._password = password;
-    this._idUtilisateur = idUtilisateur;
-    this._id = idUtilisateur;
-    this._mobile = mobile;
+    this.pseudo = pseudo;
+    this.email = mail;
+    this.password = password;
+    this.idUtilisateur = idUtilisateur;
+    this.id = idUtilisateur;
+    this.mobile = mobile;
     this.role = role;
-    this._favoris = favoris;
+    this.favoris = favoris;
   }
 
   // Static method for signing up
@@ -62,17 +62,19 @@ export default class Utilisateur {
     const data = docSnap.data();
     return new Utilisateur(
       data.pseudo,
-      data.mail,
+      data.email,
       data.password,
       data.idUtilisateur,
       data.mobile,
       data.role,
-      data.favoris 
+      data.favoris
     );
   }
 
   // New: Get utilisateur by idUtilisateur from Firestore
-  public static async getById(idUtilisateur: number): Promise<Utilisateur | null> {
+  public static async getById(
+    idUtilisateur: number
+  ): Promise<Utilisateur | null> {
     const docRef = doc(firestore, Utilisateur.table, String(idUtilisateur));
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
@@ -82,7 +84,10 @@ export default class Utilisateur {
   }
 
   // New: Update favoris field in Firestore for a user
-  public static async updateFavoris(idUtilisateur: number, favoris: string[]): Promise<void> {
+  public static async updateFavoris(
+    idUtilisateur: number,
+    favoris: string[]
+  ): Promise<void> {
     const docRef = doc(firestore, Utilisateur.table, String(idUtilisateur));
     await updateDoc(docRef, { favoris });
   }
@@ -90,7 +95,7 @@ export default class Utilisateur {
   // Hash password asynchronously using new method
   private async hashMyPassword() {
     try {
-      this._password = await hashPassword(this._password);
+      this.password = await hashPassword(this.password);
     } catch (error) {
       throw error;
     }
@@ -98,7 +103,7 @@ export default class Utilisateur {
 
   private async verifyPassword(password: string): Promise<Utilisateur> {
     try {
-      const valid = await comparePassword(password, this._password);
+      const valid = await comparePassword(password, this.password);
       if (!valid) {
         throw new Error("Invalid password");
       }
@@ -108,18 +113,13 @@ export default class Utilisateur {
     }
   }
 
-  // Getter for favoris
-  public get favoris(): string[] {
-    return this._favoris ?? [];
-  }
-
   /**
    * Adds a new favorite crypto (as a string, for example a crypto ID or name)
    * If there are already three favorites, removes the oldest favorite before adding the new one.
    */
   public addFavoris(newFavori: string): void {
     // If favoris is not present, initialize as an empty array
-    const favoris = this._favoris ?? [];
+    const favoris = this.favoris ?? [];
     // Optionally, you can prevent duplicates:
     if (favoris.includes(newFavori)) {
       return;
@@ -129,72 +129,34 @@ export default class Utilisateur {
       favoris.shift();
     }
     favoris.push(newFavori);
-    this._favoris = favoris;
+    this.favoris = favoris;
   }
 
   // Getters
-  get id(): number {
-    return this._id;
-  }
 
-  get pseudo(): string {
-    return this._pseudo;
-  }
-
-  get password(): string {
-    return this._password;
-  }
-
-  get idUtilisateur(): number {
-    return this._idUtilisateur;
-  }
-
-  get mobile(): boolean {
-    return this._mobile;
-  }
-
-  get mail(): string {
-    return this._mail;
-  }
-
-  // Setters
-  set pseudo(value: string) {
-    if (!value.trim()) {
-      throw new Error("Pseudo cannot be empty.");
+  public static async updateLocalConfig() {
+    const userString = getItem("user");
+    if (!userString) {
+      throw new Error("No user data found locally.");
     }
-    this._pseudo = value;
-  }
 
-  set idUtilisateur(value: number) {
-    if (!value) {
-      throw new Error("ID Utilisateur cannot be empty.");
+    const user = JSON.parse(userString);
+    if (!user || !user.id) {
+      throw new Error("Invalid user data found locally.");
     }
-    this._idUtilisateur = value;
+
+    const updatedUser = await Utilisateur.getById(user.id);
+    if (!updatedUser) {
+      throw new Error("User not found in Firestore.");
+    }
+    await setItemAsync("user", JSON.stringify(updatedUser));
   }
 
-  set mobile(value: boolean) {
-    this._mobile = value;
-  }
-
-	public static async updateLocalConfig(){
-		
-		const userString = getItem('user');
-		if (!userString) {
-			throw new Error("No user data found locally.");
-		}
-	
-		const user = JSON.parse(userString);
-		if (!user || !user._id) {
-			throw new Error("Invalid user data found locally.");
-		}
-
-		const updatedUser = await Utilisateur.getById(user._id);
-		if (!updatedUser) {
-			throw new Error("User not found in Firestore.");
-		}
-		await setItemAsync('user', JSON.stringify(updatedUser));
-
+	public static async updateMToken(
+		idUtilisateur: number,
+		mToken: string
+	): Promise<void> {
+		const docRef = doc(firestore, Utilisateur.table, String(idUtilisateur));
+		await updateDoc(docRef, { mToken });
 	}
-
-
 }

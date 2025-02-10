@@ -28,7 +28,7 @@ class CryptoAsset {
     const cryptoAssets: CryptoAsset[] = [];
     for (const historic of historics) {
       const crypto = await Crypto.getById(historic.idCrypto);
-			crypto.initializePrices(false,1);
+			await crypto.initializePrices(false,1);
       if (crypto) {
         cryptoAssets.push(new CryptoAsset(crypto, historic));
       }

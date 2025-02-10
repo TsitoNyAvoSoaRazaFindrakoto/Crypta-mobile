@@ -21,25 +21,25 @@ interface ValueData {
 }
 
 export default class Crypto {
-  public static table: string = "crypto";
-  private _crypto: string;
-  private _id: string;
-  private _idCrypto: number;
-  private _current?: number;
-  private _vals?: CryptoVal[];
+  static table: string = "crypto";
+  crypto: string;
+  id: string | number;
+  idCrypto: number;
+  current?: number;
+  vals?: CryptoVal[];
 
   constructor(crypto: string, id: string, idCrypto: number) {
-    this._crypto = crypto;
-    this._id = id;
-    this._idCrypto = idCrypto;
+    this.crypto = crypto;
+    this.id = id;
+    this.idCrypto = idCrypto;
   }
 
   public async initializePrices(all: boolean, limit: number): Promise<void> {
-    this._vals = all
+    this.vals = all
       ? await this.fetchAllValues()
       : await this.fetchLatestValues(limit);
-    if (this._vals && this._vals.length > 0) {
-      this._current = this._vals[this._vals.length - 1].valeur;
+    if (this.vals && this.vals.length > 0) {
+      this.current = this.vals[this.vals.length - 1].valeur;
     }
   }
 
@@ -52,10 +52,8 @@ export default class Crypto {
       const snapshot = await get(queryRef);
 
       if (!snapshot.exists()) {
-        console.log("tsisy valeur");
         return [];
       }
-      console.log();
       return this.parseSnapshot(snapshot);
     } catch (error) {
       console.error("Error fetching all values:", error);
@@ -97,7 +95,7 @@ export default class Crypto {
     }
   }
 
-  private parseSnapshot(snapshot: DataSnapshot): CryptoVal[] {
+  public parseSnapshot(snapshot: DataSnapshot): CryptoVal[] {
     const values: CryptoVal[] = [];
 
     snapshot.forEach((childSnapshot) => {
@@ -107,51 +105,12 @@ export default class Crypto {
       }
       return false; // Continue enumeration
     });
-    console.log(values);
 
     return values;
   }
 
   static fromDoc(doc: any): Crypto {
     return new Crypto(doc.crypto, doc.idCrypto, doc.idCrypto);
-  }
-
-  public get crypto(): string {
-    return this._crypto;
-  }
-  public get id(): string {
-    return this._id;
-  }
-  public get idCrypto(): number {
-    return this._idCrypto;
-  }
-  public set crypto(value: string) {
-    this._crypto = value;
-  }
-  public set id(value: string) {
-    this._id = value;
-  }
-  public set idCrypto(value: number) {
-    this._idCrypto = value;
-    this._id = String(this._idCrypto);
-  }
-  get current(): number {
-    return this._current ?? 0;
-  }
-
-  public get vals(): CryptoVal[] {
-    return this._vals ?? [];
-  }
-  public set vals(value: CryptoVal[]) {
-    this._vals = value;
-  }
-
-  set current(current: number | string) {
-    if (typeof current === "string") {
-      this._current = parseFloat(current);
-    } else {
-      this._current = current;
-    }
   }
 
   public static async getById(idCrypto: number): Promise<Crypto> {
@@ -182,7 +141,7 @@ export default class Crypto {
       const snapshot = await getDocs(q);
 
       if (snapshot.empty) {
-        console.log("there are cryptos");
+        console.log("there are no cryptos");
         return [];
       }
 

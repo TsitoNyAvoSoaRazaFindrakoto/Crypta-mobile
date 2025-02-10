@@ -16,14 +16,11 @@ interface HistoriqueData {
   idUtilisateur: number;
   prixUnitaire: string; // Stored as string in Firestore (e.g., "1524.22")
   sortie: number;
-  utilisateur: {
-    idUtilisateur: number;
-    pseudo: string;
-  };
+  utilisateur: { idUtilisateur: number; pseudo: string };
 }
 
 class Historique {
-	public static table : string = "transCrypto";
+  public static table: string = "transCrypto";
   dateTransaction: Date;
   entree: number;
   idCrypto: number;
@@ -31,10 +28,7 @@ class Historique {
   idUtilisateur: number;
   prixUnitaire: number; // Converted to number
   sortie: number;
-  utilisateur: {
-    idUtilisateur: number;
-    pseudo: string;
-  };
+  utilisateur: { idUtilisateur: number; pseudo: string };
 
   constructor(
     dateTransaction: Date,
@@ -100,23 +94,20 @@ class Historique {
     idUtilisateur: number,
     limitCount: number = 5
   ): Promise<Historique[]> {
-    try {
+    try {			
       const historiqueCollection = collection(firestore, Historique.table);
       const q = query(
         historiqueCollection,
-        where("idUtilisateur", "==", idUtilisateur),
+        where("utilisateur.idUtilisateur", "==", idUtilisateur),
         orderBy("dateTransaction", "desc"),
         limit(limitCount)
       );
 
       const snapshot = await getDocs(q);
 
-      if (snapshot.empty) {
-        return [];
-      }
-
       return snapshot.docs.map((doc) => {
         const data = doc.data() as HistoriqueData;
+				console.log(data);
         return Historique.fromFirestore(data);
       });
     } catch (error) {
@@ -125,13 +116,22 @@ class Historique {
     }
   }
 
-	public static async fetchGroupedByCrypto(idUtilisateure: number): Promise<{ idCrypto: number; idUtilisateur: number; totalEntree: number; totalSortie: number }[]> {
-		try {			
-			const historiqueCollection = collection(firestore, Historique.table);
-			const q = query(
-				historiqueCollection,
-				where("utilisateur.idUtilisateur", "==", idUtilisateure)
-			);
+  public static async fetchGroupedByCrypto(
+    idUtilisateure: number
+  ): Promise<
+    {
+      idCrypto: number;
+      idUtilisateur: number;
+      totalEntree: number;
+      totalSortie: number;
+    }[]
+  > {
+    try {
+      const historiqueCollection = collection(firestore, Historique.table);
+      const q = query(
+        historiqueCollection,
+        where("utilisateur.idUtilisateur", "==", idUtilisateure)
+      );
 
       const snapshot = await getDocs(q);
 
@@ -139,7 +139,15 @@ class Historique {
         return [];
       }
 
-      const groupedData: Map<string, { idCrypto: number; idUtilisateur: number; totalEntree: number; totalSortie: number }> = new Map();
+      const groupedData: Map<
+        string,
+        {
+          idCrypto: number;
+          idUtilisateur: number;
+          totalEntree: number;
+          totalSortie: number;
+        }
+      > = new Map();
 
       snapshot.docs.forEach((doc) => {
         const data = doc.data() as HistoriqueData;

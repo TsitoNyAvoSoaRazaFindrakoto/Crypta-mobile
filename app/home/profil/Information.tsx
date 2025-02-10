@@ -27,7 +27,7 @@ const Information = () => {
           size={20}
           color="#6366f1"
         />
-        <Text style={styles.listText}>Gestion des dépôts et retraits</Text>
+        <Text style={styles.listText}>Demande de dépôts et retraits de fonds</Text>
       </View>
       <View style={styles.listItem}>
         <MaterialCommunityIcons name="newspaper" size={20} color="#6366f1" />
@@ -35,19 +35,15 @@ const Information = () => {
       </View>
       <View style={styles.listItem}>
         <MaterialCommunityIcons name="cellphone" size={20} color="#6366f1" />
-        <Text style={styles.listText}>Interface utilisateur intuitive</Text>
+        <Text style={styles.listText}>Interface utilisateur (tsara tareh)</Text>
       </View>
 
-      <Text style={styles.subtitle}>📩 Contact :</Text>
-      <Text style={styles.description}>
-        Pour toute question ou assistance, veuillez nous contacter à{" "}
-        <Text style={styles.email}>support@crypta.com</Text>.
-      </Text>
 
       <Text style={styles.subtitle}>📜 Mentions légales :</Text>
       <Text style={styles.description}>
         L'utilisation de cette application est soumise à nos conditions
         d'utilisation. Veuillez les lire attentivement.
+				PS : il n'y en a pas
       </Text>
     </ScrollView>
   );

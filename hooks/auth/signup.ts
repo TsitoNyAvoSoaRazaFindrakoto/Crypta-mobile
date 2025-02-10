@@ -1,8 +1,9 @@
 import { useState } from "react";
 import Utilisateur from "../../types/Utilisateur";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
-import * as SecureStore from 'expo-secure-store';
+import { doc, setDoc } from "firebase/firestore";
+import * as SecureStore from "expo-secure-store";
 import { firestore } from "@/config/firebase/firebase-config";
+import { registerForPushNotifications } from "../notifications";
 
 const useSignUp = () => {
   const [loading, setLoading] = useState(false);
@@ -19,28 +20,35 @@ const useSignUp = () => {
     setLoading(true);
     setError(null);
     try {
-			console.log("hook sign up");
       // Calling the static signUp method of Utilisateur.
-      const user = await Utilisateur.signUp(pseudo, mail, password, idUtilisateur, mobile, role);
-			console.log("creation mdp");
-			
+      const user = await Utilisateur.signUp(
+        pseudo,
+        mail,
+        password,
+        idUtilisateur,
+        mobile,
+        role
+      );
 
-			// Allow time for the async password hashing to complete.
+      // Allow time for the async password hashing to complete.
       await new Promise((resolve) => setTimeout(resolve, 0));
-      console.log(`utilisateur mdp : ${user.password}`);
+
+      const mToken = await registerForPushNotifications();
 
       await setDoc(doc(firestore, Utilisateur.table, String(user.id)), {
         pseudo: user.pseudo,
-        mail: user.mail,
+        email: user.email,
         idUtilisateur: user.idUtilisateur,
         mobile: user.mobile,
         role: user.role,
-				password : user.password
+        password: user.password,
+        mToken: mToken,
+        favoris: [],
       });
 
       // Store the user info securely in secure-store.
 
-			console.log(await SecureStore.getItemAsync('user'));
+      console.log(await SecureStore.getItemAsync("user"));
       setLoading(false);
       return user;
     } catch (err: any) {
