@@ -23,7 +23,7 @@ export class ImageKitService {
 
     async uploadImage(file: File, userId: string): Promise<string | null> {
         try {
-            const fileName = `profil_${userId}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
+            const fileName = `profil/${userId}`;
             const fileBuffer = await file.arrayBuffer();
             const fileBase64 = typeof Buffer !== 'undefined' ? Buffer.from(fileBuffer).toString("base64") : '';
 
@@ -42,7 +42,7 @@ export class ImageKitService {
 
             return uploadResponse.fileId;
         } catch (error) {
-            console.error("ImageKit upload error:", error.message || error);
+            console.error("ImageKit upload error:", error);
             throw error;
         }
     }
@@ -53,7 +53,7 @@ export class ImageKitService {
             const fileDetails: FileDetailsResponse = await this.imageKit.getFileDetails(fileId) as FileDetailsResponse;
             return fileDetails.url || null;
         } catch (error) {
-            console.error("ImageKit URL generation error:", error.message || error);
+            console.error("ImageKit URL generation error:",error);
             throw error;
         }
     }
@@ -64,7 +64,7 @@ export class ImageKitService {
             await this.imageKit.deleteFile(fileId);
             return true;
         } catch (error) {
-            console.error("ImageKit delete error:", error.message || error);
+            console.error("ImageKit delete error:",error);
             throw error;
         }
     }

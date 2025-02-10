@@ -10,7 +10,8 @@ export default class Utilisateur {
   email: string;
   idUtilisateur: number = 0;
   mobile: boolean = false;
-  mToken: string = "";
+  mToken?: string = "";
+  img?: string = "";
   favoris?: string[];
 
   role: string = "Membre simple";
@@ -24,6 +25,7 @@ export default class Utilisateur {
     mobile: boolean,
     role: string,
     mToken?: string,
+		image? : string,
     favoris?: string[]
   ) {
     this.pseudo = pseudo;
@@ -33,6 +35,8 @@ export default class Utilisateur {
     this.id = idUtilisateur;
     this.mobile = mobile;
     this.role = role;
+		this.mToken = mToken;
+		this.img = image;
     this.favoris = favoris;
   }
 
@@ -67,6 +71,8 @@ export default class Utilisateur {
       data.idUtilisateur,
       data.mobile,
       data.role,
+			data.mToken,
+			data.img,
       data.favoris
     );
   }
@@ -158,5 +164,13 @@ export default class Utilisateur {
 	): Promise<void> {
 		const docRef = doc(firestore, Utilisateur.table, String(idUtilisateur));
 		await updateDoc(docRef, { mToken });
+	}
+
+	public static async updateImage(
+		idUtilisateur: number,
+		image: string
+	): Promise<void> {
+		const docRef = doc(firestore, Utilisateur.table, String(idUtilisateur));
+		await updateDoc(docRef, { image });
 	}
 }
