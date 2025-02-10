@@ -1,60 +1,93 @@
-import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
-import { StatusBar } from "expo-status-bar";
-import { useEffect } from "react";
-import "react-native-reanimated";
+import { router, Stack } from "expo-router";
+import { View, Text, StyleSheet } from "react-native";
+import { useEffect, useRef, useState } from "react";
 import "../global.css";
 
-import { useColorScheme } from "@/hooks/useColorScheme";
+import * as Notifications from "expo-notifications";
+import type { NotificationResponse, Notification } from "expo-notifications"; // Import types
+import { StatusBar } from "expo-status-bar";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
+
+interface InAppNotification {
+  title: string;
+  body?: string; // Body is optional
+}
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
-  });
+  const notificationListener = useRef<Notifications.EventSubscription | null>(
+    null
+  ); // Ref can be null initially
+  const responseListener = useRef<Notifications.EventSubscription | null>(null); // Ref can be null initially
+  const [inAppNotification, setInAppNotification] =
+    useState<InAppNotification | null>(null); // State type
 
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener(
+        (notification: Notification) => {
+          setInAppNotification({
+            title:
+              notification.request.content.title || "Notification Received",
+            body: notification.request.content.body ?? undefined,
+          });
+        }
+      );
+
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener(
+        (response: NotificationResponse) => {
+          // Type the response parameter
+          const data = response.notification.request.content.data as
+            | { url?: string }
+            | undefined; // Type the data, be explicit about undefined
+          if (data?.url) {
+            router.push(data.url as any);
+          }
+        }
+      );
+
+    return () => {
+      if (notificationListener.current) {
+        Notifications.removeNotificationSubscription(
+          notificationListener.current
+        );
+      }
+      if (responseListener.current) {
+        Notifications.removeNotificationSubscription(responseListener.current);
+      }
+    };
+  }, []);
+
+  // Auto-dismiss the in-app notification after a few seconds
+  useEffect(() => {
+    if (inAppNotification) {
+      const timer = setTimeout(() => {
+        setInAppNotification(null);
+      }, 3000);
+      return () => clearTimeout(timer);
     }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
-  /**
-   * FICHIER _layout.tsx - MODE D'EMPLOI
-   *
-   * C'est le "fondateur" de votre app qui régit tous les écrans.
-   * Imaginez-le comme une maison : ce fichier est les fondations et les murs communs à toutes les pièces.
-   *
-   * Ce qu'il fait concrètement :
-   *
-   * 1. 🎨 GÈRE LE THÈME VISUEL
-   *    - Change automatiquement les couleurs si le téléphone passe en mode sombre
-   *    - Exemple : Fond noir/textes blancs si mode nuit activé
-   *
-   * 2. 🗺 ORGANISE LA NAVIGATION
-   *    - Définit comment on passe d'un écran à l'autre
-   *    - Exemple : Animation de transition quand on ouvre un profil
-   *
-   * 3. 🏗 APPLIQUE UNE STRUCTURE COMMUNE
-   *    - Ce qui est défini ici s'applique à TOUS les écrans
-   *    - Exemple : Une barre de navigation en bas présente partout
-   *
-   * 4. 🚦 CONFIGURE LES ÉCRANS
-   *    - Options par défaut pour chaque page
-   *    - Exemple : Cache la barre de titre sur l'écran d'accueil
-   */
+  }, [inAppNotification]);
 
   return (
     <>
-      <StatusBar backgroundColor="#f8f9fe" style="dark"/>
+      <StatusBar backgroundColor="#f8f9fe" style="dark" />
+      {inAppNotification && (
+        <View style={styles.inAppBanner}>
+          <Text style={styles.inAppBannerTitle}>{inAppNotification.title}</Text>
+          {inAppNotification.body && (
+            <Text style={styles.inAppBannerBody}>{inAppNotification.body}</Text>
+          )}
+        </View>
+      )}
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" />
         <Stack.Screen name="auth" />
@@ -64,3 +97,29 @@ export default function RootLayout() {
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  inAppBanner: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
+    padding: 15,
+    paddingTop: 30,
+    alignItems: "center",
+    zIndex: 1000,
+  },
+  inAppBannerTitle: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  inAppBannerBody: {
+    color: "white",
+    fontSize: 14,
+    textAlign: "center",
+    marginTop: 5,
+  },
+});

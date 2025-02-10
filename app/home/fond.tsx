@@ -1,23 +1,25 @@
 import { View, Text, TouchableOpacity, Modal, TextInput, Alert, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from "react-native-safe-area-context"
-import { Picker } from '@react-native-picker/picker'
 import Logo from "@/components/ui/Logo"
 import { MaterialIcons } from '@expo/vector-icons'
+import Fond from '@/types/Fond'
 
 export default function Page() {
   const [form, setForm] = useState({
-    type: 'depot',
+    depot: true,
     montant: '',
   })
   const [showModal, setShowModal] = useState(false)
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!form.montant) {
       Alert.alert('Erreur', 'Veuillez entrer un montant')
-      return
+      return;
     }
-    setShowModal(true)
+    const fond = await Fond.createFond(form.depot, Number(form.montant));
+		await fond.saveToFirestore();
+    setShowModal(true);
   }
 
   return (
@@ -38,18 +40,23 @@ export default function Page() {
 
         {/* Type d'opération */}
         <View className="mb-2">
-          <Text className="text-lg font-medium mb-2 ml-2">
-            Type d'opération
-          </Text>
-          <View className="border-hairline border-accent-800 rounded-lg overflow-hidden bg-white">
-            <Picker
-              selectedValue={form.type}
-              onValueChange={(itemValue) => setForm({ ...form, type: itemValue })}
-              className="h-12"
+          <View style={{ flexDirection: 'row', justifyContent: 'space-around', margin: 20 }}>
+            <TouchableOpacity
+              style={{ backgroundColor: form.depot  ? '#4CAF50' : '#ccc', padding: 15, borderRadius: 10, elevation: 5, flexDirection: 'row', alignItems: 'center' }}
+              onPress={() => setForm({ ...form, depot : true })}
+              activeOpacity={0.7}
             >
-              <Picker.Item label="Dépôt" value="depot" />
-              <Picker.Item label="Retrait" value="retrait" />
-            </Picker>
+              <MaterialIcons name="arrow-upward" size={24} color={form.depot  ? 'white' : 'black'} />
+              <Text style={{ color: form.depot ? 'white' : 'black', fontSize: 18, textAlign: 'center', marginLeft: 10 }}>Dépôt</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{ backgroundColor: !form.depot ? '#F44336' : '#ccc', padding: 15, borderRadius: 10, elevation: 5, flexDirection: 'row', alignItems: 'center' }}
+              onPress={() => setForm({ ...form, depot : false })}
+              activeOpacity={0.7}
+            >
+              <MaterialIcons name="arrow-downward" size={24} color={!form.depot ? 'white' : 'black'} />
+              <Text style={{ color: !form.depot ? 'white' : 'black', fontSize: 18, textAlign: 'center', marginLeft: 10 }}>Retrait</Text>
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -103,7 +110,7 @@ export default function Page() {
               Demande envoyée !
             </Text>
             <Text className="text-base text-gray-600 mb-6 text-center">
-              Votre demande de {form.type === 'depot' ? 'dépôt' : 'retrait'} de {form.montant} Ar est en cours de validation
+              Votre demande de {form.depot ? 'dépôt' : 'retrait'} de {form.montant} Ar est en cours de validation
             </Text>
 
             {/* Bouton de fermeture */}
@@ -111,7 +118,7 @@ export default function Page() {
               className="bg-brand-500 w-full py-4 rounded-xl items-center"
               onPress={() => {
                 setShowModal(false)
-                setForm({ type: 'depot', montant: '' })
+                setForm({ depot : true , montant: '' })
               }}
             >
               <Text className="text-surface text-base font-semibold">
