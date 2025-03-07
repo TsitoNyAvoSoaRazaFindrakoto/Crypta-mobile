@@ -1,189 +1,72 @@
-# Crypta SDK
+# Crypta Mobile
 
-SDK pour le suivi et la gestion des cryptomonnaies en temps réel.
+![Logo Crypta](./assets/images/icon.png)
 
-## Prérequis
+Crypta Mobile est une application mobile multiplateforme pour gérer et suivre des actifs en cryptomonnaie. Développée avec React Native et Expo, elle fournit des données en temps réel, le suivi des transactions et la gestion de portefeuille.
 
-- Node.js (version 14 ou supérieure)
-- npm ou yarn
-- React Native (version 0.71 ou supérieure)
-- Expo (version 49 ou supérieure)
+## Fonctionnalités
 
-## Technologies Utilisées
+- **Suivi des cryptomonnaies en temps réel**: Surveillez les prix des cryptomonnaies en temps réel
+- **Gestion de portefeuille**: Suivez tous vos actifs crypto en un seul endroit
+- **Historique des transactions**: Visualisez votre historique d'achats et de ventes
+- **Gestion des fonds**: Déposez et retirez des fonds en toute sécurité
+- **Système de favoris**: Enregistrez vos cryptomonnaies préférées pour un accès rapide
+- **Authentification utilisateur**: Système sécurisé de connexion et d'inscription
+- **Gestion de profil**: Personnalisez vos informations de profil et votre photo
 
-- **React Native**: Framework pour le développement mobile
-- **Expo**: Plateforme de développement React Native
-- **TypeScript**: Langage de programmation typé
-- **TailwindCSS**: Framework CSS pour le style
-- **React Native Charts**: Pour l'affichage des graphiques
-- **Firebase**: Pour l'authentification et le stockage de données
+## Technologies utilisées
 
-## Installation
+- **React Native**: Framework principal de développement mobile
+- **Expo**: Chaîne d'outils et plateforme de développement
+- **Firebase**: Backend, authentification et base de données en temps réel
+- **Firestore**: Stockage de base de données NoSQL
+- **NativeWind/TailwindCSS**: Stylisation
+- **Expo Router**: Navigation et routage
+- **Expo Secure Store**: Stockage sécurisé des données
+- **ImageKit**: Gestion et stockage d'images
+- **React Native Gifted Charts**: Visualisation de données
+- **Expo Notifications**: Notifications push
 
-```bash
-npm install @crypta/sdk
-# ou
-yarn add @crypta/sdk
-```
+## Premiers pas
 
-## Configuration
+### Prérequis
 
-### 1. Configuration de l'Environnement
+- Node.js (v14 ou ultérieur)
+- npm ou Yarn
+- Expo CLI
+- Compte Firebase
 
-```bash
-# Installation des dépendances globales
-npm install -g expo-cli
-npm install -g typescript
+### Installation
 
-# Installation des dépendances du projet
-npm install
-```
-
-### 2. Variables d'Environnement
-
-Créez un fichier `.env` à la racine du projet :
-
-```env
-API_URL=votre_url_api
-API_KEY=votre_cle_api
-FIREBASE_CONFIG={...vos_configurations_firebase}
-```
-
-## Utilisation du SDK
-
-### 1. Initialisation
-
-```typescript
-import { CryptaSDK } from '@crypta/sdk';
-
-const sdk = new CryptaSDK({
-  apiKey: process.env.API_KEY,
-  baseUrl: process.env.API_URL
-});
-```
-
-### 2. Fonctionnalités Principales
-
-#### Gestion des Cryptomonnaies
-
-```typescript
-// Récupérer la liste des cryptomonnaies
-const cryptos = await sdk.getCryptoAssets();
-
-// Obtenir l'historique des prix
-const historique = await sdk.getHistoricalData(1, 'week');
-
-// Gérer les favoris
-await sdk.toggleFavorite(1);
-
-// Calculer les variations de prix
-const variation = sdk.calculatePriceChange(10000, 9000);
-```
-
-## Structure du Projet
-
-```
-crypta-mobile/
-├── app/                    # Code source principal
-│   ├── home/              # Pages principales
-│   │   └── crypto/        # Composants crypto
-├── assets/                # Ressources statiques
-├── components/            # Composants réutilisables
-├── constants/             # Constants et configurations
-├── firebase/             # Configuration Firebase
-├── hooks/                # Hooks personnalisés
-├── sdk/                  # SDK Crypta
-│   ├── types.ts          # Types et interfaces
-│   ├── index.ts          # Classe principale du SDK
-│   └── README.md         # Documentation
-└── package.json          # Dépendances
-```
-
-## Composants Principaux
-
-### CryptoRow
-Composant pour afficher les informations d'une cryptomonnaie :
-- Prix actuel
-- Variation de prix
-- Statut favori
-- Icône personnalisée
-
-### CustomChart
-Composant de graphique personnalisé pour afficher :
-- Historique des prix
-- Tendances
-- Périodes personnalisables
-
-## Sécurité
-
-- Authentification via Firebase
-- Stockage sécurisé des clés API
-- Chiffrement des données sensibles
-- Validation des entrées utilisateur
-
-## Bonnes Pratiques
-
-1. **Code**
-   - Utiliser TypeScript pour le typage
-   - Suivre les principes SOLID
-   - Documenter les fonctions et composants
-
-2. **Performance**
-   - Optimiser les rendus React
-   - Mettre en cache les données
-   - Utiliser la pagination pour les listes
-
-3. **UI/UX**
-   - Interface responsive
-   - Thème sombre/clair
-   - Animations fluides
-   - Retours utilisateur
-
-## Dépannage
-
-### Problèmes Courants
-
-1. **Erreur de connexion API**
-   ```
-   Solution: Vérifier les configurations dans .env
+1. Clonez le dépôt:
+   ```bash
+   git clone https://github.com/votrenomdutilisateur/Crypta-mobile.git
+   cd Crypta-mobile
    ```
 
-2. **Graphiques ne s'affichent pas**
-   ```
-   Solution: Vérifier l'installation de react-native-charts
-   ```
-
-3. **Problèmes de compilation**
-   ```
-   Solution: Nettoyer le cache
-   npx expo start -c
+2. Installez les dépendances:
+   ```bash
+   npm install
+   # ou
+   yarn install
    ```
 
-## Support
+3. Configurez Firebase:
+   - Créez un projet Firebase
+   - Configurez l'Authentification et Firestore
+   - Mettez à jour la configuration Firebase dans `app.config.js`
 
-Pour toute question ou problème :
-- Ouvrir une issue sur GitHub
-- Consulter la documentation API
-- Contacter l'équipe de support
+4. Démarrez le serveur de développement:
+   ```bash
+   npx expo start
+   ```
 
-## Types de Données
+5. Exécutez sur un appareil ou émulateur:
+   ```bash
+   npx expo run:android
+   # ou
+   npx expo run:ios
+   ```
 
-```typescript
-interface CryptoAsset {
-  id: number;
-  name: string;
-  price: number;
-  previousPrice?: number;
-  favorite: boolean;
-}
+## Structure du projet
 
-interface ChartData {
-  value: number;
-  label?: string;
-  timestamp: number;
-}
-
-interface CryptoSDKConfig {
-  apiKey?: string;
-  baseUrl?: string;
-}
